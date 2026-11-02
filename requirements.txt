@@ -6,3 +6,4 @@ requests
 PyYAML
 jsonschema
 pytest
+pillow
