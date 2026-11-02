@@ -29,6 +29,7 @@ from scripts.katalog import Entri, muat
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = Path.home() / ".claude/skills"
 LOG = ROOT / "katalog/terpasang.md"
+UV_BIN = Path.home() / ".local/bin"  # tempat `uv tool install` menaruh perintah CLI
 LISENSI_BEBAS = ("mit", "apache-2.0", "bsd", "isc", "lgpl", "remotion license", "gsap standard")
 RUJUKAN = ROOT / "rujukan"
 TEMPLATE = ROOT / "template"
@@ -70,7 +71,7 @@ def alasan_tidak_boleh(e: Entri, saat: str = "otomatis") -> str | None:
             return f"status {e.status}: hanya diambil saat diminta"
         if _mb(e.ukuran) > MAKS_MB:
             return f"ukuran {e.ukuran}: hanya diambil saat diminta"
-    if not e.pasang or jenis not in ("git_skill", "git_subskill", "npx_skill", "npm", "rujukan", "unduh"):
+    if not e.pasang or jenis not in ("git_skill", "git_subskill", "npx_skill", "npm", "rujukan", "unduh", "uv_tool"):
         return "tidak ada cara pasang otomatis; pasang manual hanya dengan izin pemilik"
     return None
 
@@ -96,10 +97,31 @@ def sudah_terpasang(e: Entri, skills_dir: Path = SKILLS) -> bool:
         return (RUJUKAN / e.id).is_dir() and any((RUJUKAN / e.id).iterdir())
     if jenis == "unduh":
         return (RUJUKAN / e.pasang["file"]).exists()
+    if jenis == "uv_tool":
+        return _cli(e) is not None
     if e.pasang and e.pasang.get("jenis") == "git_subskill":
         nama = e.pasang.get("skills") or [Path(x).name for x in e.pasang["paths"] if not x.endswith("*")]
         return bool(nama) and all((Path(skills_dir) / n / "SKILL.md").exists() for n in nama)
     return any(Path(skills_dir).glob(f"{e.id}*/SKILL.md")) or any(Path(skills_dir).glob(f"*/{e.id}*/SKILL.md"))
+
+
+def _cli(e: Entri) -> str | None:
+    nama = e.pasang["perintah"]
+    lokal = UV_BIN / nama
+    return shutil.which(nama) or (str(lokal) if lokal.exists() else None)
+
+
+def _pasang_uv(e: Entri, runner) -> bool:
+    """`uv tool install <url>` (bukan PyPI), lalu perintah `setelah` (mis. `agent-reach setup`) dengan path CLI-nya."""
+    r = runner(["uv", "tool", "install", e.pasang["url"]], capture_output=True, text=True, timeout=900)
+    cli = _cli(e)
+    if r.returncode != 0 or not cli:
+        return False
+    for args in e.pasang.get("setelah", []):
+        r = runner([cli, *args], capture_output=True, text=True, timeout=600)
+        if r.returncode != 0:
+            return False
+    return True
 
 
 def _pasang_subskill(e: Entri, skills_dir: Path, runner, cache: Path) -> bool:
@@ -146,6 +168,8 @@ def pasang_satu(e: Entri, skills_dir: Path | None = None, runner=subprocess.run,
         jenis = e.pasang["jenis"]
         if jenis == "git_subskill":
             ok = _pasang_subskill(e, skills_dir, runner, cache) and (sudah_terpasang(e, skills_dir) or not e.pasang.get("skills"))
+        elif jenis == "uv_tool":
+            ok = _pasang_uv(e, runner)
         elif jenis in ("npm", "rujukan", "unduh"):
             if jenis == "npm":
                 cmd = ["npm", "install", "--prefix", str(TEMPLATE), *e.pasang["paket"]]

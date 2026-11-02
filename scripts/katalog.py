@@ -59,6 +59,6 @@ if __name__ == "__main__":
         if sudah_terpasang(e):
             label = "[sudah: terpasang]"
         else:
-            alasan = alasan_tidak_boleh(e)
+            alasan = alasan_tidak_boleh(e, saat="diminta")  # sama dengan aturan --id
             label = "[boleh]" if alasan is None else (f"[sudah: {alasan}]" if "setup.sh" in alasan or "settings" in alasan else f"[pemilik: {alasan}]")
         print(f"{e.id} {label} {e.fungsi[:90]}")

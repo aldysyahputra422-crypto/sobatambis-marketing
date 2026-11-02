@@ -9,7 +9,7 @@ MODEL = {
     "direktur-marketing": "opus", "penulis-naskah": "sonnet", "pembasmi-slop": "sonnet", "pemeriksa-fakta": "sonnet",
     "storyboarder": "sonnet", "animator": "opus", "sutradara-suara": "haiku", "qa-suara": "haiku",
     "inspektur-frame": "sonnet", "desainer-cover": "sonnet", "penulis-caption": "sonnet",
-    "penjaga-gerbang-qa": "sonnet", "pencari-skill": "haiku", "akuntan-token": "haiku", "penjadwal-notion": "haiku", "perencana-konten": "sonnet",
+    "penjaga-gerbang-qa": "sonnet", "pencari-skill": "haiku", "akuntan-token": "haiku", "penjadwal-notion": "haiku", "perencana-konten": "sonnet", "periset-tren": "sonnet",
 }
 
 
@@ -114,3 +114,14 @@ def test_pencari_skill_paham_alur_dan_hemat_token():
         assert kunci in t, kunci
     for agent in ("penulis-naskah", "storyboarder", "desainer-cover", "perencana-konten"):
         assert agent in t
+
+
+def test_sa_minggu_merangkai_kapasitas_riset_rencana_notion():
+    t = (ROOT / "commands/sa-minggu.md").read_text(encoding="utf-8")
+    posisi = [t.index(k) for k in ("scripts.kapasitas", "scripts.jadwal_minggu susun", "periset-tren", "perencana-konten", "penjadwal-notion")]
+    assert posisi == sorted(posisi)
+    p = (ROOT / "agents/perencana-konten.md").read_text(encoding="utf-8")
+    assert "jadwal.json" in p and "bank-topik.json" in p
+    r = (ROOT / "agents/periset-tren.md").read_text(encoding="utf-8")
+    assert "scripts.riset periksa" in r and "--agent periset-tren" in r and "cookie" in r
+    assert "Bank Topik Sobat Ambis" in (ROOT / "skills/sa-jadwal/SKILL.md").read_text(encoding="utf-8")

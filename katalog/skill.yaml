@@ -109,7 +109,7 @@
   cara_pasang: otomatis (sparse clone, hanya folder skill terpilih)
   otomatis: true
   pasang: {jenis: git_subskill, url: "https://github.com/coreyhaines31/marketingskills", paths: [skills/copywriting, skills/copy-editing, skills/content-strategy, skills/social, skills/marketing-psychology, skills/marketing-ideas, skills/video], skills: [copywriting, copy-editing, content-strategy, social, marketing-psychology, marketing-ideas, video]}
-  agent: [perencana-konten, penulis-caption, desainer-cover, direktur-marketing, penulis-naskah, storyboarder]
+  agent: [perencana-konten, penulis-caption, desainer-cover, direktur-marketing, penulis-naskah, storyboarder, periset-tren]
   lisensi: MIT
   catatan_lisensi: bebas dipakai; jangan pasang seluruh paket (50+ skill) supaya konteks tetap ringan
   butuh_key: null
@@ -329,11 +329,13 @@
   status: opsional
 - id: agent-reach
   sumber: https://github.com/Panniantong/Agent-Reach
-  fungsi: membaca web dan transkrip video untuk riset
-  pakai_saat: riset tren baca web transkrip youtube
-  cara_pasang: ikuti README repo; aktifkan hanya modul baca web dan transkrip
+  fungsi: CLI baca halaman web, info dan subtitle YouTube, repo GitHub untuk riset topik; keluaran JSON ringkas
+  pakai_saat: riset tren topik terbaru baca web artikel transkrip subtitle youtube sumber
+  cara_pasang: "otomatis saat periset-tren mulai (python -m scripts.pasang_otomatis --agent periset-tren): uv tool install dari zip rilis GitHub lalu agent-reach setup. JANGAN pip install agent-reach (nama PyPI itu proyek lain)"
+  pasang: {jenis: uv_tool, url: "https://github.com/Panniantong/Agent-Reach/releases/latest/download/agent-reach.zip", perintah: agent-reach, setelah: [[setup]]}
+  agent: [periset-tren]
   lisensi: MIT
-  catatan_lisensi: jangan pakai fitur cookie login media sosial karena berisiko akun diblokir
+  catatan_lisensi: hanya kanal tanpa login (web, youtube, github). Jangan pakai fitur cookie login media sosial (instagram, x, tiktok, reddit, xiaohongshu) karena berisiko akun diblokir; scripts/riset.py menolak URL itu
   butuh_key: null
   biaya: gratis
   ukuran: kecil

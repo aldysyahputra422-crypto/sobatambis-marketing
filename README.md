@@ -28,10 +28,10 @@ Semua agent, skill, perintah, dan hook dimuat langsung dari folder repo (lewat `
    Butuh Python 3.13, Node 22, dan ffmpeg 6.
 
 ### Yang ada di dalam plugin
-- **16 agent**: direktur-marketing dan animator (Opus); penulis-naskah, perencana-konten, pembasmi-slop, pemeriksa-fakta, storyboarder, inspektur-frame, desainer-cover, penulis-caption, penjaga-gerbang-qa (Sonnet); sutradara-suara, qa-suara, pencari-skill, akuntan-token, penjadwal-notion (Haiku). Setiap agent punya bagian "Skill dasar" berisi skill terverifikasi yang wajib dimuat.
-- **5 skill di repo**: `sa-brand` (fakta resmi, harga, CTA), `sa-cerita` (story bible, Arc 1), `sa-komedi` (teknik komedi sketsa), `sa-katalog` (katalog + pemasangan otomatis), `sa-jadwal` (catatan produksi di Notion).
+- **17 agent**: direktur-marketing dan animator (Opus); penulis-naskah, perencana-konten, periset-tren, pembasmi-slop, pemeriksa-fakta, storyboarder, inspektur-frame, desainer-cover, penulis-caption, penjaga-gerbang-qa (Sonnet); sutradara-suara, qa-suara, pencari-skill, akuntan-token, penjadwal-notion (Haiku). Setiap agent punya bagian "Skill dasar" berisi skill terverifikasi yang wajib dimuat.
+- **6 skill di repo**: `sa-riset` (riset topik bersumber, tingkat sumber A/B/C), `sa-brand` (fakta resmi, harga, CTA), `sa-cerita` (story bible, Arc 1), `sa-komedi` (teknik komedi sketsa), `sa-katalog` (katalog + pemasangan otomatis), `sa-jadwal` (catatan produksi di Notion).
 - **Skill luar yang terpasang sendiri** (dipilih per bidang, lisensi diperiksa): `humanizer` dan `stop-slop` (anti-slop naskah/caption), `claude-screenwriting` (struktur cerita + lint naskah), `marketingskills` (copywriting, copy-editing, content-strategy, social, marketing-psychology, marketing-ideas, video), `canvas-design` dan `skill-creator` (Anthropic resmi), skill Remotion resmi, `motion-design-skill`. Plugin hemat token: caveman, ponytail.
-- **3 perintah**: `/sa-video`, `/sa-status`, `/sa-pasang-skill`.
+- **4 perintah**: `/sa-minggu`, `/sa-video`, `/sa-status`, `/sa-pasang-skill`.
 
 ### 13 repo wajib
 Semua tercatat di `katalog/skill.yaml` (`wajib: true`) dan bisa diambil kapan saja dengan `python -m scripts.pasang_otomatis --wajib` atau satu per satu dengan `--id <id>`:
@@ -39,15 +39,27 @@ karpathy-skills (plugin, aktif bawaan), ECC / genjutsu / hyperframes / lemo-opus
 
 ### Konektor
 - **Wajib: Notion.** Semua catatan produksi untukmu masuk ke database Notion "Produksi Sobat Ambis": tahap, status, apa yang ditunggu darimu, angka QA, token. Sambungkan di claude.ai → Settings → Connectors → Notion. Database dibuat otomatis saat episode pertama (kamu hanya ditanya halaman induknya). Tanpa Notion, catatan jatuh ke `catatan-notion.md` di folder episode.
-- **Opsional, untuk pemeriksa-fakta** bila naskah memuat klaim ilmiah (Ep.1 tidak): salah satu dari Consensus, Elicit, atau SciSpace.
+- **Disarankan, untuk periset-tren dan pemeriksa-fakta**: Consensus (pencarian makalah, paling hemat) atau Elicit. SciSpace sebagai cadangan. Tanpa ini, riset ilmiah jatuh ke web search biasa ke PubMed/doi.org/`.ac.id`.
+- **Tren terbaru**: tidak butuh konektor. Web search bawaan + Agent-Reach (CLI, dipasang otomatis lewat `uv tool` saat periset-tren mulai; hanya kanal tanpa login: web, YouTube, GitHub). Instagram/TikTok/X tidak dibuka sama sekali supaya akun tidak diblokir.
 - **Google Drive**: belum dipakai (unggah otomatis masuk rencana berikutnya).
 - ElevenLabs bukan konektor: dipakai lewat secret `ELEVENLABS_API_KEY` (lihat `docs/lanjutan-elevenlabs.md`).
 
 ## Pakai
 
+- `/sa-minggu 2026-W47` — rencana satu minggu: ukur kapasitas, riset topik (bank topik bersumber), jadwal 7 hari, lalu catat ke Notion.
 - `/sa-video videos/<minggu>/<episode>` — produksi satu episode. Berhenti di tiga titik persetujuan: naskah + pilihan suara, trek dialog, video final.
 - `/sa-status videos/<minggu>/<episode>` — tahap, skor gerak, token.
 - `/sa-pasang-skill "<kebutuhan>"` — cari dan pasang skill dari katalog.
+
+### Berapa episode per minggu muat di Claude Pro?
+
+Batas Pro tidak diumumkan dalam token, jadi plugin **mengukur**, bukan menebak:
+1. Sebelum satu episode penuh, buka `/usage` dan catat persen batas mingguan.
+2. Sesudah episode selesai, catat lagi, lalu jalankan:
+   `python -m scripts.kapasitas catat videos/<minggu>/<ep> --jendela mingguan --awal 12 --akhir 25`
+3. `python -m scripts.kapasitas` menghitung kapasitas = (100 − cadangan 15%) ÷ persen per episode. `/sa-minggu` memakai angka ini: hari yang tidak muat diisi konten turunan yang hemat token.
+
+Data yang sudah ada (pilot v1, pipeline lama): 17.866 token output, 6,0 juta token cache read dalam satu episode. Pipeline v2 belum diukur.
 
 ### Dua jalur suara
 

@@ -13,16 +13,34 @@ Pemilik membaca progres produksi di Notion, bukan di chat. Satu baris per episod
 |---|---|---|
 | Episode | Title | `ep01 · Rencana Sempurna` |
 | Folder | Text | `videos/2026-W46/ep01-v2` (kunci pencocokan baris) |
-| Tahap | Select | naskah, suara, dialog_ok, adegan, mix, render_draf, qa_gerak, render, qa_final, kemasan, video_ok, gerbang, selesai |
-| Status | Select | berjalan, butuh persetujuan, butuh rekam ulang, gagal, siap posting |
+| Tahap | Select | rencana, naskah, suara, dialog_ok, adegan, mix, render_draf, qa_gerak, render, qa_final, kemasan, video_ok, gerbang, selesai |
+| Status | Select | direncanakan, berjalan, butuh persetujuan, butuh rekam ulang, gagal, siap posting |
 | Butuh dari pemilik | Text | kalimat tindakan untuk pemilik, kosong bila tidak ada |
 | Sumber suara | Select | manusia, elevenlabs |
 | Skor gerak (median) | Number | dari QA gerak |
 | LUFS | Number | dari mix |
 | Token output | Number | dari token.json |
-| Jadwal tayang | Date | diisi pemilik |
+| Jadwal tayang | Date | dari `scripts.jadwal_minggu` (WIB); pemilik boleh menggeser |
 | Tautan video | URL | bila video diunggah |
 | Diperbarui | Text | waktu UTC catatan terakhir |
+
+## Database "Bank Topik Sobat Ambis"
+Dari `python -m scripts.riset notion <bank-topik.json>`; satu baris per topik.
+
+| Kolom | Tipe Notion | Isi |
+|---|---|---|
+| Topik | Title | judul topik |
+| Pilar | Select | relate_siswa, relate_ortu, edukasi_belajar |
+| Temuan | Text | satu kalimat fakta |
+| Sudut psikologi | Text | mekanisme psikologis |
+| Ide episode | Text | situasi Arta & Mbis |
+| Sumber | Text | URL, satu per baris |
+| Tingkat sumber | Select | A, B |
+| Minggu | Text | `2026-W47` |
+| Tanggal riset | Date | |
+| Dipakai di | Text | folder episode, kosong bila belum |
+
+`bank_topik_id` disimpan di `config/notion.yaml` dengan aturan yang sama seperti `database_id`.
 
 ## Aturan
 - Nilai SELALU diambil dari `python -m scripts.notion_catatan <folder>` (JSON `properti` + `log`). Jangan mengarang angka.

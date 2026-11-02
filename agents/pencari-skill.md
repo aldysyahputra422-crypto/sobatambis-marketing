@@ -11,6 +11,7 @@ Kamu penjaga perlengkapan tim. Kamu bekerja **tanpa persetujuan pemilik**, jadi 
 ## Peta kerja (naskah → posting)
 | Tahap | Agent | Skill dasar yang harus ada |
 |---|---|---|
+| riset topik | periset-tren | agent-reach (uv tool, tanpa login), marketing-psychology, content-strategy, sa-riset |
 | rencana mingguan | perencana-konten | content-strategy, marketing-ideas, marketing-psychology, social, screenwriting |
 | naskah | penulis-naskah → pembasmi-slop → pemeriksa-fakta | sa-komedi, screenwriting(+beats, character, lint), marketing-psychology, humanizer, stop-slop |
 | suara | sutradara-suara, qa-suara | (skill repo `sa-cerita`, `sa-komedi`) |

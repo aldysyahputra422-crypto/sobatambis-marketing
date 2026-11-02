@@ -311,3 +311,36 @@ def test_settings_mendaftarkan_marketplace_repo_wajib():
         assert m in s["extraKnownMarketplaces"], m
     assert s["enabledPlugins"]["andrej-karpathy-skills@karpathy-skills"] is True
     assert "ecc@ecc" not in s["enabledPlugins"]
+
+
+def test_agent_reach_dipasang_lewat_uv_untuk_periset(tmp_path, monkeypatch):
+    monkeypatch.setattr(pasang_otomatis, "UV_BIN", tmp_path / "bin")
+    monkeypatch.setattr(pasang_otomatis.shutil, "which", lambda n: None)
+    e = BY_ID["agent-reach"]
+    assert e.pasang["jenis"] == "uv_tool" and "releases/latest/download/agent-reach.zip" in e.pasang["url"]
+    assert "periset-tren" in e.agent and not e.otomatis
+    jalan = []
+
+    def runner(cmd, **kw):
+        jalan.append(cmd)
+        if cmd[:3] == ["uv", "tool", "install"]:
+            (tmp_path / "bin").mkdir(exist_ok=True)
+            (tmp_path / "bin/agent-reach").write_text("#!/bin/sh")
+        return subprocess.CompletedProcess(cmd, 0, "", "")
+    assert not pasang_otomatis.sudah_terpasang(e)
+    h = pasang_otomatis.pasang_untuk_agent(KATALOG, "periset-tren", skills_dir=tmp_path / "s", runner=runner,
+                                           log=tmp_path / "t.md", cache=tmp_path / "c")
+    assert "agent-reach" in h["terpasang"], h
+    assert ["uv", "tool", "install", e.pasang["url"]] in jalan
+    assert [str(tmp_path / "bin/agent-reach"), "setup"] in jalan
+    assert not any("pypi" in " ".join(c) or c[:2] == ["pip", "install"] for c in jalan)
+
+
+def test_label_cari_sama_dengan_aturan_id():
+    """pencari-skill memutuskan `--id` dari label `cari`; keduanya harus memakai aturan "diminta"."""
+    r = subprocess.run([sys.executable, "-m", "scripts.katalog", "cari", "riset tren baca web transkrip youtube"],
+                       capture_output=True, text=True, cwd=ROOT)
+    baris = next(b for b in r.stdout.splitlines() if b.startswith("agent-reach "))
+    assert "[boleh]" in baris or "[sudah:" in baris, baris
+    r = subprocess.run([sys.executable, "-m", "scripts.katalog", "cari", "elevenlabs suara"], capture_output=True, text=True, cwd=ROOT)
+    assert "elevenlabs [pemilik: berbayar" in r.stdout

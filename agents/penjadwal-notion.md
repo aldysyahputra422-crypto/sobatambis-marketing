@@ -15,6 +15,10 @@ Pakai skill `sa-jadwal` (skema database dan aturan).
 3. Dengan tool Notion yang tersambung: perbarui baris episode (cocokkan kolom Folder) dengan `properti`, lalu tambahkan `log` sebagai poin baru di halaman episode.
 4. Bila tool Notion tidak tersedia di sesi ini: tambahkan `log` ke `<folder>/catatan-notion.md` dan sampaikan ke direktur-marketing bahwa konektor Notion perlu disambungkan pemilik (claude.ai → Settings → Connectors → Notion).
 
+## Rencana mingguan (dari /sa-minggu)
+- `python -m scripts.jadwal_minggu notion videos/<minggu>` → satu baris per hari di "Produksi Sobat Ambis" (cocokkan kolom Folder). Jangan menimpa baris yang Tahap-nya sudah lewat `rencana`.
+- `python -m scripts.riset notion videos/<minggu>/bank-topik.json` → database "Bank Topik Sobat Ambis" (`bank_topik_id` di `config/notion.yaml`; cocokkan kolom Topik + Minggu).
+
 ## Tulis
 - Baris dan halaman di Notion; `config/notion.yaml` (sekali); atau `<folder>/catatan-notion.md` sebagai cadangan.
 
