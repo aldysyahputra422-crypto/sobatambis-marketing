@@ -20,14 +20,24 @@ Plugin ini menjalankan script Python dan proyek Remotion yang ada di repo, jadi 
    /plugin install sobatambis-marketing@sobatambis
    ```
 
-3. Dependensi (sekali):
+3. Dependensi (sekali; aman diulang):
 
    ```bash
-   python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-   npm ci --prefix template
+   bash scripts/setup.sh
    ```
 
-   Butuh Python 3.13, Node 22, dan ffmpeg 6.
+   Butuh Python 3.13, Node 22, dan ffmpeg 6. Di Claude Code versi web, isi script setup environment dengan `bash scripts/setup.sh` supaya dependensi terpasang otomatis tiap sesi.
+
+### Yang ada di dalam plugin
+- **14 agent**: direktur-marketing dan animator (Opus); penulis-naskah, pembasmi-slop, pemeriksa-fakta, storyboarder, inspektur-frame, desainer-cover, penulis-caption, penjaga-gerbang-qa (Sonnet); sutradara-suara, qa-suara, pencari-skill, akuntan-token (Haiku).
+- **3 skill**: `sa-brand` (fakta resmi, harga, CTA), `sa-cerita` (story bible, Arc 1), `sa-katalog` (katalog skill tambahan).
+- **3 perintah**: `/sa-video`, `/sa-status`, `/sa-pasang-skill`.
+
+### Konektor
+- **Wajib: tidak ada.** Produksi video berjalan tanpa konektor (GitHub hanya untuk mengambil repo).
+- **Opsional, untuk pemeriksa-fakta** bila naskah memuat klaim ilmiah (Ep.1 tidak): salah satu dari Consensus, Elicit, atau SciSpace.
+- ElevenLabs bukan konektor: dipakai lewat secret `ELEVENLABS_API_KEY` (lihat `docs/lanjutan-elevenlabs.md`).
+- Notion dan Google Drive baru dipakai di rencana berikutnya (jadwal mingguan, unggah otomatis); belum perlu disambungkan.
 
 4. Secret `ELEVENLABS_API_KEY` di environment (jangan ditempel di chat). Untuk jalur ElevenLabs penuh, buat kunci di paket **berbayar** dengan izin: `text_to_speech`, `voices_read`, `voices_write`, `sound_generation`, `user_read`, dan `music_generation`. Jalur rekaman manusia tidak butuh kunci untuk suara.
 
