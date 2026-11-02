@@ -222,3 +222,30 @@ def test_subskill_bintang_menyalin_semua_folder_skill(tmp_path):
         return subprocess.CompletedProcess(cmd, 0, "", "")
     h = pasang_otomatis.pasang_satu(BY_ID["remotion-skills"], skills_dir=tmp_path / "s", runner=runner, log=tmp_path / "t.md", cache=tmp_path / "c")
     assert h["status"] == "terpasang" and sorted(p.name for p in (tmp_path / "s").iterdir()) == ["remotion-best-practices", "remotion-license"]
+
+
+# ---------- pencari-skill: end-to-end, hemat token ----------
+
+def test_alasan_sesuai_jenis():
+    assert "setup.sh" in pasang_otomatis.alasan_tidak_boleh(BY_ID["ffmpeg"])
+    assert "setup.sh" in pasang_otomatis.alasan_tidak_boleh(BY_ID["faster-whisper"])
+    assert "settings" in pasang_otomatis.alasan_tidak_boleh(BY_ID["caveman"])
+    assert "izin pemilik" in pasang_otomatis.alasan_tidak_boleh(BY_ID["threejs"])
+
+
+def test_pasang_untuk_agent_hanya_skill_miliknya(tmp_path):
+    dipasang = []
+
+    def runner(cmd, **kw):
+        dipasang.append(cmd)
+        return subprocess.CompletedProcess(cmd, 1, "", "")
+    h = pasang_otomatis.pasang_untuk_agent(KATALOG, "pembasmi-slop", skills_dir=tmp_path, runner=runner, log=tmp_path / "t.md", cache=tmp_path / "c")
+    assert sorted(h["gagal"]) == ["humanizer", "stop-slop"]
+    assert all("marketingskills" not in " ".join(c) for c in dipasang)
+
+
+def test_cari_ringkas_maksimal_tiga_baris_berlabel():
+    r = subprocess.run([sys.executable, "-m", "scripts.katalog", "cari", "naskah anti slop caption"], capture_output=True, text=True, cwd=ROOT)
+    baris = r.stdout.strip().splitlines()
+    assert 1 <= len(baris) <= 3
+    assert all(("[boleh]" in b) or ("[pemilik:" in b) or ("[sudah:" in b) for b in baris)

@@ -52,6 +52,12 @@ if __name__ == "__main__":
     if len(sys.argv) < 3 or sys.argv[1] != "cari":
         print("pakai: python -m scripts.katalog cari \"<kebutuhan>\"")
         sys.exit(2)
-    for e in cari(muat(Path("katalog/skill.yaml")), " ".join(sys.argv[2:]))[:5]:
-        kunci = f" (butuh {e.butuh_key})" if e.butuh_key else ""
-        print(f"{e.id} [{e.status}]{kunci}: {e.cara_pasang}")
+    # Ringkas demi hemat token: maksimal 3 baris, masing-masing sudah berisi keputusan pasang.
+    from scripts.pasang_otomatis import alasan_tidak_boleh, sudah_terpasang
+    for e in cari(muat(Path(__file__).resolve().parents[1] / "katalog/skill.yaml"), " ".join(sys.argv[2:]))[:3]:
+        if sudah_terpasang(e):
+            label = "[sudah: terpasang]"
+        else:
+            alasan = alasan_tidak_boleh(e)
+            label = "[boleh]" if alasan is None else (f"[sudah: {alasan}]" if "setup.sh" in alasan or "settings" in alasan else f"[pemilik: {alasan}]")
+        print(f"{e.id} {label} {e.fungsi[:90]}")

@@ -30,6 +30,7 @@
   fungsi: suara voice over narasi gratis bahasa Indonesia, emosi terbatas
   pakai_saat: suara voice over narasi cadangan mbis bereaksi datar
   cara_pasang: pip install edge-tts==7.3.1 (ada di requirements.txt)
+  pasang: {jenis: setup}
   lisensi: LGPL-3.0
   catatan_lisensi: memakai layanan TTS Microsoft secara tidak resmi; bisa berhenti sewaktu-waktu
   butuh_key: null
@@ -41,6 +42,7 @@
   fungsi: transkripsi suara lokal dengan waktu per kata untuk mengecek hasil voice over
   pakai_saat: dengar ulang transkrip cek suara caption waktu kata
   cara_pasang: pip install faster-whisper==1.2.1 (ada di requirements.txt); model small diunduh saat pertama dipakai
+  pasang: {jenis: setup}
   lisensi: MIT
   catatan_lisensi: bobot model Whisper berlisensi MIT
   butuh_key: null
@@ -52,6 +54,7 @@
   fungsi: olah audio dan video, potong, gabung, konversi, ekstrak frame
   pakai_saat: audio video konversi gabung potong frame cuplikan
   cara_pasang: sudah terpasang di environment (ffmpeg 6)
+  pasang: {jenis: setup}
   lisensi: LGPL/GPL
   catatan_lisensi: dipakai sebagai alat baris perintah
   butuh_key: null

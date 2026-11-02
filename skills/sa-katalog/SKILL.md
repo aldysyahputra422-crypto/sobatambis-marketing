@@ -11,8 +11,10 @@ Katalog: `katalog/skill.yaml`. Cari dengan:
 python -m scripts.katalog cari "<kebutuhan tugas>"
 ```
 
+Pintas: `python -m scripts.pasang_otomatis --agent <nama-agent>` memasang semua skill dasar milik satu agent sekaligus.
+
 Prosedur (wajib berurutan, tanpa bertanya ke pemilik kecuali langkah 4):
-1. Cocokkan kebutuhan: `python -m scripts.katalog cari "<kebutuhan>"`; ambil hasil teratas yang relevan.
+1. Cocokkan kebutuhan: `python -m scripts.katalog cari "<kebutuhan>"` → maksimal 3 baris berlabel `[boleh]`, `[sudah: ...]`, atau `[pemilik: alasan]`. Jangan membaca file katalog langsung (hemat token).
 2. Pasang: `python -m scripts.pasang_otomatis --id <id>`. Script itu sendiri yang memutuskan boleh/tidak (gratis, tanpa key, lisensi MIT/Apache/BSD/ISC/LGPL, status direkomendasikan/opsional, ≤ 200 MB) dan memverifikasi file `SKILL.md` benar-benar ada.
 3. Hasil `terpasang` atau `sudah_ada`: lanjutkan tugas memakai skill itu. Hasil `gagal`: ulangi sekali; masih gagal → langkah 4.
 4. Hasil `butuh_pemilik` atau gagal dua kali: JANGAN pasang manual, JANGAN cari jalan lain, JANGAN mengerjakan seadanya diam-diam. Catat alasannya lewat penjadwal-notion (kolom "Butuh dari pemilik") dan pakai alternatif gratis dari katalog bila ada.

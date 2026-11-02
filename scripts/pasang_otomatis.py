@@ -10,6 +10,7 @@ Selain itu: status "butuh_pemilik" + alasan (dicatat ke Notion lewat penjadwal-n
 
 python -m scripts.pasang_otomatis            → pasang semua entri bertanda otomatis: true
 python -m scripts.pasang_otomatis --id <id>  → pasang satu entri (dipakai pencari-skill)
+python -m scripts.pasang_otomatis --agent <nama>  → pasang semua skill dasar milik satu agent
 """
 import argparse
 import json
@@ -39,6 +40,11 @@ def _mb(ukuran: str) -> float:
 
 
 def alasan_tidak_boleh(e: Entri) -> str | None:
+    jenis = (e.pasang or {}).get("jenis")
+    if jenis == "setup":
+        return "sudah ditangani scripts/setup.sh (dependensi proyek)"
+    if jenis == "plugin":
+        return "plugin aktif lewat .claude/settings.json (scripts/aktifkan_otomatis.sh)"
     if e.butuh_key:
         return f"butuh {e.butuh_key}"
     if (e.biaya or "").lower() != "gratis":
@@ -50,7 +56,7 @@ def alasan_tidak_boleh(e: Entri) -> str | None:
     if _mb(e.ukuran) > MAKS_MB:
         return f"ukuran {e.ukuran}"
     if not e.pasang or e.pasang.get("jenis") not in ("git_skill", "git_subskill", "npx_skill"):
-        return "tidak ada cara pasang otomatis (plugin diatur lewat .claude/settings.json)"
+        return "tidak ada cara pasang otomatis; pasang manual hanya dengan izin pemilik"
     return None
 
 
@@ -135,12 +141,28 @@ def pasang_semua(katalog: list[Entri], skills_dir: Path | None = None, runner=su
     return hasil
 
 
+def pasang_untuk_agent(katalog: list[Entri], agent: str, skills_dir: Path | None = None, runner=subprocess.run,
+                      log: Path | None = None, cache: Path | None = None) -> dict:
+    """Pasang semua skill dasar milik satu agent (field `agent` di katalog) yang lolos aturan."""
+    milik = [e for e in katalog if e.agent and (agent in e.agent or "semua" in e.agent)]
+    hasil = {"terpasang": [], "sudah_ada": [], "gagal": [], "butuh_pemilik": []}
+    for e in milik:
+        if (e.pasang or {}).get("jenis") in ("plugin", "setup"):
+            continue
+        h = pasang_satu(e, skills_dir, runner, log, cache)
+        hasil[h["status"]].append(e.id)
+    return hasil
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--id")
+    ap.add_argument("--agent")
     a = ap.parse_args()
     kat = muat(ROOT / "katalog/skill.yaml")
-    if a.id:
+    if a.agent:
+        print(json.dumps({k: v for k, v in pasang_untuk_agent(kat, a.agent).items() if v}, ensure_ascii=False))
+    elif a.id:
         e = next((x for x in kat if x.id == a.id), None)
         print(json.dumps(pasang_satu(e) if e else {"id": a.id, "status": "butuh_pemilik", "alasan": "tidak ada di katalog"}, ensure_ascii=False))
     else:

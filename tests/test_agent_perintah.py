@@ -106,3 +106,11 @@ def test_skill_komedi_dan_perencana_konten_ada():
     assert (ROOT / "skills/sa-komedi/SKILL.md").exists()
     t = (ROOT / "agents/penulis-naskah.md").read_text(encoding="utf-8")
     assert "`sa-komedi`" in t and "`humanizer`" in t and "`claude-screenwriting`" in t
+
+
+def test_pencari_skill_paham_alur_dan_hemat_token():
+    t = (ROOT / "agents/pencari-skill.md").read_text(encoding="utf-8")
+    for kunci in ("--agent", "katalog cari", "Aturan hemat token", "Jangan membuka atau membaca", "Peta kerja", "butuh pemilik"):
+        assert kunci in t, kunci
+    for agent in ("penulis-naskah", "storyboarder", "desainer-cover", "perencana-konten"):
+        assert agent in t
