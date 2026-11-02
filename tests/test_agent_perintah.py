@@ -9,7 +9,7 @@ MODEL = {
     "direktur-marketing": "opus", "penulis-naskah": "sonnet", "pembasmi-slop": "sonnet", "pemeriksa-fakta": "sonnet",
     "storyboarder": "sonnet", "animator": "opus", "sutradara-suara": "haiku", "qa-suara": "haiku",
     "inspektur-frame": "sonnet", "desainer-cover": "sonnet", "penulis-caption": "sonnet",
-    "penjaga-gerbang-qa": "sonnet", "pencari-skill": "haiku", "akuntan-token": "haiku", "penjadwal-notion": "haiku",
+    "penjaga-gerbang-qa": "sonnet", "pencari-skill": "haiku", "akuntan-token": "haiku", "penjadwal-notion": "haiku", "perencana-konten": "sonnet",
 }
 
 
@@ -84,3 +84,25 @@ def test_notion_tercatat_di_alur():
         assert kolom in skill
     agen = (ROOT / "agents/penjadwal-notion.md").read_text(encoding="utf-8")
     assert "catatan-notion.md" in agen and "config/notion.yaml" in agen
+
+
+def test_setiap_agent_dibangun_dari_skill_terverifikasi():
+    import re
+    from scripts.katalog import muat
+    kat = {e.id: e for e in muat(ROOT / "katalog/skill.yaml")}
+    lokal = {p.parent.name for p in (ROOT / "skills").glob("*/SKILL.md")}
+    for p in (ROOT / "agents").glob("*.md"):
+        teks = p.read_text(encoding="utf-8")
+        assert "## Skill dasar" in teks, p.name
+        bagian = teks.split("## Skill dasar", 1)[1].split("\n## ", 1)[0]
+        dipakai = set(re.findall(r"`([a-z0-9-]+)`", bagian))
+        assert dipakai, p.name
+        for s in dipakai:
+            assert s in lokal or s in kat or any(s in (e.pasang or {}).get("skills", []) for e in kat.values()), f"{p.name}: {s}"
+        assert any(s in lokal or (s in kat and (kat[s].otomatis or (kat[s].pasang or {}).get("jenis") == "plugin")) for s in dipakai), p.name
+
+
+def test_skill_komedi_dan_perencana_konten_ada():
+    assert (ROOT / "skills/sa-komedi/SKILL.md").exists()
+    t = (ROOT / "agents/penulis-naskah.md").read_text(encoding="utf-8")
+    assert "`sa-komedi`" in t and "`humanizer`" in t and "`claude-screenwriting`" in t

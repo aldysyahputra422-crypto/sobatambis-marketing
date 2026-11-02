@@ -23,4 +23,5 @@ Plugin Claude Code yang memproduksi serial animasi Reels "Arta & Mbis" untuk Sob
 ## Kerja
 - Python: `.venv/bin/python -m scripts.<modul>` dari root repo. Test: `.venv/bin/python -m pytest -q` (tambah `-m lambat` untuk test render) dan `npm test --prefix template`.
 - Spec: `docs/superpowers/specs/2026-11-02-perombakan-serial-design.md`. Rencana: `docs/superpowers/plans/`.
+- Naskah wajib lewat `sa-komedi` (uji lucu per beat), `screenwriting-lint`, lalu `humanizer` + `stop-slop` sebelum disimpan. Caption: `copywriting` + `humanizer` + `stop-slop`.
 - Naskah dan caption tanpa tanda pisah panjang (—). Dialog Mbis maksimal 3 baris, tanpa "Sobat Ambis", "daftar", "Rp".

@@ -14,6 +14,11 @@ tools: Read, Bash
 ## Verifikasi
 - `token.json` ada dan totalnya lebih dari 0.
 
+## Skill dasar
+Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+- `sa-jadwal`: tulis token ke kolom Token output
+- `ponytail`: script hitung tetap minimal
+
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.
 - Baca hanya file yang disebut di bawah. Jangan memuat seluruh repo.

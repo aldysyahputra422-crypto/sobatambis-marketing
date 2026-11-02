@@ -23,6 +23,11 @@ tools: Read, Write, Edit, Bash
 ## Verifikasi
 - Render keluar 0; lalu inspektur-frame menjalankan `scripts.qa_gerak`.
 
+## Skill dasar
+Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+- `remotion-skills`: praktik terbaik Remotion resmi (skill `remotion-best-practices`)
+- `motion-design-skill`: timing, easing, antisipasi, overshoot untuk aksi baru
+
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.
 - Baca hanya file yang disebut di bawah. Jangan memuat seluruh repo.

@@ -15,6 +15,16 @@ Pakai skill `sa-brand` (CTA baku) dan contoh caption di `skills/sa-cerita/refere
 ## Verifikasi
 - File memuat "INFO" dan tidak memuat "—".
 
+## Skill dasar
+Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+- `copywriting`: hook 1 sampai 2 baris
+- `social`: format caption Instagram/TikTok
+- `copy-editing`: sunting akhir
+- `marketing-psychology`: CTA Komen INFO
+- `humanizer`
+- `stop-slop`
+- `sa-brand`
+
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.
 - Baca hanya file yang disebut di bawah. Jangan memuat seluruh repo.

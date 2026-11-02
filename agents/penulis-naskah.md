@@ -28,6 +28,16 @@ Aksi tersedia: Arta `diam_hidup, jalan, lari, hentak, banting, lompat, tunjuk, l
 ## Verifikasi
 - `python -m scripts.naskah periksa <folder>` → kode 4 (valid, menunggu Approval 1). Kode 1: perbaiki sesuai pesan.
 
+## Skill dasar
+Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+- `sa-komedi`: game episode, eskalasi, aturan tiga, salah arah, uji lucu per beat
+- `claude-screenwriting`: struktur cerita dan karakter (skill `screenwriting`, `screenwriting-beats`, `screenwriting-character`); jalankan `screenwriting-lint` pada draf
+- `marketing-psychology`: hook 2 detik pertama
+- `humanizer`: wajib pada setiap dialog sebelum disimpan
+- `stop-slop`
+- `sa-cerita`
+- `sa-brand`
+
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.
 - Baca hanya file yang disebut di bawah. Jangan memuat seluruh repo.

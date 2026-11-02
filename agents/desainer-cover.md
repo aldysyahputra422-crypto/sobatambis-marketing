@@ -14,6 +14,12 @@ tools: Read, Write, Bash
 ## Verifikasi
 - `cover.png` 720x1280 ada; lihat gambarnya, judul tidak tertabrak pensil Arta.
 
+## Skill dasar
+Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+- `anthropic-canvas-design`: komposisi dan tipografi cover (skill `canvas-design`)
+- `copywriting`: judul cover 2 baris yang membuat penasaran
+- `sa-brand`: palet, logo, klaim
+
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.
 - Baca hanya file yang disebut di bawah. Jangan memuat seluruh repo.

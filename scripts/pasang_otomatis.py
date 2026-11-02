@@ -5,7 +5,7 @@ Boleh dipasang TANPA bertanya hanya bila semua benar:
   - lisensi bebas komersial (MIT, Apache-2.0, BSD, ISC, LGPL)
   - status direkomendasikan atau opsional (bukan rujukan/sebagian/alternatif)
   - ukuran bukan GB dan tidak lebih dari 200 MB
-  - punya cara pasang terstruktur (pasang.jenis git_skill atau npx_skill)
+  - punya cara pasang terstruktur (pasang.jenis git_skill, git_subskill, atau npx_skill)
 Selain itu: status "butuh_pemilik" + alasan (dicatat ke Notion lewat penjadwal-notion), tidak dipasang.
 
 python -m scripts.pasang_otomatis            → pasang semua entri bertanda otomatis: true
@@ -14,6 +14,7 @@ python -m scripts.pasang_otomatis --id <id>  → pasang satu entri (dipakai penc
 import argparse
 import json
 import re
+import shutil
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -23,7 +24,8 @@ from scripts.katalog import Entri, muat
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = Path.home() / ".claude/skills"
 LOG = ROOT / "katalog/terpasang.md"
-LISENSI_BEBAS = ("mit", "apache-2.0", "bsd", "isc", "lgpl")
+LISENSI_BEBAS = ("mit", "apache-2.0", "bsd", "isc", "lgpl", "remotion license")  # Remotion License: lisensi mesin inti proyek, sudah diterima pemilik
+CACHE = Path.home() / ".cache/sobatambis/repo"
 STATUS_BOLEH = ("direkomendasikan", "opsional")
 MAKS_MB = 200
 
@@ -47,7 +49,7 @@ def alasan_tidak_boleh(e: Entri) -> str | None:
         return f"status {e.status}"
     if _mb(e.ukuran) > MAKS_MB:
         return f"ukuran {e.ukuran}"
-    if not e.pasang or e.pasang.get("jenis") not in ("git_skill", "npx_skill"):
+    if not e.pasang or e.pasang.get("jenis") not in ("git_skill", "git_subskill", "npx_skill"):
         return "tidak ada cara pasang otomatis (plugin diatur lewat .claude/settings.json)"
     return None
 
@@ -66,7 +68,34 @@ def perintah(e: Entri, skills_dir: Path = SKILLS) -> list[str]:
 
 
 def sudah_terpasang(e: Entri, skills_dir: Path = SKILLS) -> bool:
+    if e.pasang and e.pasang.get("jenis") == "git_subskill":
+        nama = e.pasang.get("skills") or [Path(x).name for x in e.pasang["paths"] if not x.endswith("*")]
+        return bool(nama) and all((Path(skills_dir) / n / "SKILL.md").exists() for n in nama)
     return any(Path(skills_dir).glob(f"{e.id}*/SKILL.md")) or any(Path(skills_dir).glob(f"*/{e.id}*/SKILL.md"))
+
+
+def _pasang_subskill(e: Entri, skills_dir: Path, runner, cache: Path) -> bool:
+    """Sparse clone repo ke cache, lalu salin hanya folder skill terpilih (paths; 'x/*' = semua subfolder ber-SKILL.md)."""
+    url = e.pasang["url"]
+    tujuan = Path(cache) / re.sub(r"[^a-z0-9]+", "-", url.lower()).strip("-")
+    if tujuan.exists():
+        shutil.rmtree(tujuan)
+    tujuan.parent.mkdir(parents=True, exist_ok=True)
+    induk = sorted({p[:-2] if p.endswith("/*") else p for p in e.pasang["paths"]})
+    r = runner(["git", "clone", "--depth", "1", "--filter=blob:none", "--sparse", url, str(tujuan)], capture_output=True, text=True, timeout=300)
+    if r.returncode != 0:
+        return False
+    runner(["git", "-C", str(tujuan), "sparse-checkout", "set", *induk], capture_output=True, text=True, timeout=300)
+    Path(skills_dir).mkdir(parents=True, exist_ok=True)
+    sumber = []
+    for p in e.pasang["paths"]:
+        if p.endswith("/*"):
+            sumber += [d for d in sorted((tujuan / p[:-2]).glob("*")) if (d / "SKILL.md").exists()]
+        elif (tujuan / p / "SKILL.md").exists():
+            sumber.append(tujuan / p)
+    for d in sumber:
+        shutil.copytree(d, Path(skills_dir) / d.name, dirs_exist_ok=True)
+    return bool(sumber)
 
 
 def _catat(log: Path, e: Entri, hasil: str) -> None:
@@ -77,27 +106,31 @@ def _catat(log: Path, e: Entri, hasil: str) -> None:
         f.write(f"| {datetime.now(timezone.utc).isoformat(timespec='minutes')} | {e.id} | {hasil} |\n")
 
 
-def pasang_satu(e: Entri, skills_dir: Path = SKILLS, runner=subprocess.run, log: Path = LOG) -> dict:
+def pasang_satu(e: Entri, skills_dir: Path | None = None, runner=subprocess.run, log: Path | None = None, cache: Path | None = None) -> dict:
+    skills_dir, log, cache = skills_dir or SKILLS, log or LOG, cache or CACHE
     alasan = alasan_tidak_boleh(e)
     if alasan:
         return {"id": e.id, "status": "butuh_pemilik", "alasan": alasan}
     if sudah_terpasang(e, skills_dir):
         return {"id": e.id, "status": "sudah_ada"}
     try:
-        r = runner(perintah(e, skills_dir), capture_output=True, text=True, timeout=180)
-        ok = r.returncode == 0 and sudah_terpasang(e, skills_dir)
+        if e.pasang["jenis"] == "git_subskill":
+            ok = _pasang_subskill(e, skills_dir, runner, cache) and (sudah_terpasang(e, skills_dir) or not e.pasang.get("skills"))
+        else:
+            r = runner(perintah(e, skills_dir), capture_output=True, text=True, timeout=180)
+            ok = r.returncode == 0 and sudah_terpasang(e, skills_dir)
     except (OSError, subprocess.TimeoutExpired) as x:
         ok, r = False, None
     _catat(log, e, "terpasang" if ok else "gagal")
     return {"id": e.id, "status": "terpasang" if ok else "gagal"}
 
 
-def pasang_semua(katalog: list[Entri], skills_dir: Path = SKILLS, runner=subprocess.run, log: Path = LOG) -> dict:
+def pasang_semua(katalog: list[Entri], skills_dir: Path | None = None, runner=subprocess.run, log: Path | None = None, cache: Path | None = None) -> dict:
     hasil = {"terpasang": [], "sudah_ada": [], "gagal": [], "butuh_pemilik": []}
     for e in katalog:
         if not e.otomatis:
             continue
-        h = pasang_satu(e, skills_dir, runner, log)
+        h = pasang_satu(e, skills_dir, runner, log, cache)
         hasil[h["status"]].append(e.id)
     return hasil
 

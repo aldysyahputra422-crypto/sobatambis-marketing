@@ -13,6 +13,14 @@ KATALOG = muat(ROOT / "katalog/skill.yaml")
 BY_ID = {e.id: e for e in KATALOG}
 
 
+@pytest.fixture(autouse=True)
+def _jangan_sentuh_folder_asli(tmp_path, monkeypatch):
+    """Pemasang tidak boleh menulis ke ~/.claude/skills, ~/.cache, atau katalog asli selama test."""
+    monkeypatch.setattr(pasang_otomatis, "SKILLS", tmp_path / "_skills_asli")
+    monkeypatch.setattr(pasang_otomatis, "CACHE", tmp_path / "_cache_asli")
+    monkeypatch.setattr(pasang_otomatis, "LOG", tmp_path / "_log_asli.md")
+
+
 # ---------- pemasang otomatis ----------
 
 def test_boleh_otomatis_hanya_gratis_tanpa_key_lisensi_bebas():
@@ -46,19 +54,20 @@ def test_pasang_otomatis_memasang_yang_belum_dan_mencatat(tmp_path):
         return subprocess.CompletedProcess(cmd, 0, "", "")
 
     log = tmp_path / "terpasang.md"
-    hasil = pasang_otomatis.pasang_semua(KATALOG, skills_dir=tmp_path, runner=runner, log=log)
+    dua = [BY_ID["stop-slop"], BY_ID["motion-design-skill"]]
+    hasil = pasang_otomatis.pasang_semua(dua, skills_dir=tmp_path, runner=runner, log=log)
     assert hasil["terpasang"] == ["stop-slop", "motion-design-skill"] and hasil["gagal"] == []
     assert "stop-slop" in log.read_text()
     jalan.clear()
-    hasil2 = pasang_otomatis.pasang_semua(KATALOG, skills_dir=tmp_path, runner=runner, log=log)
+    hasil2 = pasang_otomatis.pasang_semua(dua, skills_dir=tmp_path, runner=runner, log=log)
     assert jalan == [] and hasil2["sudah_ada"] == ["stop-slop", "motion-design-skill"]
 
 
 def test_pasang_gagal_tidak_melempar(tmp_path):
     def runner(cmd, **kw):
         return subprocess.CompletedProcess(cmd, 1, "", "jaringan putus")
-    hasil = pasang_otomatis.pasang_semua(KATALOG, skills_dir=tmp_path, runner=runner, log=tmp_path / "t.md")
-    assert set(hasil["gagal"]) == {"stop-slop", "motion-design-skill"}
+    hasil = pasang_otomatis.pasang_semua(KATALOG, skills_dir=tmp_path, runner=runner, log=tmp_path / "t.md", cache=tmp_path / "c")
+    assert set(hasil["gagal"]) == {e.id for e in KATALOG if e.otomatis} and hasil["terpasang"] == []
 
 
 def test_pasang_satu_id_yang_tidak_boleh_ditolak(tmp_path):
@@ -174,3 +183,42 @@ def test_mulai_mengabaikan_episode_v1(tmp_path):
     status.tandai(f, "naskah", "lulus")
     r = _hook("mulai", {"source": "startup"}, tmp_path)
     assert "videos/w/lama" not in json.loads(r.stdout)["hookSpecificOutput"]["additionalContext"]
+
+
+# ---------- skill terbaik per bidang ----------
+
+def test_skill_bidang_dipasang_bawaan():
+    for i in ("humanizer", "stop-slop", "marketingskills", "claude-screenwriting", "anthropic-canvas-design", "remotion-skills", "motion-design-skill"):
+        assert BY_ID[i].otomatis and pasang_otomatis.boleh_otomatis(BY_ID[i]), i
+
+
+def test_subskill_hanya_folder_terpilih(tmp_path):
+    cache = tmp_path / "cache"
+
+    def runner(cmd, **kw):
+        if cmd[:2] == ["git", "clone"]:
+            dst = Path(cmd[-1])
+            for s in ("copywriting", "social", "cold-email"):
+                (dst / "skills" / s).mkdir(parents=True)
+                (dst / "skills" / s / "SKILL.md").write_text(s)
+        return subprocess.CompletedProcess(cmd, 0, "", "")
+
+    e = BY_ID["marketingskills"]
+    e2 = type(e)(**{**e.__dict__, "pasang": {**e.pasang, "paths": ["skills/copywriting", "skills/social"], "skills": ["copywriting", "social"]}})
+    h = pasang_otomatis.pasang_satu(e2, skills_dir=tmp_path / "skills", runner=runner, log=tmp_path / "t.md", cache=cache)
+    assert h["status"] == "terpasang"
+    assert sorted(p.name for p in (tmp_path / "skills").iterdir()) == ["copywriting", "social"]
+    assert pasang_otomatis.sudah_terpasang(e2, tmp_path / "skills")
+
+
+def test_subskill_bintang_menyalin_semua_folder_skill(tmp_path):
+    def runner(cmd, **kw):
+        if cmd[:2] == ["git", "clone"]:
+            dst = Path(cmd[-1])
+            for s in ("remotion-best-practices", "remotion-license"):
+                (dst / "skills" / s).mkdir(parents=True)
+                (dst / "skills" / s / "SKILL.md").write_text(s)
+            (dst / "skills" / "bukan-skill").mkdir()
+        return subprocess.CompletedProcess(cmd, 0, "", "")
+    h = pasang_otomatis.pasang_satu(BY_ID["remotion-skills"], skills_dir=tmp_path / "s", runner=runner, log=tmp_path / "t.md", cache=tmp_path / "c")
+    assert h["status"] == "terpasang" and sorted(p.name for p in (tmp_path / "s").iterdir()) == ["remotion-best-practices", "remotion-license"]

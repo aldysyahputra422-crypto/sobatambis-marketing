@@ -18,6 +18,11 @@ tools: Read, Bash
 ## Verifikasi
 - Kedua perintah keluar 0.
 
+## Skill dasar
+Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+- `motion-design-skill`: menilai apakah gerak terasa hidup atau kaku
+- `remotion-skills`: memeriksa hasil render
+
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.
 - Baca hanya file yang disebut di bawah. Jangan memuat seluruh repo.

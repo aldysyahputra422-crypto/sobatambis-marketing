@@ -23,7 +23,8 @@ class Entri:
     ukuran: str
     status: str
     otomatis: bool = False  # boleh dipasang tanpa bertanya (lihat scripts/pasang_otomatis.py)
-    pasang: dict | None = None  # cara pasang terstruktur: git_skill | npx_skill | plugin
+    pasang: dict | None = None  # cara pasang terstruktur: git_skill | git_subskill | npx_skill | plugin
+    agent: list | None = None  # agent yang dibangun dari skill ini ("semua" = seluruh agent)
 
 
 def muat(path: Path) -> list[Entri]:

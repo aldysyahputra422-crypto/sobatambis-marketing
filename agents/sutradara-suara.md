@@ -19,6 +19,11 @@ Baca `naskah.json` → `sumber_suara`:
 ## Verifikasi
 - Kode 0 lulus. Kode 3: izin/kredit ElevenLabs kurang, berhenti dan lapor. Kode 5: kirim daftar `baris_tersisa` di `status.json` ke pemilik untuk rekam ulang.
 
+## Skill dasar
+Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+- `sa-cerita`: watak suara tiap tokoh
+- `sa-komedi`: arah emosi dan timing punchline di lembar rekaman
+
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.
 - Baca hanya file yang disebut di bawah. Jangan memuat seluruh repo.

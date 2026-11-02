@@ -28,8 +28,9 @@ Semua agent, skill, perintah, dan hook dimuat langsung dari folder repo (lewat `
    Butuh Python 3.13, Node 22, dan ffmpeg 6.
 
 ### Yang ada di dalam plugin
-- **15 agent**: direktur-marketing dan animator (Opus); penulis-naskah, pembasmi-slop, pemeriksa-fakta, storyboarder, inspektur-frame, desainer-cover, penulis-caption, penjaga-gerbang-qa (Sonnet); sutradara-suara, qa-suara, pencari-skill, akuntan-token, penjadwal-notion (Haiku).
-- **4 skill**: `sa-brand` (fakta resmi, harga, CTA), `sa-cerita` (story bible, Arc 1), `sa-katalog` (katalog skill tambahan), `sa-jadwal` (catatan produksi di Notion).
+- **16 agent**: direktur-marketing dan animator (Opus); penulis-naskah, perencana-konten, pembasmi-slop, pemeriksa-fakta, storyboarder, inspektur-frame, desainer-cover, penulis-caption, penjaga-gerbang-qa (Sonnet); sutradara-suara, qa-suara, pencari-skill, akuntan-token, penjadwal-notion (Haiku). Setiap agent punya bagian "Skill dasar" berisi skill terverifikasi yang wajib dimuat.
+- **5 skill di repo**: `sa-brand` (fakta resmi, harga, CTA), `sa-cerita` (story bible, Arc 1), `sa-komedi` (teknik komedi sketsa), `sa-katalog` (katalog + pemasangan otomatis), `sa-jadwal` (catatan produksi di Notion).
+- **Skill luar yang terpasang sendiri** (dipilih per bidang, lisensi diperiksa): `humanizer` dan `stop-slop` (anti-slop naskah/caption), `claude-screenwriting` (struktur cerita + lint naskah), `marketingskills` (copywriting, copy-editing, content-strategy, social, marketing-psychology, marketing-ideas, video), `canvas-design` dan `skill-creator` (Anthropic resmi), skill Remotion resmi, `motion-design-skill`. Plugin hemat token: caveman, ponytail.
 - **3 perintah**: `/sa-video`, `/sa-status`, `/sa-pasang-skill`.
 
 ### Konektor

@@ -18,6 +18,11 @@ tools: Read, Bash
 ## Verifikasi
 - `qa.md` memuat setiap baris bermasalah atau "tidak ada temuan".
 
+## Skill dasar
+Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+- `sa-cerita`: watak suara tiap tokoh
+- `sa-komedi`: ritme punchline dan jeda sesudahnya
+
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.
 - Baca hanya file yang disebut di bawah. Jangan memuat seluruh repo.

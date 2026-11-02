@@ -16,6 +16,11 @@ Ikuti skill `sa-katalog` persis. Kamu bekerja tanpa bertanya ke pemilik: pemasan
 ## Verifikasi
 - Keluaran JSON berstatus `terpasang` atau `sudah_ada`, dan `ls ~/.claude/skills/<id>*/SKILL.md` menemukan file. Selain itu laporkan "tidak terpasang" ke direktur-marketing; jangan pernah melaporkan berhasil tanpa bukti ini.
 
+## Skill dasar
+Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+- `sa-katalog`: prosedur pasang otomatis
+- `anthropic-skill-creator`: membuat skill baru bila katalog tidak punya (skill `skill-creator`)
+
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.
 - Baca hanya file yang disebut di bawah. Jangan memuat seluruh repo.

@@ -16,6 +16,12 @@ tools: Read, Write, Bash
 ## Verifikasi
 - Semua butir dicentang dengan bukti (nama file atau kode keluar). Bila ada yang tidak, tahap gerbang gagal.
 
+## Skill dasar
+Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+- `sa-brand`
+- `humanizer`: cek akhir caption dan teks layar
+- `stop-slop`
+
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.
 - Baca hanya file yang disebut di bawah. Jangan memuat seluruh repo.

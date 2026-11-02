@@ -4,7 +4,10 @@
   sumber: plugin remotion (sudah terpasang di Claude Code) / https://www.remotion.dev
   fungsi: membuat, mempratinjau, dan merender video dengan kode React
   pakai_saat: render video animasi template remotion komposisi caption audio
-  cara_pasang: sudah tersedia sebagai plugin remotion; dependensi npm ada di template/package.json
+  cara_pasang: skill resmi remotion-dev/skills dipasang otomatis (folder skills/*); dependensi npm ada di template/package.json
+  otomatis: true
+  pasang: {jenis: git_subskill, url: "https://github.com/remotion-dev/skills", paths: ["skills/*"], skills: [remotion-best-practices]}
+  agent: [animator, storyboarder, inspektur-frame]
   lisensi: Remotion License
   catatan_lisensi: gratis untuk individu dan tim kecil; cek remotion.dev/license bila tim membesar
   butuh_key: null
@@ -62,6 +65,7 @@
   cara_pasang: git clone --depth 1 https://github.com/hardikpandya/stop-slop ~/.claude/skills/stop-slop
   otomatis: true
   pasang: {jenis: git_skill, url: "https://github.com/hardikpandya/stop-slop"}
+  agent: [pembasmi-slop, penulis-naskah, penulis-caption, penjaga-gerbang-qa]
   lisensi: MIT
   catatan_lisensi: bebas dipakai
   butuh_key: null
@@ -74,11 +78,82 @@
   pakai_saat: hemat token kuota log komunikasi agent ringkas
   cara_pasang: aktif bawaan lewat .claude/settings.json (plugin caveman@caveman); di sesi web aturannya disuntikkan hook SessionStart. Hanya untuk komunikasi internal, bukan naskah, caption, atau catatan Notion
   pasang: {jenis: plugin, id: caveman@caveman}
+  agent: [semua]
   lisensi: Apache-2.0
   catatan_lisensi: bebas dipakai
   butuh_key: null
   biaya: gratis
   ukuran: sedang
+  status: direkomendasikan
+- id: humanizer
+  sumber: https://github.com/blader/humanizer
+  fungsi: menulis ulang teks yang terdengar buatan AI berdasarkan 24 pola "Signs of AI writing" Wikipedia, tanpa mengubah isi
+  pakai_saat: naskah caption anti slop ai tulisan manusiawi sunting dialog
+  cara_pasang: otomatis (git clone ke ~/.claude/skills/humanizer)
+  otomatis: true
+  pasang: {jenis: git_skill, url: "https://github.com/blader/humanizer"}
+  agent: [pembasmi-slop, penulis-naskah, penulis-caption, penjaga-gerbang-qa]
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: marketingskills
+  sumber: https://github.com/coreyhaines31/marketingskills
+  fungsi: paket skill pemasaran paling banyak dipakai; yang dipasang hanya copywriting, copy-editing, content-strategy, social, marketing-psychology, marketing-ideas, video
+  pakai_saat: caption copywriting strategi konten kalender ide konten media sosial psikologi pemasaran hook video
+  cara_pasang: otomatis (sparse clone, hanya folder skill terpilih)
+  otomatis: true
+  pasang: {jenis: git_subskill, url: "https://github.com/coreyhaines31/marketingskills", paths: [skills/copywriting, skills/copy-editing, skills/content-strategy, skills/social, skills/marketing-psychology, skills/marketing-ideas, skills/video], skills: [copywriting, copy-editing, content-strategy, social, marketing-psychology, marketing-ideas, video]}
+  agent: [perencana-konten, penulis-caption, desainer-cover, direktur-marketing, penulis-naskah, storyboarder]
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai; jangan pasang seluruh paket (50+ skill) supaya konteks tetap ringan
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: claude-screenwriting
+  sumber: https://github.com/e06084/claude-screenwriting
+  fungsi: teori struktur cerita (Vogler, McKee, Save the Cat 15 beat), desain karakter, dan lint kesehatan struktur naskah
+  pakai_saat: naskah struktur cerita beat karakter arc diagnosis naskah film
+  cara_pasang: otomatis (sparse clone skill screenwriting, screenwriting-beats, screenwriting-character, screenwriting-lint)
+  otomatis: true
+  pasang: {jenis: git_subskill, url: "https://github.com/e06084/claude-screenwriting", paths: [skills/screenwriting, skills/screenwriting-beats, skills/screenwriting-character, skills/screenwriting-lint], skills: [screenwriting, screenwriting-beats, screenwriting-character, screenwriting-lint]}
+  agent: [penulis-naskah, perencana-konten]
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai; teks skill berbahasa Mandarin dan alurnya mengandaikan vault Obsidian. Pakai teori dan lint-nya; tetap menulis ke naskah.json, bukan vault
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: anthropic-canvas-design
+  sumber: https://github.com/anthropics/skills/tree/main/skills/canvas-design
+  fungsi: skill resmi Anthropic untuk desain visual statis (poster, cover) dengan filosofi desain yang jelas
+  pakai_saat: cover thumbnail desain visual poster komposisi tipografi
+  cara_pasang: otomatis (sparse clone folder skills/canvas-design)
+  otomatis: true
+  pasang: {jenis: git_subskill, url: "https://github.com/anthropics/skills", paths: [skills/canvas-design], skills: [canvas-design]}
+  agent: [desainer-cover]
+  lisensi: Apache-2.0
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: anthropic-skill-creator
+  sumber: https://github.com/anthropics/skills/tree/main/skills/skill-creator
+  fungsi: skill resmi Anthropic untuk membuat dan menguji skill baru bila katalog tidak punya yang dibutuhkan
+  pakai_saat: buat skill baru kemampuan belum ada
+  cara_pasang: otomatis (sparse clone folder skills/skill-creator)
+  otomatis: true
+  pasang: {jenis: git_subskill, url: "https://github.com/anthropics/skills", paths: [skills/skill-creator], skills: [skill-creator]}
+  agent: [pencari-skill]
+  lisensi: Apache-2.0
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
   status: direkomendasikan
 - id: ponytail
   sumber: https://github.com/DietrichGebert/ponytail
@@ -86,6 +161,7 @@
   pakai_saat: hemat token kuota kode sederhana minimal coding
   cara_pasang: aktif bawaan lewat .claude/settings.json (plugin ponytail@ponytail); di sesi web aturannya disuntikkan hook SessionStart
   pasang: {jenis: plugin, id: ponytail@ponytail}
+  agent: [semua]
   lisensi: MIT
   catatan_lisensi: bebas dipakai; uji independen JetBrains mencatat hemat sekitar 10% per tugas (klaim pembuatnya lebih besar)
   butuh_key: null
@@ -99,6 +175,7 @@
   cara_pasang: npx skills add LottieFiles/motion-design-skill
   otomatis: true
   pasang: {jenis: npx_skill, repo: LottieFiles/motion-design-skill}
+  agent: [animator, storyboarder, inspektur-frame]
   lisensi: MIT
   catatan_lisensi: bebas dipakai
   butuh_key: null

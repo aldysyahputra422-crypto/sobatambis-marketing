@@ -20,6 +20,11 @@ Pakai skill stop-slop dari katalog (`python -m scripts.katalog cari "slop"`; pas
 - `python -m scripts.naskah periksa <folder>` tidak memunculkan masalah baru.
 - `grep -c "—" <file>` = 0.
 
+## Skill dasar
+Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+- `humanizer`: 24 pola tulisan AI (Wikipedia) dibersihkan tanpa mengubah isi
+- `stop-slop`: pola slop tambahan; jalankan sesudah humanizer
+
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.
 - Baca hanya file yang disebut di bawah. Jangan memuat seluruh repo.

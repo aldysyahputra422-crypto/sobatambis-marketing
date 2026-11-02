@@ -21,6 +21,10 @@ Pakai skill `sa-jadwal` (skema database dan aturan).
 ## Verifikasi
 - Baca ulang baris Notion: kolom Tahap dan Status sama dengan JSON. Untuk cadangan: baris terakhir `catatan-notion.md` sama dengan `log`.
 
+## Skill dasar
+Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+- `sa-jadwal`: skema database dan aturan pencatatan
+
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.
 - Baca hanya file yang disebut di atas. Jangan memuat seluruh repo.
