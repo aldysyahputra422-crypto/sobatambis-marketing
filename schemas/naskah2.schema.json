@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "naskah.json versi 2 (beat)",
+  "type": "object",
+  "required": ["episode", "judul", "disetujui", "judul_berikut", "beat"],
+  "properties": {
+    "episode": {"type": "string"}, "judul": {"type": "string"}, "disetujui": {"type": "boolean"},
+    "sumber_suara": {"enum": [null, "manusia", "elevenlabs"]},
+    "judul_berikut": {"type": "string"},
+    "beat": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/beat"}}
+  },
+  "$defs": {
+    "emosi": {"enum": ["semangat", "marah", "tertekan", "lelah", "hancur", "kaget", "misterius", "hangat", "datar"]},
+    "beat": {
+      "type": "object",
+      "required": ["id", "jenis", "latar", "emosi", "intensitas", "dialog", "aksi", "punchline"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^t\\d{2}$"},
+        "jenis": {"enum": ["hook", "lucu", "naik", "mengena", "penutup"]},
+        "latar": {"type": "string"},
+        "emosi": {"$ref": "#/$defs/emosi"},
+        "intensitas": {"type": "integer", "minimum": 1, "maximum": 10},
+        "durasi": {"type": "number", "exclusiveMinimum": 0},
+        "kamera": {"type": "array", "items": {"type": "object", "required": ["jenis"],
+          "properties": {"jenis": {"enum": ["lebar", "dekat", "sisipan"]}, "tokoh": {"type": "string"}, "benda": {"type": "string"},
+            "mulai_kata": {"type": "string"}, "gerak": {"enum": ["diam", "dorong", "hentak", "sapu", "getar"]}}}},
+        "dialog": {"type": "array", "items": {"type": "object", "required": ["penutur", "teks", "arah"],
+          "properties": {"penutur": {"enum": ["arta", "ratna", "mbis", "bima"]}, "teks": {"type": "string", "minLength": 1},
+            "arah": {"type": "string"}, "puncak": {"type": "string"}}}},
+        "aksi": {"type": "array", "items": {"type": "object", "required": ["tokoh", "aksi"],
+          "properties": {"tokoh": {"enum": ["arta", "ratna", "mbis"]}, "aksi": {"type": "string"},
+            "pada_kata": {"type": "string"}, "pada": {"enum": ["awal", "akhir"]}, "benda": {"type": "string"},
+            "ekspresi": {"type": "string"}, "dx": {"type": "number"}}}},
+        "properti": {"type": "array", "items": {"type": "string"}},
+        "sfx": {"type": "array", "items": {"type": "object", "required": ["nama"],
+          "properties": {"nama": {"type": "string"}, "pada_kata": {"type": "string"}, "pada": {"enum": ["awal", "akhir"]}}}},
+        "musik": {"type": "string"},
+        "punchline": {"type": "string"}
+      }
+    }
+  }
+}
