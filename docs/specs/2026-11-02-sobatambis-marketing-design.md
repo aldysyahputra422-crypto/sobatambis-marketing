@@ -26,7 +26,7 @@ Pemilik hanya melakukan dua hal: **approve** dan **posting**.
 |---|---|
 | Lokasi | Repo `aldysyahputra422-crypto/sobatambis-marketing` (plugin + marketplace dalam satu repo) |
 | Lisensi | Sobat Ambis diperlakukan sebagai project mata kuliah (nonkomersial). Status lisensi tiap repo tetap dicatat di katalog. Kalau status bisnis berubah, entri bertanda `noncommercial-only` wajib dicek ulang. |
-| Suara | Bawaan **edge-tts** (gratis, suara `id-ID-ArdiNeural` / `id-ID-GadisNeural`). Pakai **ElevenLabs** otomatis kalau `ELEVENLABS_API_KEY` tersedia. Rekaman suara pemilik juga diterima sebagai input. |
+| Suara | Episode serial: **ElevenLabs v3** (`ELEVENLABS_API_KEY`), karena butuh emosi kuat. Saat kredit habis, sutradara-suara **berhenti dan meminta persetujuan pemilik** sebelum pindah ke **edge-tts** (`id-ID-GadisNeural` / `id-ID-ArdiNeural`); selama menunggu, tahap lain yang tidak butuh suara tetap jalan. Video Mbis Bereaksi boleh langsung memakai edge-tts. Rekaman suara manusia diterima sebagai input. Kloning suara hanya boleh dari suara yang pemiliknya sudah memberi izin tertulis (pemilik bisnis atau talent berbayar). |
 | Verifikasi suara | **faster-whisper** lokal (gratis). ElevenLabs Scribe bila key tersedia. |
 | Visual | Karakter dan latar digambar dengan kode (SVG/React di Remotion). Generator gambar berbayar (Higgsfield, Open-Generative-AI/MuAPI, Gemini) hanya opsional lewat katalog bila key tersedia. |
 | Mesin render | **Remotion** sebagai satu-satunya mesin render. HyperFrames dicatat di katalog sebagai alternatif, tidak dipasang bawaan. |
