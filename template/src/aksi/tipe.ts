@@ -11,10 +11,11 @@ export type PoseKunci = {
 
 export type Aksi = {
   nama: string;
-  tokoh: "arta";
+  tokoh: "arta" | "ratna" | "mbis";
   durasi: number;
   penuh: boolean; // aksi seluruh badan (dihitung QA naskah)
   ulang?: boolean; // siklus (jalan, diam_hidup)
+  laju?: number; // px per detik untuk aksi berpindah (jalan, lari) bila tidak dibatasi aksi berikutnya
   kontak?: number; // detik relatif saat benda menempel / kaki menghentak / mendarat
   kunci: PoseKunci[];
 };

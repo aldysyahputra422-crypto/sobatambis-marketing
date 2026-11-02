@@ -48,7 +48,7 @@ const highlight = (x,y,w,h=26,op=.75) => `<rect x="${x}" y="${y}" width="${w}" h
 // ---------- faces ----------
 function eyes(expr, s=1, kedip=0){
   const inner = eyesInner(expr, s);
-  if (!kedip || expr==='senyum' || expr==='tawa') return inner;
+  if (!kedip || expr==='senyum' || expr==='tawa' || expr==='tidur') return inner;
   const k = Math.max(0.08, 1 - kedip);
   return `<g transform="translate(0 ${12*s}) scale(1 ${k}) translate(0 ${-12*s})">${inner}</g>`;
 }
@@ -75,6 +75,8 @@ function eyesInner(expr, s=1){
       +`<path d="M${R+44*s} ${Y-40*s} q${8*s} ${16*s} 0 ${24*s} q${-8*s} ${-8*s} 0 ${-24*s}z" fill="#9CCBF2" stroke="${P.ink}" stroke-width="${2*s}"/>`;
     case 'tawa': return `<path d="M${L-20*s} ${Y+6*s} q${20*s} ${-20*s} ${40*s} 0 M${R-20*s} ${Y+6*s} q${20*s} ${-20*s} ${40*s} 0" stroke="${P.ink}" stroke-width="${5.5*s}" fill="none" stroke-linecap="round"/>`
       +`<path d="M${L-20*s} ${Y-30*s} q${20*s} ${-12*s} ${40*s} 0 M${R-20*s} ${Y-30*s} q${20*s} ${-12*s} ${40*s} 0" stroke="${P.hair}" stroke-width="${6*s}" fill="none" stroke-linecap="round"/>`;
+    case 'tidur': return `<path d="M${L-20*s} ${Y} q${20*s} ${12*s} ${40*s} 0 M${R-20*s} ${Y} q${20*s} ${12*s} ${40*s} 0" stroke="${P.ink}" stroke-width="${5*s}" fill="none" stroke-linecap="round"/>`
+      +`<text x="${R+40*s}" y="${Y-40*s}" font-family="Caveat" font-weight="700" font-size="${34*s}" fill="${P.ink}">z</text>`;
     case 'hancur': return white(L)+white(R)+pup(L,0,8,6)+pup(R,0,8,6)
       +`<path d="M${L-20*s} ${Y-30*s} l${36*s} ${-8*s} M${R+20*s} ${Y-30*s} l${-36*s} ${-8*s}" stroke="${P.hair}" stroke-width="${6*s}" stroke-linecap="round"/>`
       +`<path d="M${L-24*s} ${Y+14*s} q${24*s} ${10*s} ${48*s} 0 M${R-24*s} ${Y+14*s} q${24*s} ${10*s} ${48*s} 0" stroke="#7FB3E8" stroke-width="${5*s}" fill="none" opacity=".9"/>`
@@ -101,6 +103,7 @@ function mouthDiam(expr, s=1){
     lirik:`<path d="M${-12*s} ${Y} q${14*s} ${-6*s} ${26*s} ${2*s}" stroke="${P.ink}" stroke-width="${4*s}" fill="none" stroke-linecap="round"/>`,
     marah:`<path d="M${-30*s} ${Y-12*s} q${30*s} ${-8*s} ${60*s} 0 q${-4*s} ${34*s} ${-30*s} ${34*s} q${-26*s} 0 ${-30*s} ${-34*s}z" fill="#8A3A33" stroke="${P.ink}" stroke-width="${3*s}"/><path d="M${-22*s} ${Y-9*s} h${44*s}" stroke="#fff" stroke-width="${6*s}"/>`,
     hancur:`<path d="M${-16*s} ${Y+4*s} q${16*s} ${-14*s} ${32*s} 0" stroke="${P.ink}" stroke-width="${4*s}" fill="none" stroke-linecap="round"/>`,
+    tidur:`<ellipse cx="0" cy="${Y+2*s}" rx="${7*s}" ry="${6*s}" fill="#8A3A33" stroke="${P.ink}" stroke-width="${2.6*s}"/>`,
     panik:`<path d="M${-20*s} ${Y-2*s} q${10*s} ${-10*s} ${20*s} 0 q${10*s} ${10*s} ${20*s} 0 v${14*s} h${-40*s}z" fill="#8A3A33" stroke="${P.ink}" stroke-width="${3*s}"/><path d="M${-16*s} ${Y+1*s} h${32*s}" stroke="#fff" stroke-width="${4*s}"/>`,
     tawa:`<path d="M${-30*s} ${Y-10*s} h${60*s} q${-2*s} ${38*s} ${-30*s} ${38*s} q${-28*s} 0 ${-30*s} ${-38*s}z" fill="#8A3A33" stroke="${P.ink}" stroke-width="${3*s}"/><path d="M${-24*s} ${Y-7*s} h${48*s}" stroke="#fff" stroke-width="${6*s}"/><ellipse cx="0" cy="${Y+18*s}" rx="${12*s}" ry="${6*s}" fill="#E07A6E"/>`,
   }[expr]||'';

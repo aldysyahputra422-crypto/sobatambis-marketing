@@ -1,24 +1,24 @@
 // Merangkai daftar aksi bertanggal menjadi fungsi frame → Pose.
 // Setiap aksi mulai dari posisi akar akhir aksi sebelumnya; peralihan diblend 5 sampai 12 frame sesuai jarak pose.
 import { easing, interpolasiPose, SENDI, type Pose, type Sendi } from "../rig/pose";
-import { AKSI_ARTA } from "./arta";
+import { AKSI, type IdTokohAksi } from "./index";
 import type { Aksi, EntriAksi } from "./tipe";
 
 const BLEND_FRAME = 5;
 const BLEND_MAKS = 12;
-const LAJU_JALAN = 150; // px per detik bila jalan tidak dibatasi aksi berikutnya
 
 type KunciPenuh = { t: number; dx: number; dy: number; sx: number; sy: number; sendi: Record<Sendi, number>; easing: keyof typeof easing };
 
-const ambilAksi = (nama: string): Aksi => {
-  const a = (AKSI_ARTA as Record<string, Aksi>)[nama];
-  if (!a) throw new Error(`aksi tidak dikenal: ${nama}`);
+const ambilAksi = (nama: string, tokoh: IdTokohAksi): Aksi => {
+  const a = AKSI[tokoh]?.[nama];
+  if (!a) throw new Error(`aksi '${nama}' tidak tersedia untuk ${tokoh}`);
   return a;
 };
 
 const cacheKunci = new Map<string, KunciPenuh[]>();
 function kunciPenuh(a: Aksi, dasar: Pose): KunciPenuh[] {
-  const ada = cacheKunci.get(a.nama);
+  const kunciCache = `${a.tokoh}:${a.nama}`;
+  const ada = cacheKunci.get(kunciCache);
   if (ada) return ada;
   let k: KunciPenuh = { t: 0, dx: 0, dy: 0, sx: 1, sy: 1, sendi: { ...dasar.sendi }, easing: "linear" };
   const hasil = a.kunci.map((kk) => {
@@ -28,7 +28,7 @@ function kunciPenuh(a: Aksi, dasar: Pose): KunciPenuh[] {
     };
     return k;
   });
-  cacheKunci.set(a.nama, hasil);
+  cacheKunci.set(kunciCache, hasil);
   return hasil;
 }
 
@@ -48,17 +48,18 @@ function sampel(kunci: KunciPenuh[], tau: number): Omit<KunciPenuh, "t" | "easin
   return kunci[kunci.length - 1];
 }
 
-export function rangkaiJalur(entri: EntriAksi[], fps: number, awal: Pose): (frame: number) => Pose {
+export function rangkaiJalur(entri: EntriAksi[], fps: number, awal: Pose, tokoh: IdTokohAksi = "arta"): (frame: number) => Pose {
   const urut = [...entri].sort((a, b) => a.mulai - b.mulai);
-  const aksi = urut.map((e) => ambilAksi(e.aksi));
+  const aksi = urut.map((e) => ambilAksi(e.aksi, tokoh));
   const kunci = aksi.map((a) => kunciPenuh(a, awal));
 
   // Posisi akar awal setiap entri = posisi akhir entri sebelumnya.
   const rentang = urut.map((e, i) => (i + 1 < urut.length ? urut[i + 1].mulai - e.mulai : Infinity));
   const geserJalan = (i: number, tau: number) => {
     const dx = urut[i].param?.dx ?? 0;
-    if (!dx || aksi[i].nama !== "jalan") return 0;
-    const lama = Number.isFinite(rentang[i]) ? rentang[i] : Math.abs(dx) / LAJU_JALAN;
+    const laju = aksi[i].laju;
+    if (!dx || !laju) return 0;
+    const lama = Number.isFinite(rentang[i]) ? rentang[i] : Math.abs(dx) / laju;
     return dx * Math.min(1, Math.max(0, tau / lama));
   };
   const nilai = (i: number, tau: number) => {
@@ -112,9 +113,9 @@ export function rangkaiJalur(entri: EntriAksi[], fps: number, awal: Pose): (fram
   };
 }
 
-export function titikKontak(entri: EntriAksi[]): { aksi: string; detik: number }[] {
+export function titikKontak(entri: EntriAksi[], tokoh: IdTokohAksi = "arta"): { aksi: string; detik: number }[] {
   return entri
-    .map((e) => ({ e, a: ambilAksi(e.aksi) }))
+    .map((e) => ({ e, a: ambilAksi(e.aksi, tokoh) }))
     .filter(({ a }) => a.kontak !== undefined)
     .map(({ e, a }) => ({ aksi: a.nama, detik: e.mulai + (a.kontak as number) }));
 }
