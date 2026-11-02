@@ -4,29 +4,28 @@ Plugin Claude Code: tim marketing agentic Sobat Ambis. Satu perintah mengubah na
 
 ## Pasang di akun utama
 
-Plugin ini menjalankan script Python dan proyek Remotion yang ada di repo, jadi kerjakan di dalam clone repo ini.
+Semua agent, skill, perintah, dan hook dimuat langsung dari folder repo (lewat `.claude/`). Tidak perlu merge dan tidak perlu `/plugin install`.
 
-1. Clone dan buka Claude Code di foldernya:
+1. Clone branch kerja dan masuk ke foldernya:
 
    ```bash
-   git clone https://github.com/aldysyahputra422-crypto/sobatambis-marketing
+   git clone -b desain/spec-awal https://github.com/aldysyahputra422-crypto/sobatambis-marketing
    cd sobatambis-marketing
    ```
 
-2. Pasang plugin dari marketplace repo ini (di Claude Code):
-
-   ```
-   /plugin marketplace add aldysyahputra422-crypto/sobatambis-marketing
-   /plugin install sobatambis-marketing@sobatambis
-   ```
-
-3. Dependensi (sekali; aman diulang):
+2. Aktifkan otomasi (sekali per clone):
 
    ```bash
-   bash scripts/setup.sh
+   bash scripts/aktifkan_otomatis.sh
    ```
 
-   Butuh Python 3.13, Node 22, dan ffmpeg 6. Di Claude Code versi web, isi script setup environment dengan `bash scripts/setup.sh` supaya dependensi terpasang otomatis tiap sesi.
+   Ini memasang `.claude/settings.json`: hook SessionStart (dependensi + skill katalog terpasang sendiri + mode hemat token), hook Stop (produksi lanjut sendiri sampai titik persetujuan), hook PreToolUse (ElevenLabs diblokir sampai ada `.sa/izin-elevenlabs`), izin perintah pipeline supaya tidak berhenti minta izin, serta plugin **caveman** dan **ponytail** aktif bawaan.
+
+3. Buka Claude Code di folder itu dan pilih **trust** saat ditanya. Dependensi terpasang sendiri pada sesi pertama (beberapa menit). Jangan memasang plugin `sobatambis-marketing` lewat `/plugin` di folder ini, supaya agent tidak dobel.
+
+   Di Claude Code versi web: pilih repo ini (branch `desain/spec-awal`) saat membuat sesi dan isi script setup environment dengan `bash scripts/setup.sh && bash scripts/aktifkan_otomatis.sh`. Plugin marketplace tidak dimuat di sesi web, tetapi aturan hemat token tetap disuntikkan hook SessionStart.
+
+   Butuh Python 3.13, Node 22, dan ffmpeg 6.
 
 ### Yang ada di dalam plugin
 - **15 agent**: direktur-marketing dan animator (Opus); penulis-naskah, pembasmi-slop, pemeriksa-fakta, storyboarder, inspektur-frame, desainer-cover, penulis-caption, penjaga-gerbang-qa (Sonnet); sutradara-suara, qa-suara, pencari-skill, akuntan-token, penjadwal-notion (Haiku).

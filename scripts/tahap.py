@@ -34,6 +34,13 @@ if __name__ == "__main__":
     perintah, folder = sys.argv[1], Path(sys.argv[2])
     if perintah == "berikutnya":
         print(berikutnya(folder) or "selesai")
+    elif perintah == "mulai":
+        # tandai produksi aktif agar hook Stop melanjutkan otomatis sampai titik persetujuan
+        import json
+        penanda = Path(".sa/aktif.json")
+        penanda.parent.mkdir(exist_ok=True)
+        penanda.write_text(json.dumps({"folder": folder.as_posix()}))
+        print(berikutnya(folder) or "selesai")
     elif perintah == "ulang":
         ulang(folder, sys.argv[3])
         print(f"tahap {sys.argv[3]} dan sesudahnya direset")

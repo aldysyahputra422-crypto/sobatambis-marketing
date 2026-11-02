@@ -11,3 +11,4 @@ __pycache__/
 template/out/
 template/public/uji/
 audisi/
+.sa/

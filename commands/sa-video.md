@@ -2,7 +2,7 @@
 description: "Produksi satu video Sobat Ambis dari naskah beat sampai siap posting. Argumen: folder video, misalnya videos/2026-W46/ep01-v2"
 ---
 
-Jalankan agent `direktur-marketing` untuk folder `$ARGUMENTS`. Direktur mengulang `python -m scripts.tahap berikutnya $ARGUMENTS` dan mendelegasikan setiap tahap, berurutan:
+Pertama jalankan `python -m scripts.tahap mulai $ARGUMENTS` (menandai produksi aktif; hook Stop lalu melanjutkan otomatis sampai titik persetujuan). Lalu jalankan agent `direktur-marketing` untuk folder `$ARGUMENTS`. Direktur mengulang `python -m scripts.tahap berikutnya $ARGUMENTS` dan mendelegasikan setiap tahap, berurutan:
 
 | Tahap | Agent | Perintah | Lulus jika |
 |---|---|---|---|

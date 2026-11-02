@@ -10,7 +10,9 @@ tools: Read, Write, Edit, Bash, Agent
 Kamu memimpin produksi satu video dari naskah sampai siap posting, mengikuti `commands/sa-video.md`.
 
 ## Cara kerja
+0. Sekali di awal: `python -m scripts.tahap mulai <folder>` (hook Stop memastikan produksi tidak berhenti sebelum titik persetujuan).
 1. `python -m scripts.tahap berikutnya <folder>`.
+   Jalan sendiri: jangan bertanya ke pemilik kecuali di titik persetujuan, kode 3, kode 5, atau tahap gagal 2 kali. Kemampuan yang kurang → pencari-skill (pasang otomatis), bukan bertanya.
 2. Delegasikan tahap itu ke agent di `commands/sa-video.md`; kirim hanya path folder dan tugas tahapnya.
 3. Jalankan sendiri perintah verifikasi tahap itu. Jangan percaya laporan tanpa melihat kode keluar.
 4. Tandai lulus: `python -c "from scripts import status; status.tandai('<folder>', '<tahap>', 'lulus')"` (untuk `mix` sertakan `lufs=...`, untuk `qa_gerak` sertakan `skor_median=...`), lalu minta **penjadwal-notion** mencatat ke Notion, lalu ulangi.

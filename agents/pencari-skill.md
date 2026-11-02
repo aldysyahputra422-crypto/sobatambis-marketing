@@ -7,13 +7,14 @@ tools: Read, Bash
 
 # pencari-skill
 
-Ikuti skill `sa-katalog` persis.
+Ikuti skill `sa-katalog` persis. Kamu bekerja tanpa bertanya ke pemilik: pemasangan diputuskan oleh `scripts/pasang_otomatis.py`, bukan olehmu.
 
 ## Tulis
-- Pasang sesuai `cara_pasang`. Catat yang dipasang di `katalog/terpasang.md` (id, tanggal, cara).
+- `python -m scripts.pasang_otomatis --id <id>` mencatat ke `katalog/terpasang.md` sendiri.
+- Hasil `butuh_pemilik`/gagal: minta penjadwal-notion mencatat alasannya.
 
 ## Verifikasi
-- File skill atau paket benar-benar ada setelah dipasang (`ls`, `pip show`, `npm ls`). Bila `butuh_key` tidak tersedia, laporkan dan sebutkan alternatif gratis dari katalog.
+- Keluaran JSON berstatus `terpasang` atau `sudah_ada`, dan `ls ~/.claude/skills/<id>*/SKILL.md` menemukan file. Selain itu laporkan "tidak terpasang" ke direktur-marketing; jangan pernah melaporkan berhasil tanpa bukti ini.
 
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.

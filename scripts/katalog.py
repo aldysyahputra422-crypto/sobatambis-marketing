@@ -22,6 +22,8 @@ class Entri:
     biaya: str
     ukuran: str
     status: str
+    otomatis: bool = False  # boleh dipasang tanpa bertanya (lihat scripts/pasang_otomatis.py)
+    pasang: dict | None = None  # cara pasang terstruktur: git_skill | npx_skill | plugin
 
 
 def muat(path: Path) -> list[Entri]:

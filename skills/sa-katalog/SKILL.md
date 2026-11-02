@@ -11,12 +11,15 @@ Katalog: `katalog/skill.yaml`. Cari dengan:
 python -m scripts.katalog cari "<kebutuhan tugas>"
 ```
 
-Prosedur (wajib berurutan):
-1. Cocokkan kebutuhan tugas dengan katalog lewat perintah di atas.
-2. Cek apakah sudah terpasang (`ls ~/.claude/skills`, daftar plugin, atau `pip show`/`npm ls`).
-3. Bila belum: pasang sesuai `cara_pasang`, lalu pastikan file skill atau paketnya benar-benar ada.
-4. Bila `butuh_key` tidak tersedia di environment: pakai alternatif gratis di katalog dan laporkan ke direktur-marketing. Jangan berpura-pura alat itu jalan.
-5. Sumber di luar katalog tidak dipasang tanpa izin pemilik.
+Prosedur (wajib berurutan, tanpa bertanya ke pemilik kecuali langkah 4):
+1. Cocokkan kebutuhan: `python -m scripts.katalog cari "<kebutuhan>"`; ambil hasil teratas yang relevan.
+2. Pasang: `python -m scripts.pasang_otomatis --id <id>`. Script itu sendiri yang memutuskan boleh/tidak (gratis, tanpa key, lisensi MIT/Apache/BSD/ISC/LGPL, status direkomendasikan/opsional, ≤ 200 MB) dan memverifikasi file `SKILL.md` benar-benar ada.
+3. Hasil `terpasang` atau `sudah_ada`: lanjutkan tugas memakai skill itu. Hasil `gagal`: ulangi sekali; masih gagal → langkah 4.
+4. Hasil `butuh_pemilik` atau gagal dua kali: JANGAN pasang manual, JANGAN cari jalan lain, JANGAN mengerjakan seadanya diam-diam. Catat alasannya lewat penjadwal-notion (kolom "Butuh dari pemilik") dan pakai alternatif gratis dari katalog bila ada.
+5. Sumber di luar katalog tidak dipasang. Usulkan penambahan ke katalog lewat catatan Notion.
+6. Plugin (`pasang.jenis: plugin`, misalnya caveman dan ponytail) tidak dipasang lewat script: sudah aktif bawaan lewat `.claude/settings.json` (lihat `scripts/aktifkan_otomatis.sh`).
+
+Skill bertanda `otomatis: true` dipasang sendiri oleh hook SessionStart setiap sesi dimulai.
 
 Aturan lisensi:
 - `status: sebagian` → pasang hanya bagian yang disebut di `catatan_lisensi`.

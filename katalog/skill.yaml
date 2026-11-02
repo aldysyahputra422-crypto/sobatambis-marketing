@@ -60,6 +60,8 @@
   fungsi: membuang pola tulisan AI dari naskah dan caption
   pakai_saat: naskah caption tulisan slop AI sunting gaya bahasa
   cara_pasang: git clone --depth 1 https://github.com/hardikpandya/stop-slop ~/.claude/skills/stop-slop
+  otomatis: true
+  pasang: {jenis: git_skill, url: "https://github.com/hardikpandya/stop-slop"}
   lisensi: MIT
   catatan_lisensi: bebas dipakai
   butuh_key: null
@@ -70,18 +72,33 @@
   sumber: https://github.com/JuliusBrussee/caveman
   fungsi: menghemat token dengan gaya komunikasi ringkas antar agent
   pakai_saat: hemat token kuota log komunikasi agent ringkas
-  cara_pasang: ikuti README repo (plugin); pakai hanya untuk log dan komunikasi internal, bukan naskah atau caption
+  cara_pasang: aktif bawaan lewat .claude/settings.json (plugin caveman@caveman); di sesi web aturannya disuntikkan hook SessionStart. Hanya untuk komunikasi internal, bukan naskah, caption, atau catatan Notion
+  pasang: {jenis: plugin, id: caveman@caveman}
   lisensi: Apache-2.0
   catatan_lisensi: bebas dipakai
   butuh_key: null
   biaya: gratis
   ukuran: sedang
   status: direkomendasikan
+- id: ponytail
+  sumber: https://github.com/DietrichGebert/ponytail
+  fungsi: menghemat token dengan memaksa solusi kode paling sederhana yang jalan (YAGNI, stdlib dulu)
+  pakai_saat: hemat token kuota kode sederhana minimal coding
+  cara_pasang: aktif bawaan lewat .claude/settings.json (plugin ponytail@ponytail); di sesi web aturannya disuntikkan hook SessionStart
+  pasang: {jenis: plugin, id: ponytail@ponytail}
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai; uji independen JetBrains mencatat hemat sekitar 10% per tugas (klaim pembuatnya lebih besar)
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
 - id: motion-design-skill
   sumber: https://github.com/LottieFiles/motion-design-skill
   fungsi: prinsip motion design timing easing koreografi gerak
   pakai_saat: animasi gerak easing timing transisi koreografi
   cara_pasang: npx skills add LottieFiles/motion-design-skill
+  otomatis: true
+  pasang: {jenis: npx_skill, repo: LottieFiles/motion-design-skill}
   lisensi: MIT
   catatan_lisensi: bebas dipakai
   butuh_key: null

@@ -14,6 +14,12 @@ Plugin Claude Code yang memproduksi serial animasi Reels "Arta & Mbis" untuk Sob
 - Tiga titik persetujuan pemilik: naskah + sumber suara, trek dialog, video final.
 - Catatan dan laporan progres untuk pemilik masuk ke **Notion** (database "Produksi Sobat Ambis", skill `sa-jadwal`, agent `penjadwal-notion`). Chat hanya untuk ringkasan singkat + tautan Notion.
 
+## Otomasi (aktif setelah `bash scripts/aktifkan_otomatis.sh`)
+- SessionStart: dependensi + skill katalog `otomatis: true` terpasang sendiri; mode hemat token (caveman + ponytail) aktif.
+- Stop: produksi dengan penanda `.sa/aktif.json` tidak boleh berhenti sebelum titik persetujuan; macet 2 kali → catat ke Notion.
+- PreToolUse: semua perintah ElevenLabs ditolak sampai pemilik membuat `.sa/izin-elevenlabs`.
+- Kemampuan yang kurang dipasang pencari-skill lewat `scripts/pasang_otomatis.py` tanpa bertanya, hanya bila lolos aturan ketatnya; selain itu catat ke Notion.
+
 ## Kerja
 - Python: `.venv/bin/python -m scripts.<modul>` dari root repo. Test: `.venv/bin/python -m pytest -q` (tambah `-m lambat` untuk test render) dan `npm test --prefix template`.
 - Spec: `docs/superpowers/specs/2026-11-02-perombakan-serial-design.md`. Rencana: `docs/superpowers/plans/`.
