@@ -111,7 +111,38 @@ def _penyedia(nama: str):
     return ElevenLabs(kunci, suara)
 
 
+def main(argv: list[str]) -> int:
+    """Naskah v2 (beat): pilih jalur dari naskah.sumber_suara. Naskah v1: jalur lama."""
+    folder = Path(argv[0])
+    n = naskah_mod.muat(folder / "naskah.json")
+    if "beat" not in n:
+        return -1
+    pilihan = n.get("sumber_suara")
+    if pilihan == "manusia":
+        from scripts.suara import lembar, manusia
+        lembar.tulis(folder)
+        k = manusia.jalankan(folder)
+    elif pilihan == "elevenlabs":
+        from scripts.suara import v2
+        kunci = os.environ.get("ELEVENLABS_API_KEY")
+        if not kunci:
+            print("ELEVENLABS_API_KEY belum ada di environment")
+            return 3
+        suara = yaml.safe_load((Path(__file__).resolve().parents[2] / "config/suara.yaml").read_text(encoding="utf-8"))["elevenlabs"]
+        k = v2.jalankan(folder, v2.KlienElevenLabsV2(kunci), suara)
+    else:
+        print("Pilih sumber suara di naskah.json: \"sumber_suara\": \"manusia\" atau \"elevenlabs\" (Approval 1)")
+        return 4
+    from scripts.suara.v2 import kode_keluar as kk
+    st = status.baca(folder)["tahap"]["suara"]
+    print(k, st.get("alasan", ""), ", ".join(st.get("baris_tersisa", [])))
+    return kk(k)
+
+
 if __name__ == "__main__":
+    kode = main(sys.argv[1:2])
+    if kode >= 0:
+        sys.exit(kode)
     ap = argparse.ArgumentParser()
     ap.add_argument("folder")
     ap.add_argument("--penyedia", choices=["elevenlabs", "edge"], default="elevenlabs")

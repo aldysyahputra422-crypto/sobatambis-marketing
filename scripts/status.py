@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 TAHAP = ("naskah", "suara", "adegan", "render", "qa_frame", "kemasan", "gerbang")
-KEADAAN = ("lulus", "gagal", "butuh_persetujuan", "berjalan")
+KEADAAN = ("lulus", "gagal", "butuh_persetujuan", "berjalan", "butuh_rekam_ulang")
 
 
 def _path(folder: Path) -> Path:
