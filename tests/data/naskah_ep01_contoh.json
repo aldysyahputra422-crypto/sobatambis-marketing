@@ -1,0 +1,298 @@
+{
+  "episode": "ep01",
+  "judul": "Rencana Sempurna",
+  "disetujui": true,
+  "judul_berikut": "Ep.2: Kenapa rencana yang sempurna justru bikin nilai turun?",
+  "baris": [
+    {
+      "id": "b01",
+      "penutur": "arta",
+      "teks": "Hari pertama. Aku bikin rencana yang nggak mungkin gagal.",
+      "emosi": "semangat",
+      "intensitas": 7,
+      "jeda_sesudah": 0.3,
+      "visual": {
+        "latar": "kamar",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "ambis",
+            "pose": "tunjuk"
+          }
+        ],
+        "properti": [
+          "papan_100_hari"
+        ],
+        "kamera": "pantul",
+        "catatan_merah": "semangat level dewa"
+      },
+      "tag": "[excited]"
+    },
+    {
+      "id": "b02",
+      "penutur": "arta",
+      "teks": "Bangun jam empat! Belajar lima jam sehari! HP-ku kutitipkan ke Mama!",
+      "emosi": "semangat",
+      "intensitas": 8,
+      "jeda_sesudah": 0.3,
+      "visual": {
+        "latar": "dinding_sticky",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "ambis",
+            "pose": "bust"
+          }
+        ],
+        "properti": [
+          "sticky_0400",
+          "sticky_5jam",
+          "sticky_0hp",
+          "sticky_tryout"
+        ],
+        "kamera": "pantul",
+        "catatan_merah": "realistis??"
+      },
+      "tag": "[excited]"
+    },
+    {
+      "id": "b03",
+      "penutur": "arta",
+      "teks": "Teknik Informatika ITS. Seratus hari lagi.",
+      "emosi": "semangat",
+      "intensitas": 7,
+      "jeda_sesudah": 0.4,
+      "visual": {
+        "latar": "kamar",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "senyum",
+            "pose": "pinggang"
+          }
+        ],
+        "properti": [
+          "papan_100_hari"
+        ],
+        "kamera": "zoom_masuk",
+        "catatan_merah": null
+      }
+    },
+    {
+      "id": "b04",
+      "penutur": "ratna",
+      "teks": "Ta... anaknya Bu Sinta sekarang les di tiga tempat, lho.",
+      "emosi": "tertekan",
+      "intensitas": 4,
+      "jeda_sesudah": 0.4,
+      "visual": {
+        "latar": "ruang_tamu",
+        "tokoh": [
+          {
+            "id": "ratna",
+            "ekspresi": "lirik",
+            "pose": "bust"
+          }
+        ],
+        "properti": [
+          "wa_grup"
+        ],
+        "kamera": "diam",
+        "catatan_merah": "aduh..."
+      },
+      "tag": "[hesitant]"
+    },
+    {
+      "id": "b05",
+      "penutur": "arta",
+      "teks": "Tiga tempat?",
+      "emosi": "marah",
+      "intensitas": 7,
+      "jeda_sesudah": 0.2,
+      "visual": {
+        "latar": "dinding_sticky",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "marah",
+            "pose": "bust"
+          }
+        ],
+        "properti": [],
+        "kamera": "zoom_masuk",
+        "catatan_merah": null
+      },
+      "tag": "[frustrated]"
+    },
+    {
+      "id": "b06",
+      "penutur": "arta",
+      "teks": "OKE. Aku belajar TUJUH jam!",
+      "emosi": "marah",
+      "intensitas": 9,
+      "jeda_sesudah": 0.5,
+      "visual": {
+        "latar": "dinding_sticky",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "marah",
+            "pose": "bust"
+          }
+        ],
+        "properti": [
+          "sticky_7jam"
+        ],
+        "kamera": "goyang",
+        "catatan_merah": null
+      },
+      "tag": "[shouting]"
+    },
+    {
+      "id": "b07",
+      "penutur": "arta",
+      "teks": "Hari ketujuh. Rencanaku masih sempurna.",
+      "emosi": "lelah",
+      "intensitas": 3,
+      "jeda_sesudah": 0.8,
+      "visual": {
+        "latar": "meja_malam",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "datar",
+            "pose": "bust"
+          }
+        ],
+        "properti": [
+          "jam_0047"
+        ],
+        "kamera": "diam",
+        "catatan_merah": "ini jam tidur atau jam kerja?"
+      },
+      "tag": "[tired]"
+    },
+    {
+      "id": "b08",
+      "penutur": "arta",
+      "teks": "Mataku yang nggak.",
+      "emosi": "lelah",
+      "intensitas": 3,
+      "jeda_sesudah": 0.5,
+      "visual": {
+        "latar": "meja_malam",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "datar",
+            "pose": "bust"
+          }
+        ],
+        "properti": [],
+        "kamera": "diam",
+        "catatan_merah": null
+      },
+      "tag": "[tired]"
+    },
+    {
+      "id": "b09",
+      "penutur": "arta",
+      "teks": "Hari kedua belas. Nilai tryout pertamaku keluar.",
+      "emosi": "hancur",
+      "intensitas": 6,
+      "jeda_sesudah": 1.5,
+      "visual": {
+        "latar": "meja_malam",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "datar",
+            "pose": "bust"
+          }
+        ],
+        "properti": [
+          "kertas_58"
+        ],
+        "kamera": "zoom_masuk",
+        "catatan_merah": null
+      },
+      "tag": "[quietly]"
+    },
+    {
+      "id": "b10",
+      "penutur": "arta",
+      "teks": "Lima puluh... delapan.",
+      "emosi": "hancur",
+      "intensitas": 9,
+      "jeda_sesudah": 0.6,
+      "visual": {
+        "latar": "meja_malam",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "hancur",
+            "pose": "bust"
+          }
+        ],
+        "properti": [
+          "kertas_58"
+        ],
+        "kamera": "zoom_masuk",
+        "catatan_merah": null
+      },
+      "tag": "[quietly]",
+      "caption": "58"
+    },
+    {
+      "id": "b11",
+      "penutur": "mbis",
+      "teks": "Rencanamu nggak salah, Ta. Cuma kebanyakan.",
+      "emosi": "misterius",
+      "intensitas": 5,
+      "jeda_sesudah": 0.3,
+      "visual": {
+        "latar": "meja_malam",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "hancur",
+            "pose": "bust"
+          },
+          {
+            "id": "mbis",
+            "ekspresi": "intip",
+            "pose": "intip"
+          }
+        ],
+        "properti": [
+          "kertas_58"
+        ],
+        "kamera": "diam",
+        "catatan_merah": null
+      },
+      "tag": "[whispers]"
+    },
+    {
+      "id": "b12",
+      "penutur": "arta",
+      "teks": "...Siapa itu?!",
+      "emosi": "kaget",
+      "intensitas": 7,
+      "jeda_sesudah": 0.3,
+      "visual": {
+        "latar": "meja_malam",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "kaget",
+            "pose": "bust"
+          }
+        ],
+        "properti": [],
+        "kamera": "goyang",
+        "catatan_merah": null
+      },
+      "tag": "[gasps]"
+    }
+  ]
+}
