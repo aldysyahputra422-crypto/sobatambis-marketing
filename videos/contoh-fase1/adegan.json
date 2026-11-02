@@ -131,41 +131,76 @@
         ]
       },
       "ratna": {
-        "x": 520,
-        "y": 610,
-        "skala": 1.0,
+        "awal": {
+          "x": 520,
+          "y": 955,
+          "skala": 0.95,
+          "ekspresi": "lirik"
+        },
+        "lapis": "belakang",
         "tampil": [
           {
             "mulai": 0,
             "selesai": 4.4
           }
         ],
-        "ekspresi": [
+        "aksi": [
           {
             "mulai": 0,
+            "aksi": "lirik_hp",
+            "ekspresi": "lirik"
+          },
+          {
+            "mulai": 3.3,
+            "aksi": "menghela",
             "ekspresi": "lirik"
           }
         ]
       },
       "mbis": {
-        "x": 630,
-        "y": 925,
-        "skala": 0.72,
-        "masuk": "intip",
+        "awal": {
+          "x": 630,
+          "y": 1000,
+          "skala": 0.72,
+          "ekspresi": "intip"
+        },
+        "lapis": "belakang",
         "tampil": [
           {
             "mulai": 2.2,
             "selesai": 4.4
           },
           {
-            "mulai": 10.4,
+            "mulai": 10.3,
             "selesai": 11.4
           }
         ],
-        "ekspresi": [
+        "aksi": [
           {
-            "mulai": 0,
+            "mulai": 2.2,
+            "aksi": "ngintip",
             "ekspresi": "intip"
+          },
+          {
+            "mulai": 3.1,
+            "aksi": "geleng",
+            "ekspresi": "datar"
+          },
+          {
+            "mulai": 10.3,
+            "aksi": "muncul",
+            "ekspresi": "datar",
+            "param": {
+              "pindah": {
+                "x": 630,
+                "y": 1010
+              }
+            }
+          },
+          {
+            "mulai": 10.9,
+            "aksi": "geleng",
+            "ekspresi": "datar"
           }
         ]
       }
@@ -238,6 +273,19 @@
           "mulai": 7.2
         },
         "masuk": 8.56
+      },
+      {
+        "id": "hp",
+        "masuk": 99,
+        "cara": "pop",
+        "pusat": {
+          "x": 360,
+          "y": 640
+        },
+        "pegang": {
+          "tokoh": "ratna",
+          "mulai": 0
+        }
       }
     ],
     "teks": [

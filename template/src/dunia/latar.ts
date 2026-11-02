@@ -84,6 +84,8 @@ export const PROPERTI: Record<string, () => string> = {
   sticky_7jam: () => `<g transform="rotate(-6 360 330)"><g filter="url(#soft)">${wc(`<rect x="240" y="250" width="240" height="200" fill="#FFE58A"/>`)}</g>${hand(360, 368, "7 JAM", { size: 84, anchor: "middle", color: P.red })}</g>`,
   // versi dinding dalam jangkauan tangan Arta (adegan contoh Fase 1)
   sticky_7jam_b: () => `<g transform="rotate(-6 500 560)"><g filter="url(#soft)">${wc(`<rect x="400" y="475" width="200" height="170" fill="#FFE58A"/>`)}</g><rect x="478" y="467" width="44" height="16" fill="#EDE3CF" opacity=".85"/>${hand(500, 585, "7 JAM", { size: 72, anchor: "middle", color: P.red })}</g>`,
+  // HP di tangan (digambar besar; saat dipegang diskalakan 0,42). Pusat (360, 640).
+  hp: () => `<rect x="310" y="555" width="100" height="170" rx="16" fill="#20232B" stroke="${P.ink}" stroke-width="5"/><rect x="320" y="572" width="80" height="128" rx="6" fill="#E8F4EC"/><path d="M330 594 h56 M330 614 h42 M330 634 h50" stroke="${P.batik}" stroke-width="6"/>`,
   wa_grup: grupWA,
   jam_0047: () => jam(250, 260, "00.47"),
   kertas_58: () => kertasNilai(),

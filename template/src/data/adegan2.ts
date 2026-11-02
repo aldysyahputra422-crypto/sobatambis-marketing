@@ -4,12 +4,14 @@ import type { EntriKamera } from "../lapisan/kamera";
 import type { EntriProperti, EntriTeks, EntriTransisi } from "../lapisan/gerak";
 
 export type Rentang = { mulai: number; selesai: number };
-export type TokohStatis = {
-  x: number; y: number; skala: number; tampil: Rentang[];
-  ekspresi?: { mulai: number; ekspresi: string }[];
-  masuk?: "pop" | "intip" | "jatuh";
+export type IdTokoh = "arta" | "ratna" | "mbis";
+export type JalurTokoh = {
+  awal: { x: number; y: number; skala: number; ekspresi: string };
+  aksi: EntriAksi[];
+  tampil?: Rentang[];
+  lapis?: "depan" | "belakang"; // belakang: digambar sebelum latar.depan (mis. di balik sofa)
 };
-export type PropertiAdegan = EntriProperti & { pusat: { x: number; y: number }; pegang?: { tokoh: "arta"; mulai: number } };
+export type PropertiAdegan = EntriProperti & { pusat: { x: number; y: number }; pegang?: { tokoh: IdTokoh; mulai: number } };
 
 export type DataAdegan2 = {
   durasi: number;
@@ -17,11 +19,7 @@ export type DataAdegan2 = {
   jalur: {
     latar: { mulai: number; latar: string }[];
     kamera: EntriKamera[];
-    tokoh: {
-      arta?: { awal: { x: number; y: number; skala: number; ekspresi: string }; aksi: EntriAksi[]; tampil?: Rentang[] };
-      ratna?: TokohStatis;
-      mbis?: TokohStatis;
-    };
+    tokoh: Partial<Record<IdTokoh, JalurTokoh>>;
     properti: PropertiAdegan[];
     teks: EntriTeks[];
     dialog: (Rentang & { penutur: string })[];

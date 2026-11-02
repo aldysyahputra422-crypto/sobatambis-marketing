@@ -3,14 +3,15 @@ import React, { useMemo } from "react";
 import { AbsoluteFill, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { Audio } from "@remotion/media";
 import { useAudioData, visualizeAudio } from "@remotion/media-utils";
-import { P, defs, epBadge, handle, mbis, ratnaBust, vignette } from "./sistem/gambar";
+import { P, defs, epBadge, handle, vignette } from "./sistem/gambar";
 import { LATAR, PROPERTI, kertas } from "./dunia/latar";
-import { gambarArta, ikutanCepol, posisiTangan } from "./rig/arta";
+import { ikutanCepol } from "./rig/anggota";
+import { TOKOH } from "./rig/tokoh";
 import { POSE_DASAR, type Pose } from "./rig/pose";
 import { rangkaiJalur } from "./aksi/rangkai";
 import { kameraPada, type Kamera } from "./lapisan/kamera";
 import { propertiPada, teksPada, transisiPada } from "./lapisan/gerak";
-import { dalam, pilihPada, type DataAdegan2, type TokohStatis } from "./data/adegan2";
+import { dalam, pilihPada, type DataAdegan2, type IdTokoh } from "./data/adegan2";
 
 export type PropsAdeganV2 = { adeganFile: string; dialogFile: string; mixFile: string; data?: DataAdegan2 };
 
@@ -27,37 +28,27 @@ const transformKamera = (k: Kamera, d: number) => {
   return `translate(360 640) rotate(${k.rot * d}) scale(${s}) translate(${-(360 + k.x * d)} ${-(640 + k.y * d)})`;
 };
 
-const statis = (t: TokohStatis | undefined, detik: number, frame: number, gambar: (ekspresi: string, k: number) => string, benih: number) => {
-  if (!t || !dalam(t.tampil, detik)) return "";
-  const mulai = t.tampil.find((r) => detik >= r.mulai && detik < r.selesai)?.mulai ?? 0;
-  const tau = detik - mulai;
-  const naik = t.masuk === "intip" ? Math.max(0, 1 - tau / 0.35) * 160 : 0;
-  const pop = t.masuk === "pop" && tau < 0.25 ? 0.6 + 0.4 * Math.min(1, tau / 0.25) : 1;
-  const napas = Math.sin(frame / 15 + benih) * 3;
-  const eks = pilihPada(t.ekspresi, detik)?.ekspresi ?? "lirik";
-  return `<g transform="translate(${t.x} ${t.y + naik + napas}) scale(${t.skala * pop})">${gambar(eks, kedip(frame, benih))}</g>`;
-};
+const BENIH: Record<IdTokoh, number> = { arta: 1, ratna: 2, mbis: 3 };
 
 export const AdeganV2: React.FC<PropsAdeganV2> = ({ data, dialogFile, mixFile }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const dialogAudio = useAudioData(staticFile(dialogFile));
 
-  const jalurArta = useMemo(() => {
-    const a = data?.jalur.tokoh.arta;
-    if (!a) return null;
-    const awal: Pose = { ...POSE_DASAR, x: a.awal.x, y: a.awal.y, skala: a.awal.skala, ekspresi: a.awal.ekspresi };
-    return rangkaiJalur(a.aksi, fps, awal);
-  }, [data, fps]);
-
-  // Gerak ikutan cepol dihitung berurutan dari frame 0 (murah: fungsi pose murni).
-  const ikutan = useMemo(() => {
-    if (!jalurArta) return [] as number[];
-    const n = Math.ceil((data?.durasi ?? 0) * fps) + 1;
-    const hasil = [0];
-    for (let f = 1; f < n; f++) hasil.push(ikutanCepol(jalurArta(f - 1), jalurArta(f), hasil[f - 1]));
+  // Jalur pose setiap tokoh + gerak ikutan (cepol/hijab/ekor) dihitung berurutan dari frame 0.
+  const jalur = useMemo(() => {
+    const hasil: Partial<Record<IdTokoh, { pose: (f: number) => Pose; ikutan: number[] }>> = {};
+    if (!data) return hasil;
+    const n = Math.ceil(data.durasi * fps) + 1;
+    for (const [id, t] of Object.entries(data.jalur.tokoh) as [IdTokoh, NonNullable<DataAdegan2["jalur"]["tokoh"][IdTokoh]>][]) {
+      const awal: Pose = { ...POSE_DASAR, x: t.awal.x, y: t.awal.y, skala: t.awal.skala, ekspresi: t.awal.ekspresi };
+      const pose = rangkaiJalur(t.aksi, fps, awal, id);
+      const ik = [0];
+      for (let f = 1; f < n; f++) ik.push(ikutanCepol(pose(f - 1), pose(f), ik[f - 1]));
+      hasil[id] = { pose, ikutan: ik };
+    }
     return hasil;
-  }, [jalurArta, data, fps]);
+  }, [data, fps]);
 
   if (!data) return null;
   const j = data.jalur;
@@ -87,21 +78,23 @@ export const AdeganV2: React.FC<PropsAdeganV2> = ({ data, dialogFile, mixFile })
     .map(({ p, g }) => gambarProperti(p.id, p.pusat, g))
     .join("");
 
-  let arta = "";
+  const belakang: string[] = [];
+  const depan: string[] = [];
   let dipegang = "";
-  if (jalurArta && dalam(j.tokoh.arta?.tampil, detik)) {
-    const pose = jalurArta(frame);
-    arta = gambarArta(pose, { mulut: bicara === "arta" ? mulut : 0, kedip: kedip(frame, 1), ikutan: ikutan[Math.min(frame, ikutan.length - 1)] ?? 0 });
+  for (const [id, t] of Object.entries(j.tokoh) as [IdTokoh, NonNullable<DataAdegan2["jalur"]["tokoh"][IdTokoh]>][]) {
+    const jl = jalur[id];
+    if (!jl || !dalam(t.tampil, detik)) continue;
+    const pose = jl.pose(frame);
+    const svgTokoh = TOKOH[id].gambar(pose, { mulut: bicara === id ? mulut : 0, kedip: kedip(frame, BENIH[id]), ikutan: jl.ikutan[Math.min(frame, jl.ikutan.length - 1)] ?? 0 });
+    (t.lapis === "belakang" ? belakang : depan).push(svgTokoh);
     for (const p of j.properti) {
-      if (p.pegang && detik >= p.pegang.mulai && detik < p.masuk) {
-        const t = posisiTangan(pose, "Ka");
-        dipegang += `<g transform="translate(${t.x} ${t.y}) rotate(${-t.sudut * 0.3 - 8}) scale(.42) translate(${-p.pusat.x} ${-p.pusat.y})">${PROPERTI[p.id]?.() ?? ""}</g>`;
+      const tangan = TOKOH[id].tangan;
+      if (p.pegang?.tokoh === id && tangan && detik >= p.pegang.mulai && detik < p.masuk) {
+        const h = tangan(pose, "Ka");
+        dipegang += `<g transform="translate(${h.x} ${h.y}) rotate(${-h.sudut * 0.3 - 8}) scale(.42) translate(${-p.pusat.x} ${-p.pusat.y})">${PROPERTI[p.id]?.() ?? ""}</g>`;
       }
     }
   }
-
-  const ratna = statis(j.tokoh.ratna, detik, frame, (e, k) => ratnaBust(e, { kedip: k, buka: bicara === "ratna" ? mulut / 4 : 0 }), 2);
-  const mbisSvg = statis(j.tokoh.mbis, detik, frame, (e, k) => mbis(e === "intip" ? "intip" : "senang", 1, { kedip: k }), 3);
 
   const tr = transisiPada(j.transisi, detik);
   let transisi = "";
@@ -123,7 +116,7 @@ export const AdeganV2: React.FC<PropsAdeganV2> = ({ data, dialogFile, mixFile })
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280">${defs(5 + (Math.floor(frame / 4) % 6))}
     <g transform="${transformKamera(kam, 0.6)}">${kertas(latarId)}${latar.gambar()}</g>
-    <g transform="${transformKamera(kam, 1)}">${propertiBebas}${ratna}${mbisSvg}${latar.depan ? latar.depan() : ""}${arta}${dipegang}</g>
+    <g transform="${transformKamera(kam, 1)}">${propertiBebas}${belakang.join("")}${latar.depan ? latar.depan() : ""}${depan.join("")}${dipegang}</g>
     ${transisi}
     ${epBadge("1", "Rencana Sempurna")}${handle()}${vignette()}</svg>`;
 
