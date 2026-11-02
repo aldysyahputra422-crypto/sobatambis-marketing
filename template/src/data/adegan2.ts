@@ -9,9 +9,9 @@ export type JalurTokoh = {
   awal: { x: number; y: number; skala: number; ekspresi: string };
   aksi: EntriAksi[];
   tampil?: Rentang[];
-  lapis?: "depan" | "belakang"; // belakang: digambar sebelum latar.depan (mis. di balik sofa)
+  lapis?: "depan" | "belakang" | { mulai: number; lapis: "depan" | "belakang" }[]; // belakang: di balik latar.depan (sofa, meja)
 };
-export type PropertiAdegan = EntriProperti & { pusat: { x: number; y: number }; pegang?: { tokoh: IdTokoh; mulai: number } };
+export type PropertiAdegan = EntriProperti & { pusat: { x: number; y: number }; pegang?: { tokoh: IdTokoh; mulai: number; selesai?: number } };
 
 export type DataAdegan2 = {
   durasi: number;

@@ -33,6 +33,14 @@ def _nada(f: float, dur: float, jenis: str) -> np.ndarray:
     if jenis == "timpani":
         fx = f * (1 + 0.15 * np.exp(-t * 30))
         return np.sin(2 * np.pi * np.cumsum(fx) / SR) * np.exp(-t * 5)
+    if jenis == "celesta":
+        x = np.sin(2 * np.pi * f * t) + 0.5 * np.sin(2 * np.pi * 2 * f * t) * np.exp(-t * 6) + 0.2 * np.sin(2 * np.pi * 3.01 * f * t)
+        return x * np.exp(-t * 3.5)
+    if jenis == "pad":
+        lfo = 1 + 0.004 * np.sin(2 * np.pi * 0.5 * t)
+        x = sum(np.sin(2 * np.pi * f * k * lfo * t) / k for k in (1, 2, 3))
+        a = np.minimum(1, t / 0.6) * np.minimum(1, (t[-1] - t + 1e-3) / 0.6)
+        return x * a * 0.5
     if jenis == "shaker":
         return rng.normal(0, 1, len(t)) * np.exp(-t * 70) * 0.25
     if jenis == "tepuk":
@@ -82,7 +90,23 @@ def _tegang(detik: float, bpm: int) -> np.ndarray:
     return buf
 
 
-RESEP = {"ceria_konyol": _ceria, "tegang_naik": _tegang}
+def _tema_mbis(detik: float, bpm: int) -> np.ndarray:
+    """Tema Mbis: hangat dan misterius, arpeggio celesta di atas pad F mayor7."""
+    buf = np.zeros(int(detik * SR))
+    ketuk = 60 / bpm
+    arpeggio = [65, 69, 72, 76, 74, 72, 69, 72]  # F A C E D C A C
+    akor = [[53, 57, 60, 64], [50, 53, 57, 60]]  # Fmaj7, Dm7
+    for i in range(int(detik / (ketuk / 2))):
+        t = i * ketuk / 2
+        _taruh(buf, _nada(_hz(arpeggio[i % 8] + (12 if i % 16 >= 12 else 0)), 1.2, "celesta"), t, 0.22)
+    birama = ketuk * 4
+    for j in range(int(np.ceil(detik / birama))):
+        for m in akor[j % 2]:
+            _taruh(buf, _nada(_hz(m), birama + 0.3, "pad"), j * birama, 0.08)
+    return buf
+
+
+RESEP = {"ceria_konyol": _ceria, "tegang_naik": _tegang, "tema_mbis": _tema_mbis}
 
 
 def buat(nama: str, detik: float, bpm: int, keluar: Path) -> Path:
@@ -107,4 +131,5 @@ if __name__ == "__main__":
     folder.mkdir(parents=True, exist_ok=True)
     print(buat("ceria_konyol", 17.14, 112, folder / "ceria_konyol.mp3"))
     print(buat("tegang_naik", 15.0, 128, folder / "tegang_naik.mp3"))
+    print(buat("tema_mbis", 11.43, 84, folder / "tema_mbis.mp3"))
     sys.exit(0)

@@ -126,3 +126,9 @@ def test_path_relatif_ikut_folder_katalog(tmp_path):
     ks = {"k": {"file": "k.wav", "lisensi": "x"}}
     j = mix.selesaikan({"musik": [], "sfx": [{"nama": "k", "pada": 0}]}, {}, ks, dasar_sfx=tmp_path / "sfx")
     assert j["sfx"][0]["file"] == tmp_path / "sfx" / "k.wav"
+
+
+def test_musik_tema_mbis_ada(tmp_path):
+    p = musik_sintetis.buat("tema_mbis", 6.0, 84, tmp_path / "m.wav")
+    x, sr = sf.read(p)
+    assert abs(len(x) / sr - 6.0) < 0.05 and _db(x) > -30

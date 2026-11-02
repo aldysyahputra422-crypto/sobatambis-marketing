@@ -86,10 +86,11 @@ export const AdeganV2: React.FC<PropsAdeganV2> = ({ data, dialogFile, mixFile })
     if (!jl || !dalam(t.tampil, detik)) continue;
     const pose = jl.pose(frame);
     const svgTokoh = TOKOH[id].gambar(pose, { mulut: bicara === id ? mulut : 0, kedip: kedip(frame, BENIH[id]), ikutan: jl.ikutan[Math.min(frame, jl.ikutan.length - 1)] ?? 0 });
-    (t.lapis === "belakang" ? belakang : depan).push(svgTokoh);
+    const lapis = Array.isArray(t.lapis) ? pilihPada(t.lapis, detik)?.lapis : t.lapis;
+    (lapis === "belakang" ? belakang : depan).push(svgTokoh);
     for (const p of j.properti) {
       const tangan = TOKOH[id].tangan;
-      if (p.pegang?.tokoh === id && tangan && detik >= p.pegang.mulai && detik < p.masuk) {
+      if (p.pegang?.tokoh === id && tangan && detik >= p.pegang.mulai && detik < Math.min(p.masuk, p.pegang.selesai ?? Infinity)) {
         const h = tangan(pose, "Ka");
         dipegang += `<g transform="translate(${h.x} ${h.y}) rotate(${-h.sudut * 0.3 - 8}) scale(.42) translate(${-p.pusat.x} ${-p.pusat.y})">${PROPERTI[p.id]?.() ?? ""}</g>`;
       }
@@ -144,7 +145,7 @@ export const AdeganV2: React.FC<PropsAdeganV2> = ({ data, dialogFile, mixFile })
                 key={i}
                 style={{
                   fontFamily: "Bricolage Grotesque", fontWeight: 800,
-                  fontSize: k.gaya === "cap" ? 76 : 44, lineHeight: 1.15,
+                  fontSize: k.gaya === "cap" ? Math.round(76 * Math.min(1, 6 / Math.max(1, k.kata.length))) : 44, lineHeight: 1.15,
                   color: k.gaya === "cap" ? P.red : P.ink,
                   display: "inline-block", transform: `scale(${k.skala}) rotate(${k.rot}deg)`,
                   background: k.aktif && k.gaya !== "cap" ? "linear-gradient(transparent 58%, rgba(251,197,49,.8) 58%, rgba(251,197,49,.8) 92%, transparent 92%)" : "none",

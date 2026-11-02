@@ -12,3 +12,10 @@ tegang_naik:
   sumber: dibuat-sendiri (scripts/musik_sintetis.py)
   lisensi: milik-sendiri
   sementara: true
+tema_mbis:
+  file: aset/musik/tema_mbis.mp3
+  bpm: 84
+  suasana: hangat-misterius, arpeggio celesta + pad; dipakai setiap Mbis muncul
+  sumber: dibuat-sendiri (scripts/musik_sintetis.py)
+  lisensi: milik-sendiri
+  sementara: true

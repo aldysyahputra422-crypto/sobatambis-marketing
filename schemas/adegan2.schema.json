@@ -326,9 +326,34 @@
           }
         },
         "lapis": {
-          "enum": [
-            "depan",
-            "belakang"
+          "oneOf": [
+            {
+              "enum": [
+                "depan",
+                "belakang"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "mulai",
+                  "lapis"
+                ],
+                "properties": {
+                  "mulai": {
+                    "type": "number"
+                  },
+                  "lapis": {
+                    "enum": [
+                      "depan",
+                      "belakang"
+                    ]
+                  }
+                }
+              }
+            }
           ]
         }
       }
