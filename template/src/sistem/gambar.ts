@@ -248,4 +248,4 @@ const bubble = (x,y,w,h,lines,{tail='bl',size=32}={}) => {
   return s;
 };
 
-export {P, defs, paper, vignette, ink, wc, hand, highlight, artaFull, artaBust, artaHead, mbis, ratnaBust, capLines, epBadge, handle, bubble};
+export {eyes, mouth, P, defs, paper, vignette, ink, wc, hand, highlight, artaFull, artaBust, artaHead, mbis, ratnaBust, capLines, epBadge, handle, bubble};

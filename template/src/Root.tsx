@@ -4,7 +4,7 @@ import { Composition, staticFile, Still } from "remotion";
 import { Episode, type PropsEpisode } from "./Episode";
 import { Cover, type PropsCover } from "./Cover";
 import type { DataAdegan } from "./data/adegan";
-import { RigArta, type PropsRigArta } from "./uji/RigArta";
+import { RigTokoh, type PropsRigTokoh } from "./uji/RigTokoh";
 import { AdeganV2, type PropsAdeganV2 } from "./AdeganV2";
 import type { DataAdegan2 } from "./data/adegan2";
 
@@ -38,7 +38,7 @@ export const RemotionRoot: React.FC = () => (
         return { durationInFrames: Math.ceil(data.durasi * FPS), props: { ...props, data } };
       }}
     />
-    <Still id="RigArta" component={RigArta} width={720} height={1280} defaultProps={{ variasi: "dasar" } as PropsRigArta} />
+    <Still id="RigTokoh" component={RigTokoh} width={720} height={1280} defaultProps={{ tokoh: "arta", variasi: "dasar" } as PropsRigTokoh} />
     <Still
       id="Cover"
       component={Cover}

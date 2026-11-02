@@ -11,13 +11,14 @@ TPL = ROOT / "template"
 
 
 @pytest.mark.lambat
-def test_rig_arta_render_tidak_kosong_dan_pose_berbeda(tmp_path):
+@pytest.mark.parametrize("tokoh", ["arta", "ratna", "mbis"])
+def test_rig_render_tidak_kosong_dan_pose_berbeda(tmp_path, tokoh):
     hasil = []
     for i, pose in enumerate(["dasar", "ekstrem"]):
         props = tmp_path / f"p{i}.json"
-        props.write_text(json.dumps({"variasi": pose}))
+        props.write_text(json.dumps({"tokoh": tokoh, "variasi": pose}))
         keluar = tmp_path / f"{pose}.png"
-        subprocess.run(["npx", "remotion", "still", "RigArta", str(keluar), f"--props={props}", "--log=error"],
+        subprocess.run(["npx", "remotion", "still", "RigTokoh", str(keluar), f"--props={props}", "--log=error"],
                        cwd=TPL, check=True, timeout=600)
         im = Image.open(keluar).convert("RGB")
         assert im.size == (720, 1280)
