@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "adegan.json Sobat Ambis",
+  "type": "object",
+  "required": ["episode", "judul", "durasi", "adegan", "penutup"],
+  "properties": {
+    "episode": {"type": "string"},
+    "judul": {"type": "string"},
+    "durasi": {"type": "number", "exclusiveMinimum": 0},
+    "penutup": {"type": "object", "required": ["judul_berikut"], "properties": {"judul_berikut": {"type": "string"}}},
+    "adegan": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "mulai", "selesai", "akhir_jeda", "penutur", "emosi", "intensitas", "visual", "caption"],
+        "properties": {
+          "id": {"type": "string"},
+          "mulai": {"type": "number", "minimum": 0},
+          "selesai": {"type": "number"},
+          "akhir_jeda": {"type": "number"},
+          "penutur": {"type": "string"},
+          "emosi": {"type": "string"},
+          "intensitas": {"type": "integer"},
+          "visual": {"type": "object", "required": ["latar", "tokoh", "kamera"]},
+          "caption": {
+            "type": "object",
+            "required": ["teks", "kata"],
+            "properties": {
+              "teks": {"type": "string"},
+              "kata": {
+                "type": "array",
+                "items": {"type": "object", "required": ["kata", "mulai", "selesai"]}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
