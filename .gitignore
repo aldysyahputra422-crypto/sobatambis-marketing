@@ -8,3 +8,4 @@ videos/**/*.png
 __pycache__/
 .pytest_cache/
 .superpowers/
+template/out/
