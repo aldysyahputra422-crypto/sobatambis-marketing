@@ -56,4 +56,10 @@ describe("rangkaiJalur", () => {
   it("aksi tak dikenal error", () => {
     expect(() => rangkaiJalur([{ mulai: 0, aksi: "terbang" }], FPS, POSE_DASAR)).toThrow(/terbang/);
   });
+
+  it("param pindah menaruh tokoh di posisi baru tanpa blend posisi", () => {
+    const f = rangkaiJalur([{ mulai: 0, aksi: "diam_hidup" }, { mulai: 1, aksi: "diam_hidup", param: { pindah: { x: 500, y: 900 } } }], FPS, POSE_DASAR);
+    expect(f(30).x).toBeCloseTo(500, 0);
+    expect(f(31).y).toBeCloseTo(900, 0);
+  });
 });

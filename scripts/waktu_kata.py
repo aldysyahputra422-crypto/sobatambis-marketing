@@ -12,7 +12,7 @@ import jsonschema
 from scripts.suara.dengar import normalisasi
 
 ROOT = Path(__file__).resolve().parents[1]
-PENANDA = {"pada_kata": ("pada", "mulai"), "mulai_kata": ("mulai", "mulai"), "selesai_kata": ("selesai", "selesai")}
+PENANDA = {"pada_kata": ("pada", "mulai"), "masuk_kata": ("masuk", "mulai"), "mulai_kata": ("mulai", "mulai"), "selesai_kata": ("selesai", "selesai")}
 
 
 class KataTidakAda(Exception):

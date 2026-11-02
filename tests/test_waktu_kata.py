@@ -36,3 +36,8 @@ def test_sumber_contoh_valid_skema():
     sumber = json.loads((ROOT / "tests/data/adegan2_contoh.json").read_text())
     skema = json.loads((ROOT / "schemas/adegan2.schema.json").read_text())
     jsonschema.validate(sumber, skema)
+
+
+def test_masuk_kata_untuk_properti():
+    h = waktu_kata.sisipkan({"p": [{"id": "s", "masuk_kata": "TUJUH", "baris": "b06"}]}, TRANSKRIP)
+    assert h["p"][0] == {"id": "s", "masuk": 21.2}

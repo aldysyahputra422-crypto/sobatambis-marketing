@@ -118,3 +118,11 @@ def test_sfx_pelan_dan_keras_setara(tmp_path):
     a = np.abs(x[int(0.5 * sr):int(0.7 * sr)]).max()
     b = np.abs(x[int(2.0 * sr):int(2.2 * sr)]).max()
     assert abs(20 * np.log10(a / b)) < 2
+
+
+def test_path_relatif_ikut_folder_katalog(tmp_path):
+    (tmp_path / "sfx").mkdir()
+    _tulis(tmp_path / "sfx" / "k.wav", np.ones(100) * 0.1)
+    ks = {"k": {"file": "k.wav", "lisensi": "x"}}
+    j = mix.selesaikan({"musik": [], "sfx": [{"nama": "k", "pada": 0}]}, {}, ks, dasar_sfx=tmp_path / "sfx")
+    assert j["sfx"][0]["file"] == tmp_path / "sfx" / "k.wav"

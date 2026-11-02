@@ -59,9 +59,9 @@ def amplop_duck(dialog: np.ndarray, sr: int = SR) -> np.ndarray:
     return 10 ** (per_sampel / 20)
 
 
-def selesaikan(jalur: dict, katalog_musik: dict, katalog_sfx: dict, dasar: Path = ROOT) -> dict:
-    """Ubah nama aset di jalur menjadi path file; tolak aset tanpa lisensi."""
-    def ambil(kat, nama, jenis):
+def selesaikan(jalur: dict, katalog_musik: dict, katalog_sfx: dict, dasar_musik: Path = ROOT, dasar_sfx: Path = ROOT / "aset/sfx") -> dict:
+    """Ubah nama aset di jalur menjadi path file; tolak aset tanpa lisensi. Path relatif ikut folder dasar katalognya."""
+    def ambil(kat, nama, jenis, dasar):
         e = kat.get(nama)
         if e is None:
             raise KeyError(f"{jenis} '{nama}' tidak ada di katalog")
@@ -70,8 +70,8 @@ def selesaikan(jalur: dict, katalog_musik: dict, katalog_sfx: dict, dasar: Path 
         f = Path(e["file"])
         return f if f.is_absolute() else dasar / f
 
-    musik = [dict(m, file=ambil(katalog_musik, m["trek"], "musik")) for m in jalur.get("musik", [])]
-    sfx = [dict(s, file=ambil(katalog_sfx, s["nama"], "sfx")) for s in jalur.get("sfx", [])]
+    musik = [dict(m, file=ambil(katalog_musik, m["trek"], "musik", dasar_musik)) for m in jalur.get("musik", [])]
+    sfx = [dict(s, file=ambil(katalog_sfx, s["nama"], "sfx", dasar_sfx)) for s in jalur.get("sfx", [])]
     return {"musik": musik, "sfx": sfx}
 
 

@@ -60,7 +60,7 @@ export function teksPada(jalur: EntriTeks[], detik: number): GerakTeks[] {
       let rot = 0;
       if (k.gaya === "cap") {
         if (tau < 0.3) {
-          skala = 3.2 - 2.2 * easing.keluar(tau / 0.3);
+          skala = 2.2 - 1.2 * easing.keluar(tau / 0.3);
           rot = 3 * Math.sin(tau * 60) * (1 - tau / 0.3);
         }
       } else if (tau < 0.133) {

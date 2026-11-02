@@ -82,6 +82,8 @@ export const PROPERTI: Record<string, () => string> = {
   sticky_tryout: () => sticky(380, 370, 200, 170, ["Tryout", "tiap hari"], -4),
   sticky_3tempat: () => `<g transform="rotate(5 360 250)"><g filter="url(#soft)">${wc(`<rect x="225" y="140" width="270" height="210" fill="#FFFCF5"/>`)}</g><rect x="338" y="132" width="44" height="16" fill="#EDE3CF" opacity=".85"/>${hand(360, 212, "les di", { size: 40, anchor: "middle" })}${hand(360, 294, "3 TEMPAT?!", { size: 62, anchor: "middle", color: P.red })}</g>`,
   sticky_7jam: () => `<g transform="rotate(-6 360 330)"><g filter="url(#soft)">${wc(`<rect x="240" y="250" width="240" height="200" fill="#FFE58A"/>`)}</g>${hand(360, 368, "7 JAM", { size: 84, anchor: "middle", color: P.red })}</g>`,
+  // versi dinding dalam jangkauan tangan Arta (adegan contoh Fase 1)
+  sticky_7jam_b: () => `<g transform="rotate(-6 500 560)"><g filter="url(#soft)">${wc(`<rect x="400" y="475" width="200" height="170" fill="#FFE58A"/>`)}</g><rect x="478" y="467" width="44" height="16" fill="#EDE3CF" opacity=".85"/>${hand(500, 585, "7 JAM", { size: 72, anchor: "middle", color: P.red })}</g>`,
   wa_grup: grupWA,
   jam_0047: () => jam(250, 260, "00.47"),
   kertas_58: () => kertasNilai(),

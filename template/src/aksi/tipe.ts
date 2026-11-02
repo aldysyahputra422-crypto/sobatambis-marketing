@@ -23,5 +23,5 @@ export type EntriAksi = {
   mulai: number;
   aksi: string;
   ekspresi?: string;
-  param?: { dx?: number; benda?: string };
+  param?: { dx?: number; benda?: string; pindah?: { x: number; y: number } }; // pindah: taruh akar di posisi baru (potongan adegan)
 };

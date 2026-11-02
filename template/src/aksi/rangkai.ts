@@ -69,6 +69,8 @@ export function rangkaiJalur(entri: EntriAksi[], fps: number, awal: Pose): (fram
   const basis: { x: number; y: number }[] = [];
   urut.forEach((_, i) => {
     if (i === 0) return basis.push({ x: awal.x, y: awal.y });
+    const pindah = urut[i].param?.pindah;
+    if (pindah) return basis.push({ ...pindah });
     const p = basis[i - 1];
     const tau = rentang[i - 1];
     const akhir = nilai(i - 1, tau);
@@ -103,7 +105,8 @@ export function rangkaiJalur(entri: EntriAksi[], fps: number, awal: Pose): (fram
     const p = poseEntri(i, t);
     const lewat = (t - urut[i].mulai) * fps;
     if (i > 0 && lewat < panjangBlend[i]) {
-      return interpolasiPose(poseEntri(i - 1, t), p, easing.sinus(lewat / panjangBlend[i]));
+      const campur = interpolasiPose(poseEntri(i - 1, t), p, easing.sinus(lewat / panjangBlend[i]));
+      return urut[i].param?.pindah ? { ...campur, x: p.x, y: p.y } : campur;
     }
     return p;
   };
