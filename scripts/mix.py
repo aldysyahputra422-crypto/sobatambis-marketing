@@ -4,6 +4,7 @@ CLI: python -m scripts.mix <folder>  (membaca adegan.json, dialog.wav, aset/*/ka
 """
 import json
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -85,15 +86,24 @@ def _ukur(p: Path) -> tuple[float, float]:
 
 
 def _normalisasi(x: np.ndarray, keluar: Path) -> None:
-    """Gain ke −14 LUFS lalu batasi puncak −1 dBTP (limiter ffmpeg), tanpa menghidupkan sunyi."""
+    """Gain ke −14 LUFS lalu limiter puncak; diulang sampai LUFS −14 ±0,5 dan true peak ≤ −1 dBTP.
+    Gain statis (bukan loudnorm dinamis) supaya bagian sunyi tetap sunyi."""
     with tempfile.TemporaryDirectory() as d:
-        mentah = Path(d) / "mentah.wav"
-        sf.write(mentah, x.astype(np.float32), SR)
-        lufs, _ = _ukur(mentah)
-        gain = -14.0 - lufs
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mentah), "-af",
-                        f"volume={gain:.2f}dB,alimiter=limit=-1.2dB:attack=2:release=50:level=disabled",
-                        "-ar", str(SR), str(keluar)], check=True)
+        kini = Path(d) / "0.wav"
+        sf.write(kini, x.astype(np.float32), SR)
+        batas = 10 ** (-1.6 / 20)
+        for i in range(4):
+            lufs, tp = _ukur(kini)
+            if abs(lufs + 14) <= 0.5 and tp <= -1.0:
+                break
+            berikut = Path(d) / f"{i + 1}.wav"
+            gain = -14.0 - lufs
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(kini), "-af",
+                            f"volume={gain:.2f}dB,alimiter=limit={batas:.4f}:attack=1:release=60:level=disabled",
+                            "-ar", str(SR), str(berikut)], check=True)
+            kini = berikut
+            batas *= 10 ** (-0.3 / 20)
+        shutil.copy(kini, keluar)
 
 
 def campur(dialog: Path, jalur_musik: list[dict], jalur_sfx: list[dict], keluar: Path, sunyi: list[tuple[float, float]]) -> dict:

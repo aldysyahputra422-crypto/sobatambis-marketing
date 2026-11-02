@@ -132,3 +132,16 @@ def test_musik_tema_mbis_ada(tmp_path):
     p = musik_sintetis.buat("tema_mbis", 6.0, 84, tmp_path / "m.wav")
     x, sr = sf.read(p)
     assert abs(len(x) / sr - 6.0) < 0.05 and _db(x) > -30
+
+
+def test_tanpa_dialog_dengan_transien_tetap_sesuai_target(tmp_path):
+    rng = np.random.default_rng(1)
+    musik = _tulis(tmp_path / "m.wav", rng.normal(0, 0.03, 8 * SR))
+    klik = np.zeros(int(0.3 * SR))
+    klik[:600] = 1.0
+    sfx = _tulis(tmp_path / "s.wav", klik)
+    km, ks = {"m": {"file": str(musik), "lisensi": "x"}}, {"s": {"file": str(sfx), "lisensi": "x"}}
+    dialog = _tulis(tmp_path / "d.wav", np.zeros(8 * SR))
+    j = mix.selesaikan({"musik": [{"trek": "m", "mulai": 0, "selesai": 8}], "sfx": [{"nama": "s", "pada": t} for t in (1, 3, 5)]}, km, ks)
+    r = mix.campur(dialog, j["musik"], j["sfx"], tmp_path / "mix.wav", sunyi=[])
+    assert -15 <= r["lufs"] <= -13 and r["puncak_dbtp"] <= -0.9

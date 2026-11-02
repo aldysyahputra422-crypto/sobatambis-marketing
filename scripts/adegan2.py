@@ -276,6 +276,16 @@ def bangun(n: dict, timing: list[dict], transkrip: dict) -> dict:
             e = {"mulai": a0, "selesai": a1, "jenis": "sisipan" if benda else "dekat", "gerak": "diam"}
             e["target"] = pg["pusat"][benda] if benda else target("arta")
             kamera.append(e)
+        elif len(b["dialog"]) >= 2:
+            # shot / reverse-shot: dialog pertama lebar, dialog berikutnya potong ke wajah penuturnya
+            titik = [a0] + [t_by[f"{b['id']}.{k}"]["mulai"] for k in range(2, len(b["dialog"]) + 1)] + [a1]
+            for k, (t0, t1) in enumerate(zip(titik, titik[1:])):
+                if k == 0:
+                    kamera.append({"mulai": R(t0), "selesai": R(t1), "jenis": "lebar", "gerak": "dorong"})
+                else:
+                    terakhir = k == len(b["dialog"]) - 1
+                    kamera.append({"mulai": R(t0), "selesai": R(t1), "jenis": "dekat", "target": target(b["dialog"][k]["penutur"]),
+                                   "gerak": "hentak" if terakhir and b["jenis"] == "lucu" else "dorong"})
         else:
             kamera.append({"mulai": a0, "selesai": a1, "jenis": "lebar", "gerak": {"lucu": "hentak", "hook": "dorong", "penutup": "dorong"}.get(b["jenis"], "dorong")})
 

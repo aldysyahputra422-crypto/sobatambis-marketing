@@ -133,3 +133,12 @@ def test_target_dekat_di_kepala():
     k = next(x for x in a["jalur"]["kamera"] if x["jenis"] == "dekat" and x["mulai"] > 10)
     p = pg["latar"]["meja_malam"]["arta"]
     assert k["target"]["y"] == pytest.approx(p["y"] - 452 * pg["skala"]["arta"], abs=2)
+
+
+def test_potong_ke_penutur_di_dialog_berikutnya():
+    a, timing, _ = bangun()
+    t = {x["id"]: x for x in timing}
+    k = a["jalur"]["kamera"]
+    ke_ratna = [x for x in k if x["jenis"] == "dekat" and abs(x["mulai"] - t["t03.2"]["mulai"]) < 0.01]
+    assert ke_ratna and ke_ratna[0]["target"]["x"] == 520
+    assert any(x["jenis"] == "lebar" and x["mulai"] < t["t03.1"]["mulai"] < x["selesai"] for x in k)
