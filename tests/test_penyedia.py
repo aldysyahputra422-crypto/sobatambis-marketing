@@ -64,3 +64,31 @@ def test_edge_prosodi_dikuatkan_saat_rekam_ulang():
     a = e.prosodi({"penutur": "arta", "emosi": "marah"})
     b = e.prosodi({"penutur": "arta", "emosi": "marah", "_kuat": 2})
     assert _persen(b["volume"]) > _persen(a["volume"])
+
+
+class _RespGagal:
+    def __init__(self, kode, detail):
+        self.status_code, self._d, self.content = kode, {"detail": detail}, b""
+
+    def json(self):
+        return self._d
+
+    def raise_for_status(self):
+        import requests
+        raise requests.HTTPError(f"{self.status_code}")
+
+
+def test_elevenlabs_kuota_habis_jadi_kredit_kurang(monkeypatch, tmp_path):
+    import pytest
+    from scripts.suara.penyedia import KreditKurang
+    monkeypatch.setattr(penyedia.requests, "post", lambda *a, **k: _RespGagal(401, {"status": "quota_exceeded", "message": "kuota habis"}))
+    with pytest.raises(KreditKurang):
+        ElevenLabs("kunci", {"arta": "v1"}).sintesis({"id": "b1", "penutur": "arta", "teks": "halo"}, tmp_path / "b1.wav")
+
+
+def test_elevenlabs_error_lain_tetap_error(monkeypatch, tmp_path):
+    import pytest
+    import requests
+    monkeypatch.setattr(penyedia.requests, "post", lambda *a, **k: _RespGagal(500, {"status": "server_error"}))
+    with pytest.raises(requests.HTTPError):
+        ElevenLabs("kunci", {"arta": "v1"}).sintesis({"id": "b1", "penutur": "arta", "teks": "halo"}, tmp_path / "b1.wav")

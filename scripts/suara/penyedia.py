@@ -76,6 +76,13 @@ class ElevenLabs:
             json={"text": self.teks_kirim(baris), "model_id": self.model},
             timeout=120,
         )
+        if r.status_code in (401, 402, 429):
+            try:
+                detail = r.json().get("detail", {})
+            except ValueError:
+                detail = {}
+            if isinstance(detail, dict) and detail.get("status") in ("quota_exceeded", "insufficient_credits"):
+                raise KreditKurang(len(self.teks_kirim(baris)), 0)
         r.raise_for_status()
         with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
             f.write(r.content)
