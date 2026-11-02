@@ -59,6 +59,13 @@ function eyes(expr, s=1){
       +`<path d="M${L-18*s} ${Y-36*s} q${18*s} ${-10*s} ${36*s} 0 M${R-18*s} ${Y-36*s} q${18*s} ${-10*s} ${36*s} 0" stroke="${P.hair}" stroke-width="${6*s}" fill="none" stroke-linecap="round"/>`;
     case 'senyum': return `<path d="M${L-18*s} ${Y+4*s} q${18*s} ${-16*s} ${36*s} 0 M${R-18*s} ${Y+4*s} q${18*s} ${-16*s} ${36*s} 0" stroke="${P.ink}" stroke-width="${5*s}" fill="none" stroke-linecap="round"/>`;
     case 'lirik': return white(L)+white(R)+lid(L,-4)+lid(R,4)+pup(L,14,6)+pup(R,14,6);
+    case 'marah': return white(L,ry*.9)+white(R,ry*.9)+pup(L,2,4,6.5)+pup(R,-2,4,6.5)
+      +`<path d="M${L-30*s} ${Y-34*s} l${50*s} ${22*s} M${R+30*s} ${Y-34*s} l${-50*s} ${22*s}" stroke="${P.hair}" stroke-width="${9*s}" stroke-linecap="round"/>`
+      +`<path d="M${L-24*s} ${Y-6*s} l${48*s} ${10*s} M${R+24*s} ${Y-6*s} l${-48*s} ${10*s}" stroke="${P.ink}" stroke-width="${4*s}" stroke-linecap="round"/>`;
+    case 'hancur': return white(L)+white(R)+pup(L,0,8,6)+pup(R,0,8,6)
+      +`<path d="M${L-20*s} ${Y-30*s} l${36*s} ${-8*s} M${R+20*s} ${Y-30*s} l${-36*s} ${-8*s}" stroke="${P.hair}" stroke-width="${6*s}" stroke-linecap="round"/>`
+      +`<path d="M${L-24*s} ${Y+14*s} q${24*s} ${10*s} ${48*s} 0 M${R-24*s} ${Y+14*s} q${24*s} ${10*s} ${48*s} 0" stroke="#7FB3E8" stroke-width="${5*s}" fill="none" opacity=".9"/>`
+      +`<path d="M${R+20*s} ${Y+22*s} q${6*s} ${16*s} 0 ${26*s} q${-6*s} ${-10*s} 0 ${-26*s}z" fill="#9CCBF2"/>`;
   }
   return '';
 }
@@ -70,6 +77,8 @@ function mouth(expr, s=1){
     kaget:`<ellipse cx="0" cy="${Y}" rx="${11*s}" ry="${14*s}" fill="#8A3A33" stroke="${P.ink}" stroke-width="${3*s}"/>`,
     senyum:`<path d="M${-18*s} ${Y-6*s} q${18*s} ${18*s} ${36*s} 0" stroke="${P.ink}" stroke-width="${4*s}" fill="none" stroke-linecap="round"/>`,
     lirik:`<path d="M${-12*s} ${Y} q${14*s} ${-6*s} ${26*s} ${2*s}" stroke="${P.ink}" stroke-width="${4*s}" fill="none" stroke-linecap="round"/>`,
+    marah:`<path d="M${-30*s} ${Y-12*s} q${30*s} ${-8*s} ${60*s} 0 q${-4*s} ${34*s} ${-30*s} ${34*s} q${-26*s} 0 ${-30*s} ${-34*s}z" fill="#8A3A33" stroke="${P.ink}" stroke-width="${3*s}"/><path d="M${-22*s} ${Y-9*s} h${44*s}" stroke="#fff" stroke-width="${6*s}"/>`,
+    hancur:`<path d="M${-16*s} ${Y+4*s} q${16*s} ${-14*s} ${32*s} 0" stroke="${P.ink}" stroke-width="${4*s}" fill="none" stroke-linecap="round"/>`,
   }[expr]||'';
 }
 

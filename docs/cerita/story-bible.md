@@ -74,14 +74,36 @@ Satu kalimat: **Anak ambis belajar bahwa belajar keras dan belajar benar itu dua
 - Tidak mengejek sekolah, guru, bimbel lain, atau daerah tertentu.
 - Tidak ada adegan yang membuat anak di bawah umur terlihat tidak pantas.
 
-## 6. Running gag (ritual yang ditunggu penonton)
+## 6. Sistem emosi (wajib di setiap naskah)
+
+Setiap baris naskah wajib punya label emosi dan intensitas (1 sampai 10). Label ini dibaca sutradara-suara, animator, penyelaras-caption, dan mixer-audio supaya suara, gambar, dan teks bergerak bersama. Satu episode wajib punya **minimal 4 emosi berbeda** dan **satu puncak intensitas 8 ke atas**. Intensitas tidak boleh datar lebih dari 10 detik.
+
+| Emosi | Suara (arah + tag ElevenLabs v3) | Wajah & tubuh | Layar | Caption | Musik & efek |
+|---|---|---|---|---|---|
+| **Semangat** | Nada tinggi, tempo cepat, senyum terdengar. `[excited]` | Mata berbinar, pensil cepol tegak | Cahaya hangat terang, kamera sedikit memantul | Muncul cepat per kata, kata kunci distabilo | Musik ceria, bunyi "tok" |
+| **Kesal/Marah** | Ditekan, volume naik, konsonan keras, jeda pendek tajam. `[frustrated]` lalu `[shouting]` di puncak | Alis turun tajam, rahang mengatup, pensil bergetar | Rona merah tipis di tepi layar, kamera goyang kecil di kata puncak, zoom cepat | Kata puncak **besar, merah, bergetar**, huruf kapital | Musik dipotong mendadak, bunyi tamparan kertas |
+| **Tertekan** | Pelan, napas terdengar, kalimat menggantung. `[sighs]` | Bahu turun, mata melirik | Vignette lebih gelap, warna sedikit pucat | Kecil, muncul lambat | Detak jam, dengung rendah |
+| **Lelah** | Datar, tempo lambat, suara serak. `[tired]` | Kantung mata, kelopak setengah | Cahaya lampu kuning redup, kamera diam | Abu-abu tinta, tanpa animasi | Musik tipis atau hening |
+| **Hancur/Sedih** | Pecah di akhir kalimat, jeda panjang sebelum kata kunci. `[quietly]` | Mata berkaca, pensil miring total | Musik berhenti, layar meredup, zoom pelan ke wajah | Satu kata per layar | Sunyi total 1 sampai 1,5 detik, lalu piano tipis |
+| **Kaget** | Tarikan napas tajam, nada naik mendadak. `[gasps]` | Mata bulat, alis naik | Potongan cepat, kamera sentak | Muncul seketika dengan "?!" | Bunyi "ting" atau gesekan |
+| **Misterius (Mbis)** | Berbisik, dekat ke mikrofon. `[whispers]` | Hanya mata dan telinga terlihat | Cahaya turun, pinggir halaman bergetar | Tulisan tangan miring, pudar masuk | Dengung hangat, bel kecil |
+| **Hangat (Mbis/Bu Ratna lembut)** | Tempo pelan, senyum terdengar | Mata lembut | Cahaya lampu menghangat | Kartu krem biasa | Piano atau gitar tipis |
+
+Aturan tambahan:
+- **Kontras adalah kunci.** Puncak marah terasa lebih keras kalau didahului momen tenang, dan sunyi terasa lebih berat kalau didahului suara ramai.
+- **Marah Arta selalu lucu-sedih, tidak pernah kasar.** Tidak ada umpatan, tidak ada kekerasan ke orang lain. Yang dibanting hanya sticky note atau buku.
+- **Bu Ratna tidak pernah membentak.** Tekanannya halus, dan justru itu yang menusuk.
+- **Tag ElevenLabs di tabel adalah contoh.** Sebelum produksi pertama, sutradara-suara mencocokkan dengan daftar tag resmi ElevenLabs v3 dan menguji dukungan bahasa Indonesia. Tag yang tidak didukung diganti arah suara biasa (kecepatan, volume, jeda).
+- **Suara bebas (edge-tts) tidak bisa membawakan emosi kuat.** Untuk episode serial, pakai ElevenLabs v3 atau rekaman suara manusia. edge-tts hanya untuk video Mbis Bereaksi yang nadanya datar-kering.
+
+## 7. Running gag (ritual yang ditunggu penonton)
 
 1. **Catatan merah guru:** setiap episode punya satu coretan merah yang mengomentari Arta ("realistis??", "ini jam tidur atau jam kerja?").
 2. **Pensil miring:** kondisi mental Arta terbaca dari kemiringan pensil di cepolnya.
 3. **"Bu Sinta":** setiap kali namanya disebut, ada bunyi notifikasi WA.
 4. **Mbis mengintip:** Mbis selalu muncul pertama kali dari pinggir halaman.
 
-## 7. Musim 1: "Menuju ITS"
+## 8. Musim 1: "Menuju ITS"
 
 | Arc | Episode | Fokus |
 |---|---|---|
@@ -92,7 +114,7 @@ Satu kalimat: **Anak ambis belajar bahwa belajar keras dan belajar benar itu dua
 
 Detail Arc 1 ada di `arc-1.md`.
 
-## 8. Format pendamping: Mbis Bereaksi (4 per minggu)
+## 9. Format pendamping: Mbis Bereaksi (4 per minggu)
 
 - **Mbis Jawab:** Mbis menjawab komentar penonton.
 - **Mitos atau Fakta:** Mbis menilai satu mitos belajar dengan sumber.
