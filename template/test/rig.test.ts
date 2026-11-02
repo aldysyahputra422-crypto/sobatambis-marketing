@@ -57,3 +57,18 @@ describe("ikutanCepol", () => {
     expect(Math.abs(ik)).toBeLessThan(1);
   });
 });
+
+import { posisiTangan } from "../src/rig/arta";
+
+describe("posisiTangan", () => {
+  it("lengan lurus ke bawah: tangan di bawah bahu, sisi kanan di kanan akar", () => {
+    const p = { ...POSE_DASAR, x: 300, y: 1000, skala: 1, sendi: { ...POSE_DASAR.sendi, lenganAtasKa: 0, lenganBawahKa: 0, badan: 0 } };
+    const t = posisiTangan(p, "Ka");
+    expect(t.x).toBeCloseTo(300 + 76, 0);
+    expect(t.y).toBeGreaterThan(1000 - 452 + 128 + 100);
+  });
+  it("lengan terangkat 180: tangan di atas bahu", () => {
+    const p = { ...POSE_DASAR, x: 300, y: 1000, skala: 1, sendi: { ...POSE_DASAR.sendi, lenganAtasKa: 180, lenganBawahKa: 0, badan: 0 } };
+    expect(posisiTangan(p, "Ka").y).toBeLessThan(1000 - 452 + 128 - 100);
+  });
+});

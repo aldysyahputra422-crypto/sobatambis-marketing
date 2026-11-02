@@ -5,6 +5,8 @@ import { Episode, type PropsEpisode } from "./Episode";
 import { Cover, type PropsCover } from "./Cover";
 import type { DataAdegan } from "./data/adegan";
 import { RigArta, type PropsRigArta } from "./uji/RigArta";
+import { AdeganV2, type PropsAdeganV2 } from "./AdeganV2";
+import type { DataAdegan2 } from "./data/adegan2";
 
 const FPS = 30;
 
@@ -21,6 +23,19 @@ export const RemotionRoot: React.FC = () => (
       calculateMetadata={async ({ props }) => {
         const data: DataAdegan = await fetch(staticFile(props.adeganFile)).then((r) => r.json());
         return { durationInFrames: Math.ceil((data.durasi + 3) * FPS), props: { ...props, data } };
+      }}
+    />
+    <Composition
+      id="AdeganV2"
+      component={AdeganV2}
+      width={720}
+      height={1280}
+      fps={FPS}
+      durationInFrames={FPS * 10}
+      defaultProps={{ adeganFile: "uji/adegan2.json", dialogFile: "contoh/suara.mp3", mixFile: "contoh/suara.mp3" } as PropsAdeganV2}
+      calculateMetadata={async ({ props }) => {
+        const data: DataAdegan2 = await fetch(staticFile(props.adeganFile)).then((r) => r.json());
+        return { durationInFrames: Math.ceil(data.durasi * FPS), props: { ...props, data } };
       }}
     />
     <Still id="RigArta" component={RigArta} width={720} height={1280} defaultProps={{ variasi: "dasar" } as PropsRigArta} />

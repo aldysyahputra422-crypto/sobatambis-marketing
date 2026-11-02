@@ -1,0 +1,23 @@
+{
+  "durasi": 3.0,
+  "fps": 30,
+  "jalur": {
+    "latar": [{"mulai": 0, "latar": "ruang_tamu"}, {"mulai": 1.2, "latar": "dinding_sticky"}],
+    "kamera": [{"mulai": 0, "selesai": 1.2, "jenis": "lebar", "gerak": "dorong"},
+               {"mulai": 1.2, "selesai": 2.0, "jenis": "dekat", "target": {"x": 360, "y": 640}, "gerak": "hentak"},
+               {"mulai": 2.0, "selesai": 3.0, "jenis": "lebar", "gerak": "getar"}],
+    "tokoh": {
+      "arta": {"awal": {"x": 200, "y": 1040, "skala": 0.85, "ekspresi": "marah"},
+               "aksi": [{"mulai": 0, "aksi": "jalan", "param": {"dx": 120}}, {"mulai": 1.2, "aksi": "hentak"}, {"mulai": 2.0, "aksi": "banting"}]},
+      "ratna": {"x": 520, "y": 640, "skala": 0.8, "tampil": [{"mulai": 0, "selesai": 1.2}], "ekspresi": [{"mulai": 0, "ekspresi": "lirik"}]}
+    },
+    "properti": [{"id": "sticky_0400", "masuk": 1.2, "cara": "pop", "pusat": {"x": 225, "y": 255}, "keluar": 2.5, "caraKeluar": "jatuh"},
+                 {"id": "sticky_7jam", "masuk": 2.5, "cara": "banting", "pusat": {"x": 360, "y": 350}, "pegang": {"tokoh": "arta", "mulai": 2.0}}],
+    "teks": [{"kata": "OKE.", "mulai": 1.25, "selesai": 1.6, "gaya": "biasa"}, {"kata": "TUJUH", "mulai": 2.5, "selesai": 2.9, "gaya": "cap", "layar": 1}],
+    "dialog": [{"penutur": "ratna", "mulai": 0.1, "selesai": 1.1}, {"penutur": "arta", "mulai": 1.25, "selesai": 2.9}],
+    "sfx": [{"nama": "brak", "pada": 2.5}],
+    "musik": [{"trek": "tegang_naik", "mulai": 0, "selesai": 3}],
+    "transisi": [{"pada": 1.2, "jenis": "coret"}],
+    "rona": [{"mulai": 2.4, "selesai": 3.0, "warna": "merah"}]
+  }
+}

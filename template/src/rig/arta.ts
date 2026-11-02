@@ -76,3 +76,26 @@ export function ikutanCepol(sebelum: Pose, pose: Pose, ikutanSebelum: number): n
   const angkat = (pose.y - sebelum.y) * 0.15; // naik-turun badan juga mengayunkan pensil
   return (ikutanSebelum - (dorong + angkat) * 1.2) * 0.75;
 }
+
+const putar = (p: { x: number; y: number }, c: { x: number; y: number }, derajat: number) => {
+  const r = (derajat * Math.PI) / 180;
+  const dx = p.x - c.x;
+  const dy = p.y - c.y;
+  return { x: c.x + dx * Math.cos(r) - dy * Math.sin(r), y: c.y + dx * Math.sin(r) + dy * Math.cos(r) };
+};
+
+// Kinematika maju: posisi layar tengah tangan, untuk menempelkan benda yang dipegang.
+export function posisiTangan(pose: Pose, sisi: "Ki" | "Ka"): { x: number; y: number; sudut: number } {
+  const s = pose.sendi;
+  const tanda = sisi === "Ki" ? -1 : 1;
+  const bx = tanda * BAHU.x;
+  const yS = BAHU.y + SIKU;
+  const atas = sisi === "Ki" ? s.lenganAtasKi : -s.lenganAtasKa;
+  const bawah = sisi === "Ki" ? -s.lenganBawahKi : s.lenganBawahKa;
+  let p = { x: bx, y: yS + LENGAN_BAWAH + 8 };
+  p = putar(p, { x: bx, y: yS }, bawah);
+  p = putar(p, { x: bx, y: BAHU.y }, atas);
+  p = putar(p, PINGGANG, s.badan);
+  const k = pose.skala;
+  return { x: pose.x + k * pose.sx * p.x, y: pose.y + k * pose.sy * (p.y - TELAPAK), sudut: atas + bawah + s.badan };
+}

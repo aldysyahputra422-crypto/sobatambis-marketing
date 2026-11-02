@@ -58,6 +58,21 @@ const grupWA = () => `
   ${hand(232, 352, "sekarang les di 3 tempat :)", { size: 31 })}
   </g>`;
 
+// Ruang tamu: bingkai foto + lampu berdiri di dinding; sandaran sofa di depan (menutupi badan bawah Bu Ratna).
+const ruangTamu = () => `
+  ${wc(`<rect x="150" y="250" width="150" height="120" rx="4" fill="#FFFCF5"/>`)}
+  <rect x="166" y="266" width="118" height="88" fill="#BFD9F0" opacity=".7"/>
+  <path d="M166 354 l38 -40 l26 22 l24 -30 l30 48z" fill="${P.batik}" opacity=".55"/>
+  ${ink(`<rect x="150" y="250" width="150" height="120" rx="4"/><path d="M225 250 l0 -26"/>`, 3)}
+  ${ink(`<path d="M610 900 v-420"/><path d="M560 480 h100 l-20 -70 h-60z"/>`, 3)}
+  ${wc(`<path d="M560 480 h100 l-20 -70 h-60z" fill="#F3D9A4"/>`)}
+  <line x1="0" y1="930" x2="720" y2="930" stroke="${P.ink}" stroke-width="3" opacity=".5"/>`;
+const sofa = () => `
+  ${wc(`<path d="M300 820 q0 -40 40 -40 h300 q40 0 40 40 v140 h-380z" fill="#C9705C"/>`)}
+  <path d="M310 860 h400" stroke="#A9584A" stroke-width="6" opacity=".6"/>
+  ${wc(`<rect x="280" y="880" width="60" height="110" rx="24" fill="#B9614F"/><rect x="680" y="880" width="60" height="110" rx="24" fill="#B9614F"/>`)}
+  ${ink(`<path d="M300 820 q0 -40 40 -40 h300 q40 0 40 40 v140 h-380z"/><rect x="280" y="880" width="60" height="110" rx="24"/>`, 3)}`;
+
 // Properti yang bisa dirujuk adegan.visual.properti
 export const PROPERTI: Record<string, () => string> = {
   papan_100_hari: papan,
@@ -76,7 +91,7 @@ export const PROPERTI: Record<string, () => string> = {
 export const LATAR: Record<string, { malam: boolean; lampu: number[] | null; gambar: () => string; depan?: () => string }> = {
   kamar: { malam: false, lampu: null, gambar: () => jendela(false) },
   dinding_sticky: { malam: false, lampu: null, gambar: () => "" },
-  ruang_tamu: { malam: false, lampu: [360, 900, 420], gambar: () => "" },
+  ruang_tamu: { malam: false, lampu: [600, 520, 300], gambar: ruangTamu, depan: sofa },
   meja_malam: { malam: true, lampu: [560, 700, 420], gambar: () => `${jendela(true)}${lampu()}`, depan: () => meja(820) },
 };
 

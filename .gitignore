@@ -9,3 +9,4 @@ __pycache__/
 .pytest_cache/
 .superpowers/
 template/out/
+template/public/uji/
