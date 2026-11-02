@@ -32,7 +32,11 @@ def tandai(folder: Path, tahap: str, keadaan: str, **info) -> None:
     if keadaan not in KEADAAN:
         raise ValueError(f"keadaan tidak dikenal: {keadaan}")
     data = baca(folder)
-    data.setdefault("tahap", {})[tahap] = {
+    lama = data.setdefault("tahap", {}).get(tahap, {})
+    if not info and lama.get("keadaan") == keadaan:
+        # Menandai ulang keadaan yang sama tanpa info (mis. direktur setelah script) tidak boleh menghapus detail script.
+        info = {k: v for k, v in lama.items() if k not in ("keadaan", "waktu")}
+    data["tahap"][tahap] = {
         "keadaan": keadaan,
         "waktu": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         **info,

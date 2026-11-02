@@ -107,9 +107,14 @@ def cek_emosi(ukuran: dict[str, dict], naskah: dict) -> list[str]:
     baris = [b for b in naskah["baris"] if b["id"] in ukuran]
     masalah: list[str] = []
 
-    marah = [b for b in baris if b["emosi"] == "marah"]
-    tenang = [b for b in baris if b["emosi"] in ("tertekan", "lelah")]
-    if marah and tenang:
+    # Kekerasan marah dibandingkan dengan baris tenang penutur yang sama: tiap voice punya volume dasar berbeda.
+    # Bila penutur itu tidak punya baris tenang, pakai semua baris tenang sebagai acuan.
+    tenang_semua = [b for b in baris if b["emosi"] in ("tertekan", "lelah")]
+    for marah_penutur in {b["penutur"] for b in baris if b["emosi"] == "marah"}:
+        marah = [b for b in baris if b["emosi"] == "marah" and b["penutur"] == marah_penutur]
+        tenang = [b for b in tenang_semua if b["penutur"] == marah_penutur] or tenang_semua
+        if not tenang:
+            continue
         acuan = mean(ukuran[b["id"]]["rms_db"] for b in tenang) + 4
         for b in marah:
             if ukuran[b["id"]]["rms_db"] < acuan:

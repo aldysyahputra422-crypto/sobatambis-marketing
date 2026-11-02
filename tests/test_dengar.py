@@ -83,3 +83,16 @@ def test_kata_salah_di_kalimat_panjang_tetap_gagal_ambang():
     from scripts.suara.produksi import AMBANG
     naskah = "Hari kedua belas. Nilai tryout pertamaku keluar."
     assert dengar.kecocokan(naskah, "Hari kedua puluh. Nilai tryout pertamaku keluar.") < AMBANG
+
+
+def test_cek_emosi_marah_dibandingkan_dengan_penutur_yang_sama():
+    # Pilot Ep.1: suara Bu Ratna (tertekan) lebih keras dari Arta; marah Arta dibandingkan dengan tenang Arta sendiri.
+    n = {"baris": [
+        {"id": "r", "penutur": "ratna", "emosi": "tertekan", "intensitas": 4},
+        {"id": "a1", "penutur": "arta", "emosi": "lelah", "intensitas": 3},
+        {"id": "a2", "penutur": "arta", "emosi": "marah", "intensitas": 9},
+    ]}
+    uk = {"r": {"rms_db": -12.2, "pitch_hz": None, "kata_per_detik": 2.8},
+          "a1": {"rms_db": -20.0, "pitch_hz": None, "kata_per_detik": 1.4},
+          "a2": {"rms_db": -13.5, "pitch_hz": None, "kata_per_detik": 1.5}}
+    assert not [m for m in dengar.cek_emosi(uk, n) if "marah kurang keras" in m]

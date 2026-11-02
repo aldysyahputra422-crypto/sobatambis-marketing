@@ -1,6 +1,7 @@
 // @ts-nocheck
 // Latar dan properti dunia jurnal (port dari docs/desain/sumber/frames.js & emo.js).
 import { P, ink, wc, hand, highlight, paper } from "../sistem/gambar";
+import { PAPAN_GESER } from "../tata";
 
 const jendela = (malam: boolean) => `
   ${wc(`<rect x="470" y="180" width="170" height="200" rx="6" fill="${malam ? "#3B4C86" : "#BFD9F0"}" opacity="${malam ? 0.55 : 0.7}"/>`)}
@@ -25,7 +26,7 @@ export const sticky = (x, y, w, h, txt: string[], rot: number, color = "#FFE58A"
   ${txt.map((t, i) => hand(x + w / 2, y + 44 + i * 34, t, { size, anchor: "middle" })).join("")}</g>`;
 
 const papan = () => `
-  <g transform="rotate(-3 300 330)">
+  <g transform="translate(0 ${PAPAN_GESER}) rotate(-3 300 330)">
     <g filter="url(#soft)">${wc(`<rect x="150" y="196" width="320" height="270" fill="#FFFCF5"/>`)}</g>
     ${ink(`<rect x="150" y="196" width="320" height="270"/>`, 3)}
     <circle cx="310" cy="206" r="7" fill="${P.red}"/>
@@ -64,7 +65,7 @@ export const PROPERTI: Record<string, () => string> = {
   sticky_5jam: () => sticky(350, 150, 210, 170, ["belajar", "5 jam/hari"], 4, "#FFFCF5"),
   sticky_0hp: () => sticky(150, 380, 200, 160, ["0 main HP"], 3, "#FFFCF5"),
   sticky_tryout: () => sticky(380, 370, 200, 170, ["Tryout", "tiap hari"], -4),
-  sticky_3tempat: () => `<g transform="rotate(5 360 300)"><g filter="url(#soft)">${wc(`<rect x="225" y="190" width="270" height="210" fill="#FFFCF5"/>`)}</g><rect x="338" y="182" width="44" height="16" fill="#EDE3CF" opacity=".85"/>${hand(360, 262, "les di", { size: 40, anchor: "middle" })}${hand(360, 344, "3 TEMPAT?!", { size: 62, anchor: "middle", color: P.red })}</g>`,
+  sticky_3tempat: () => `<g transform="rotate(5 360 250)"><g filter="url(#soft)">${wc(`<rect x="225" y="140" width="270" height="210" fill="#FFFCF5"/>`)}</g><rect x="338" y="132" width="44" height="16" fill="#EDE3CF" opacity=".85"/>${hand(360, 212, "les di", { size: 40, anchor: "middle" })}${hand(360, 294, "3 TEMPAT?!", { size: 62, anchor: "middle", color: P.red })}</g>`,
   sticky_7jam: () => `<g transform="rotate(-6 360 330)"><g filter="url(#soft)">${wc(`<rect x="240" y="250" width="240" height="200" fill="#FFE58A"/>`)}</g>${hand(360, 368, "7 JAM", { size: 84, anchor: "middle", color: P.red })}</g>`,
   wa_grup: grupWA,
   jam_0047: () => jam(250, 260, "00.47"),
