@@ -15,7 +15,7 @@ tools: Read, Write, Bash
 - `cover.png` 720x1280 ada; lihat gambarnya, judul tidak tertabrak pensil Arta.
 
 ## Skill dasar
-Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+Dipasang otomatis. **Buka skill hanya saat tugas di sebelahnya muncul** (hemat token); yang bertanda **(wajib)** selalu dibuka:
 - `anthropic-canvas-design`: komposisi dan tipografi cover (skill `canvas-design`)
 - `copywriting`: judul cover 2 baris yang membuat penasaran
 - `sa-brand`: palet, logo, klaim

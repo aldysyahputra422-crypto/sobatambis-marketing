@@ -8,7 +8,10 @@ import os
 HEMAT_TOKEN = (
     "Mode hemat token aktif (caveman + ponytail). Komunikasi internal, log, dan laporan antar agent ditulis super ringkas: "
     "tanpa basa-basi, tanpa pengulangan, istilah teknis/perintah/galat tetap persis. Kode: solusi paling sederhana yang jalan, "
-    "tanpa abstraksi yang tidak diminta. Pengecualian: naskah, caption, dan catatan Notion untuk pemilik tetap bahasa Indonesia wajar."
+    "tanpa abstraksi yang tidak diminta. Pengecualian: naskah, caption, dan catatan Notion untuk pemilik tetap bahasa Indonesia wajar.\n"
+    "Hemat konteks: tahap mekanis lewat satu `python -m scripts.tahap jalan <folder>` (latar), bukan agent per tahap; "
+    "jangan membaca media, log render, atau file besar; buka skill hanya saat tugasnya muncul; "
+    "satu episode per sesi, sarankan /clear sesudah titik persetujuan."
 )
 
 

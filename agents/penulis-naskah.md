@@ -29,12 +29,12 @@ Aksi tersedia: Arta `diam_hidup, jalan, lari, hentak, banting, lompat, tunjuk, l
 - `python -m scripts.naskah periksa <folder>` → kode 4 (valid, menunggu Approval 1). Kode 1: perbaiki sesuai pesan.
 
 ## Skill dasar
-Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
-- `sa-komedi`: game episode, eskalasi, aturan tiga, salah arah, uji lucu per beat
+Dipasang otomatis. **Buka skill hanya saat tugas di sebelahnya muncul** (hemat token); yang bertanda **(wajib)** selalu dibuka:
+- `sa-komedi` **(wajib)**: game episode, eskalasi, aturan tiga, salah arah, uji lucu per beat
 - `claude-screenwriting`: struktur cerita dan karakter (skill `screenwriting`, `screenwriting-beats`, `screenwriting-character`); jalankan `screenwriting-lint` pada draf
 - `marketing-psychology`: hook 2 detik pertama
-- `humanizer`: wajib pada setiap dialog sebelum disimpan
-- `stop-slop`
+- `humanizer` **(wajib)**: wajib pada setiap dialog sebelum disimpan
+- `stop-slop` **(wajib)**
 - `sa-cerita`
 - `sa-brand`
 

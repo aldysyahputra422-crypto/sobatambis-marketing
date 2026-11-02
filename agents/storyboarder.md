@@ -19,7 +19,7 @@ tools: Read, Write, Bash
 - Script keluar 0 dan `adegan.json` valid terhadap `schemas/adegan2.schema.json`.
 
 ## Skill dasar
-Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+Dipasang otomatis. **Buka skill hanya saat tugas di sebelahnya muncul** (hemat token); yang bertanda **(wajib)** selalu dibuka:
 - `claude-screenwriting`: beat dan ritme adegan (skill `screenwriting-beats`)
 - `video`: bahasa visual video pendek
 - `motion-design-skill`: koreografi kamera dan transisi

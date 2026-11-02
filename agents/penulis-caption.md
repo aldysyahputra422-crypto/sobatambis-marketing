@@ -16,13 +16,13 @@ Pakai skill `sa-brand` (CTA baku) dan contoh caption di `skills/sa-cerita/refere
 - File memuat "INFO" dan tidak memuat "—".
 
 ## Skill dasar
-Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+Dipasang otomatis. **Buka skill hanya saat tugas di sebelahnya muncul** (hemat token); yang bertanda **(wajib)** selalu dibuka:
 - `copywriting`: hook 1 sampai 2 baris
 - `social`: format caption Instagram/TikTok
 - `copy-editing`: sunting akhir
 - `marketing-psychology`: CTA Komen INFO
-- `humanizer`
-- `stop-slop`
+- `humanizer` **(wajib)**
+- `stop-slop` **(wajib)**
 - `sa-brand`
 
 ## Aturan kerja

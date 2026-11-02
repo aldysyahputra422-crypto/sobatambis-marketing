@@ -19,7 +19,7 @@ tools: Read, Bash
 - `qa.md` memuat setiap baris bermasalah atau "tidak ada temuan".
 
 ## Skill dasar
-Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+Dipasang otomatis. **Buka skill hanya saat tugas di sebelahnya muncul** (hemat token); yang bertanda **(wajib)** selalu dibuka:
 - `sa-cerita`: watak suara tiap tokoh
 - `sa-komedi`: ritme punchline dan jeda sesudahnya
 

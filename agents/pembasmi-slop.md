@@ -21,9 +21,9 @@ Pakai skill stop-slop dari katalog (`python -m scripts.katalog cari "slop"`; pas
 - `grep -c "—" <file>` = 0.
 
 ## Skill dasar
-Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
-- `humanizer`: 24 pola tulisan AI (Wikipedia) dibersihkan tanpa mengubah isi
-- `stop-slop`: pola slop tambahan; jalankan sesudah humanizer
+Dipasang otomatis. **Buka skill hanya saat tugas di sebelahnya muncul** (hemat token); yang bertanda **(wajib)** selalu dibuka:
+- `humanizer` **(wajib)**: 24 pola tulisan AI (Wikipedia) dibersihkan tanpa mengubah isi
+- `stop-slop` **(wajib)**: pola slop tambahan; jalankan sesudah humanizer
 
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.

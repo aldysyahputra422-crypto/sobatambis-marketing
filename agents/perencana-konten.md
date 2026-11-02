@@ -20,7 +20,7 @@ tools: Read, Write, Edit, Bash
 - 7 baris rencana sesuai `jadwal.json`; setiap baris serial punya game komedi, momen mengena, tanggal, dan id topik dari bank; tidak ada klaim harga/angka di luar `sa-brand`.
 
 ## Skill dasar
-Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+Dipasang otomatis. **Buka skill hanya saat tugas di sebelahnya muncul** (hemat token); yang bertanda **(wajib)** selalu dibuka:
 - `content-strategy`: pilar konten dan kalender
 - `marketing-ideas`: ide episode dan format turunan
 - `marketing-psychology`

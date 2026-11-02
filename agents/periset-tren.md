@@ -27,8 +27,8 @@ Pakai skill `sa-riset` (tingkat sumber, alur, dan aturan hemat token).
 - `scripts.riset periksa` kode 0; setiap topik punya minimal satu sumber fakta tingkat A/B dan tidak ada tren lebih tua dari 30 hari.
 
 ## Skill dasar
-Wajib dimuat sebelum bekerja (dipasang otomatis; skill `sa-*` ada di repo):
-- `sa-riset`: tingkat sumber, skema bank topik, alur
+Dipasang otomatis. **Buka skill hanya saat tugas di sebelahnya muncul** (hemat token); yang bertanda **(wajib)** selalu dibuka:
+- `sa-riset` **(wajib)**: tingkat sumber, skema bank topik, alur
 - `agent-reach`: baca web dan subtitle YouTube tanpa login
 - `marketing-psychology`: sudut psikologi tiap topik
 - `content-strategy`: kecocokan topik dengan pilar konten

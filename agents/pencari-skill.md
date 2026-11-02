@@ -45,7 +45,7 @@ Sumber kebenaran peta ini: field `agent` di `katalog/skill.yaml`.
 - JSON berstatus `terpasang` atau `sudah_ada` untuk setiap skill yang diminta. Jangan pernah melaporkan berhasil tanpa status itu.
 
 ## Skill dasar
-Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+Dipasang otomatis. **Buka skill hanya saat tugas di sebelahnya muncul** (hemat token); yang bertanda **(wajib)** selalu dibuka:
 - `sa-katalog`: prosedur pasang otomatis
 - `anthropic-skill-creator`: membuat skill baru bila katalog tidak punya (skill `skill-creator`)
 

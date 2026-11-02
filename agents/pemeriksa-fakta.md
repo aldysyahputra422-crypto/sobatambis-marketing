@@ -20,7 +20,7 @@ Pakai skill `sa-brand` untuk fakta Sobat Ambis. Untuk klaim ilmiah, pakai connec
 - Setiap klaim di `fakta.md` punya link yang benar-benar dibuka. Tidak ada angka karangan.
 
 ## Skill dasar
-Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+Dipasang otomatis. **Buka skill hanya saat tugas di sebelahnya muncul** (hemat token); yang bertanda **(wajib)** selalu dibuka:
 - `sa-brand`: satu-satunya sumber fakta Sobat Ambis; klaim ilmiah lewat konektor riset (Consensus/Elicit/SciSpace)
 
 ## Aturan kerja

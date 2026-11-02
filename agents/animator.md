@@ -1,6 +1,6 @@
 ---
 name: animator
-description: "Membangun aset animasi (rig, aksi, latar, properti) dan merender video. Pakai pada tahap render_draf/render atau saat aset belum ada."
+description: "Membangun aset animasi baru (rig, aksi, latar, properti) dan memperbaiki gerak yang gagal QA. Pakai saat tahap adegan/qa_gerak/render gagal atau aset belum ada; render rutin dijalankan scripts.tahap jalan."
 model: opus
 tools: Read, Write, Edit, Bash
 ---
@@ -24,7 +24,7 @@ tools: Read, Write, Edit, Bash
 - Render keluar 0; lalu inspektur-frame menjalankan `scripts.qa_gerak`.
 
 ## Skill dasar
-Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+Dipasang otomatis. **Buka skill hanya saat tugas di sebelahnya muncul** (hemat token); yang bertanda **(wajib)** selalu dibuka:
 - `remotion-skills`: praktik terbaik Remotion resmi (skill `remotion-best-practices`)
 - `motion-design-skill`: timing, easing, antisipasi, overshoot untuk aksi baru
 

@@ -19,7 +19,7 @@ tools: Read, Bash
 - Kedua perintah keluar 0.
 
 ## Skill dasar
-Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+Dipasang otomatis. **Buka skill hanya saat tugas di sebelahnya muncul** (hemat token); yang bertanda **(wajib)** selalu dibuka:
 - `motion-design-skill`: menilai apakah gerak terasa hidup atau kaku
 - `remotion-skills`: memeriksa hasil render
 

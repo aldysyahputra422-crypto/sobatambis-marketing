@@ -344,3 +344,13 @@ def test_label_cari_sama_dengan_aturan_id():
     assert "[boleh]" in baris or "[sudah:" in baris, baris
     r = subprocess.run([sys.executable, "-m", "scripts.katalog", "cari", "elevenlabs suara"], capture_output=True, text=True, cwd=ROOT)
     assert "elevenlabs [pemilik: berbayar" in r.stdout
+
+
+def test_konteks_awal_memuat_aturan_hemat_konteks():
+    from importlib import util
+    spec = util.spec_from_file_location("mulai_hook", ROOT / "scripts/hooks/mulai.py")
+    sys.path.insert(0, str(ROOT / "scripts/hooks"))
+    m = util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    assert "scripts.tahap jalan" in m.HEMAT_TOKEN and "/clear" in m.HEMAT_TOKEN
+    assert len(m.HEMAT_TOKEN) < 900  # konteks awal dibaca di setiap langkah: tetap pendek

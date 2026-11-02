@@ -6,7 +6,7 @@ from scripts.cek_plugin import periksa
 
 ROOT = Path(__file__).resolve().parents[1]
 MODEL = {
-    "direktur-marketing": "opus", "penulis-naskah": "sonnet", "pembasmi-slop": "sonnet", "pemeriksa-fakta": "sonnet",
+    "direktur-marketing": "sonnet", "penulis-naskah": "sonnet", "pembasmi-slop": "sonnet", "pemeriksa-fakta": "sonnet",
     "storyboarder": "sonnet", "animator": "opus", "sutradara-suara": "haiku", "qa-suara": "haiku",
     "inspektur-frame": "sonnet", "desainer-cover": "sonnet", "penulis-caption": "sonnet",
     "penjaga-gerbang-qa": "sonnet", "pencari-skill": "haiku", "akuntan-token": "haiku", "penjadwal-notion": "haiku", "perencana-konten": "sonnet", "periset-tren": "sonnet",
@@ -22,8 +22,9 @@ def test_semua_agent_ada_dan_model_sesuai():
     assert ada == MODEL
 
 
-def test_hanya_animator_dan_direktur_opus():
-    assert {n for n, m in MODEL.items() if m == "opus"} == {"animator", "direktur-marketing"}
+def test_hanya_animator_opus():
+    """Opus hanya untuk membuat aset animasi baru; orkestrasi cukup Sonnet (hemat token)."""
+    assert {n for n, m in MODEL.items() if m == "opus"} == {"animator"}
 
 
 def test_agent_menulis_ke_file_dan_punya_verifikasi():
@@ -125,3 +126,15 @@ def test_sa_minggu_merangkai_kapasitas_riset_rencana_notion():
     r = (ROOT / "agents/periset-tren.md").read_text(encoding="utf-8")
     assert "scripts.riset periksa" in r and "--agent periset-tren" in r and "cookie" in r
     assert "Bank Topik Sobat Ambis" in (ROOT / "skills/sa-jadwal/SKILL.md").read_text(encoding="utf-8")
+
+
+def test_hemat_token_tahap_mekanis_satu_panggilan():
+    sa = (ROOT / "commands/sa-video.md").read_text(encoding="utf-8")
+    d = (ROOT / "agents/direktur-marketing.md").read_text(encoding="utf-8")
+    assert "scripts.tahap jalan" in sa and "scripts.tahap jalan" in d and "run_in_background" in d
+    assert "per_tahap" in sa and "/clear" in d
+    n = (ROOT / "agents/penulis-naskah.md").read_text(encoding="utf-8")
+    for s in ("sa-komedi", "humanizer", "stop-slop"):
+        assert f"`{s}` **(wajib)**" in n, s
+    for p in (ROOT / "agents").glob("*.md"):
+        assert "Buka skill hanya saat" in p.read_text(encoding="utf-8"), p.name

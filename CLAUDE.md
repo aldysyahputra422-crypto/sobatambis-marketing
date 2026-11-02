@@ -25,6 +25,11 @@ Plugin Claude Code yang memproduksi serial animasi Reels "Arta & Mbis" untuk Sob
 - `/sa-minggu <YYYY-Www>`: `scripts.kapasitas` (diukur dari `/usage`, tidak ditebak) → `scripts.jadwal_minggu` → periset-tren (`bank-topik.json`, lulus `scripts.riset periksa`) → perencana-konten → Notion.
 - Riset: fakta hanya dari sumber tingkat A/B (`config/sumber.yaml`). Agent-Reach hanya kanal tanpa login; situs wajib login tidak dibuka.
 
+## Hemat token
+- Tahap mekanis: `python -m scripts.tahap jalan <folder>` sekali (Bash latar), bukan agent per tahap. Agent spesialis hanya saat gagal (`perbaiki`).
+- Opus hanya animator. Skill dibuka saat tugasnya muncul; `(wajib)` selalu dibuka. Notion dicatat saat produksi berhenti.
+- Satu episode per sesi; `/clear` sesudah titik persetujuan. Lihat `per_tahap` di `token.json` sebelum memangkas lagi.
+
 ## Kerja
 - Python: `.venv/bin/python -m scripts.<modul>` dari root repo. Test: `.venv/bin/python -m pytest -q` (tambah `-m lambat` untuk test render) dan `npm test --prefix template`.
 - Spec: `docs/superpowers/specs/2026-11-02-perombakan-serial-design.md`. Rencana: `docs/superpowers/plans/`.

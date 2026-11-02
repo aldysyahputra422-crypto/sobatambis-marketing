@@ -20,7 +20,7 @@ Baca `naskah.json` → `sumber_suara`:
 - Kode 0 lulus. Kode 3: izin/kredit ElevenLabs kurang, berhenti dan lapor. Kode 5: kirim daftar `baris_tersisa` di `status.json` ke pemilik untuk rekam ulang.
 
 ## Skill dasar
-Wajib dimuat sebelum bekerja (dipasang otomatis oleh hook SessionStart; skill `sa-*` ada di repo):
+Dipasang otomatis. **Buka skill hanya saat tugas di sebelahnya muncul** (hemat token); yang bertanda **(wajib)** selalu dibuka:
 - `sa-cerita`: watak suara tiap tokoh
 - `sa-komedi`: arah emosi dan timing punchline di lembar rekaman
 

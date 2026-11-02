@@ -28,7 +28,7 @@ Semua agent, skill, perintah, dan hook dimuat langsung dari folder repo (lewat `
    Butuh Python 3.13, Node 22, dan ffmpeg 6.
 
 ### Yang ada di dalam plugin
-- **17 agent**: direktur-marketing dan animator (Opus); penulis-naskah, perencana-konten, periset-tren, pembasmi-slop, pemeriksa-fakta, storyboarder, inspektur-frame, desainer-cover, penulis-caption, penjaga-gerbang-qa (Sonnet); sutradara-suara, qa-suara, pencari-skill, akuntan-token, penjadwal-notion (Haiku). Setiap agent punya bagian "Skill dasar" berisi skill terverifikasi yang wajib dimuat.
+- **17 agent**: animator (Opus, hanya untuk aset baru dan perbaikan gerak); direktur-marketing, penulis-naskah, perencana-konten, periset-tren, pembasmi-slop, pemeriksa-fakta, storyboarder, inspektur-frame, desainer-cover, penulis-caption, penjaga-gerbang-qa (Sonnet); sutradara-suara, qa-suara, pencari-skill, akuntan-token, penjadwal-notion (Haiku). Setiap agent punya bagian "Skill dasar" berisi skill terverifikasi yang wajib dimuat.
 - **6 skill di repo**: `sa-riset` (riset topik bersumber, tingkat sumber A/B/C), `sa-brand` (fakta resmi, harga, CTA), `sa-cerita` (story bible, Arc 1), `sa-komedi` (teknik komedi sketsa), `sa-katalog` (katalog + pemasangan otomatis), `sa-jadwal` (catatan produksi di Notion).
 - **Skill luar yang terpasang sendiri** (dipilih per bidang, lisensi diperiksa): `humanizer` dan `stop-slop` (anti-slop naskah/caption), `claude-screenwriting` (struktur cerita + lint naskah), `marketingskills` (copywriting, copy-editing, content-strategy, social, marketing-psychology, marketing-ideas, video), `canvas-design` dan `skill-creator` (Anthropic resmi), skill Remotion resmi, `motion-design-skill`. Plugin hemat token: caveman, ponytail.
 - **4 perintah**: `/sa-minggu`, `/sa-video`, `/sa-status`, `/sa-pasang-skill`.
@@ -60,6 +60,16 @@ Batas Pro tidak diumumkan dalam token, jadi plugin **mengukur**, bukan menebak:
 3. `python -m scripts.kapasitas` menghitung kapasitas = (100 − cadangan 15%) ÷ persen per episode. `/sa-minggu` memakai angka ini: hari yang tidak muat diisi konten turunan yang hemat token.
 
 Data yang sudah ada (pilot v1, pipeline lama): 17.866 token output, 6,0 juta token cache read dalam satu episode. Pipeline v2 belum diukur.
+
+### Hemat token: yang sudah diatur
+Ukuran pilot: ~82% biaya ada di konteks yang dibaca ulang setiap langkah (cache read), hanya ~12% di output. Jadi yang dipangkas adalah jumlah langkah, bukan cuma panjang tulisan:
+- Tahap mekanis (suara, adegan, mix, render, QA) jalan dalam **satu** perintah `python -m scripts.tahap jalan`; agent spesialis hanya dipanggil saat tahap itu gagal.
+- Direktur memakai Sonnet; Opus hanya untuk animator saat membuat aset baru.
+- Skill dibuka saat tugasnya muncul. Yang tetap wajib: `sa-komedi`, `humanizer`, `stop-slop` untuk naskah dan caption.
+- Notion dicatat sekali setiap produksi berhenti, bukan setiap tahap.
+- `token.json` memuat `per_tahap`, supaya pemangkasan berikutnya berdasarkan data.
+
+**Yang perlu kamu lakukan sekali di akun utama:** buka `/plugin` di folder repo ini, lalu nonaktifkan untuk proyek ini plugin yang tidak dipakai (misalnya small-business, figma, cloudflare, brightdata, digital-venture-superpowers). Daftar skill dan tool setiap plugin aktif ikut terbaca di setiap langkah. Lalu satu episode per sesi: sesudah titik persetujuan, `/clear` dan lanjutkan dengan `/sa-video <folder>`.
 
 ### Dua jalur suara
 
