@@ -5,6 +5,7 @@ import { Episode, type PropsEpisode } from "./Episode";
 import { Cover, type PropsCover } from "./Cover";
 import type { DataAdegan } from "./data/adegan";
 import { RigTokoh, type PropsRigTokoh } from "./uji/RigTokoh";
+import { Penutup, type PropsPenutup } from "./Penutup";
 import { AdeganV2, type PropsAdeganV2 } from "./AdeganV2";
 import type { DataAdegan2 } from "./data/adegan2";
 
@@ -38,6 +39,8 @@ export const RemotionRoot: React.FC = () => (
         return { durationInFrames: Math.ceil(data.durasi * FPS), props: { ...props, data } };
       }}
     />
+    <Composition id="Penutup" component={Penutup} width={720} height={1280} fps={FPS} durationInFrames={FPS * 3}
+      defaultProps={{ judulBerikut: "Ep.2: Kenapa rencana yang sempurna justru bikin nilai turun?" } as PropsPenutup} />
     <Still id="RigTokoh" component={RigTokoh} width={720} height={1280} defaultProps={{ tokoh: "arta", variasi: "dasar" } as PropsRigTokoh} />
     <Still
       id="Cover"

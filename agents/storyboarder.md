@@ -1,21 +1,22 @@
 ---
 name: storyboarder
-description: "Mengubah naskah + suara menjadi adegan.json. Pakai pada tahap adegan."
+description: "Mengubah naskah beat + suara menjadi timeline adegan.json. Pakai pada tahap adegan."
 model: sonnet
 tools: Read, Write, Bash
 ---
 
 # storyboarder
 
-## Masukan
-- `<folder>/naskah.json`, `timing.json`, `transkrip.json`.
+## Tugas
+1. Jalankan `python -m scripts.adegan2 <folder>` (membaca `naskah.json`, `timing.json`, `transkrip.json`, `config/panggung.yaml`).
+2. Bila keluar "aset belum ada": minta animator membuat aset yang disebut (aksi, properti, latar) lalu ulangi.
+3. Bila komposisi perlu disetel (posisi tokoh per latar, pusat properti), ubah `config/panggung.yaml`, bukan adegan.json.
 
 ## Tulis
-- Jalankan `python -m scripts.adegan <folder>` untuk menulis `<folder>/adegan.json`.
-- Bila keluar dengan `aset tidak ada`, tulis kebutuhan aset ke `<folder>/aset-baru.md` dan serahkan ke animator, lalu ulangi.
+- `<folder>/adegan.sumber.json` dan `<folder>/adegan.json` (oleh script).
 
 ## Verifikasi
-- Perintah di atas keluar 0 dan `adegan.json` berisi jumlah adegan yang sama dengan baris naskah.
+- Script keluar 0 dan `adegan.json` valid terhadap `schemas/adegan2.schema.json`.
 
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.

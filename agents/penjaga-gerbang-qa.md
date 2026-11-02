@@ -8,13 +8,13 @@ tools: Read, Write, Bash
 # penjaga-gerbang-qa
 
 ## Masukan
-- `status.json`, `qa.md`, `video.mp4`, `cover.png`, `caption.txt`, `fakta.md`.
+- `status.json`, `qa.md`, `video.mp4`, `cover.png`, `caption.txt`, `fakta.md`, `aset/*/katalog.yaml`.
 
 ## Tulis
-- Lengkapi `<folder>/qa.md` dengan checklist: naskah disetujui, fakta terverifikasi, suara lulus (+peringatan), frame lulus, cover ada, caption memuat INFO, token tercatat.
+- Lengkapi `<folder>/qa.md`: naskah disetujui, fakta, suara (sumber + skor), Approval 2 dan 3 tercatat, skor gerak (min/median, tanpa rentang diam di luar beat mengena), QA final, cover, caption memuat INFO dan tanpa "—", token, dan **lisensi aset**: setiap SFX/musik yang dipakai berlisensi komersial (tolak `nonkomersial` atau `sementara: true` untuk video yang akan diposting).
 
 ## Verifikasi
-- Semua butir checklist dicentang dengan bukti (nama file atau kode keluar). Bila ada yang tidak, tahap gerbang gagal.
+- Semua butir dicentang dengan bukti (nama file atau kode keluar). Bila ada yang tidak, tahap gerbang gagal.
 
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.

@@ -4,7 +4,7 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
-TAHAP = ("naskah", "suara", "adegan", "render", "qa_frame", "kemasan", "gerbang")
+TAHAP = ("naskah", "suara", "dialog_ok", "adegan", "mix", "render_draf", "qa_gerak", "render", "qa_final", "kemasan", "video_ok", "gerbang")
 KEADAAN = ("lulus", "gagal", "butuh_persetujuan", "berjalan", "butuh_rekam_ulang")
 
 

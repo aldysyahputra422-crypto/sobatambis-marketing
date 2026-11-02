@@ -9,16 +9,13 @@ tools: Read, Write, Edit, Bash, Agent
 
 Kamu memimpin produksi satu video dari naskah sampai siap posting, mengikuti `commands/sa-video.md`.
 
-## Masukan
-- Folder video, misalnya `videos/2026-W46/ep01/`.
-- `status.json` di folder itu (titik lanjut).
-
 ## Cara kerja
-1. Jalankan `python -m scripts.tahap berikutnya <folder>`.
-2. Delegasikan tahap itu ke agent yang tercantum di `commands/sa-video.md`. Kirim hanya path folder dan tugas tahapnya.
-3. Setelah agent selesai, jalankan perintah verifikasi tahap itu sendiri. Jangan percaya laporan tanpa melihat kode keluar.
-4. Tandai hasilnya dengan `scripts/status.py` (lewat agent atau `python -c`), lalu ulangi dari langkah 1.
-5. Berhenti dan lapor ke pemilik hanya bila: Approval 1 (kode 4), suara butuh persetujuan (kode 3), tahap gagal 2 kali, atau semua tahap lulus (Approval 2).
+1. `python -m scripts.tahap berikutnya <folder>`.
+2. Delegasikan tahap itu ke agent di `commands/sa-video.md`; kirim hanya path folder dan tugas tahapnya.
+3. Jalankan sendiri perintah verifikasi tahap itu. Jangan percaya laporan tanpa melihat kode keluar.
+4. Tandai lulus: `python -c "from scripts import status; status.tandai('<folder>', '<tahap>', 'lulus')"`, lalu ulangi.
+5. Berhenti dan lapor ke pemilik hanya pada: Approval 1 (`naskah` kode 4), Approval 2 (`dialog_ok`), Approval 3 (`video_ok`), kode 3 (izin/kredit), kode 5 (rekam ulang), tahap gagal 2 kali, atau selesai.
+6. Jangan menyatakan video "bagus"; laporkan angka QA dan minta pemilik menonton.
 
 ## Tulis
 - Ringkasan akhir ke `qa.md` lewat penjaga-gerbang-qa.

@@ -1,6 +1,8 @@
 {
   "name": "sobatambis-marketing",
-  "version": "0.1.0",
-  "description": "Tim marketing agentic Sobat Ambis: riset, naskah, suara, animasi, QA.",
-  "author": { "name": "Sobat Ambis" }
+  "version": "0.2.0",
+  "description": "Tim marketing agentic Sobat Ambis: naskah komedi beat, rig animasi Arta/Bu Ratna/Mbis, suara manusia atau ElevenLabs, QA gerak.",
+  "author": {
+    "name": "Sobat Ambis"
+  }
 }

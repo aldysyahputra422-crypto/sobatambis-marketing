@@ -33,10 +33,32 @@ def test_agent_menulis_ke_file_dan_punya_verifikasi():
         assert "Verifikasi" in teks, p.name
 
 
+TAHAP_V2 = ("naskah", "suara", "dialog_ok", "adegan", "mix", "render_draf", "qa_gerak", "render", "qa_final", "kemasan", "video_ok", "gerbang")
+
+
 def test_sa_video_menyebut_semua_tahap():
     teks = (ROOT / "commands/sa-video.md").read_text(encoding="utf-8")
-    posisi = [teks.index(f"`{t}`") for t in ("naskah", "suara", "adegan", "render", "qa_frame", "kemasan", "gerbang")]
+    posisi = [teks.index(f"| `{t}`") for t in TAHAP_V2]
     assert posisi == sorted(posisi)
+
+
+def test_sa_video_menyebut_kode_5_rekam_ulang():
+    teks = (ROOT / "commands/sa-video.md").read_text(encoding="utf-8")
+    assert "kode 5" in teks and "lembar-rekaman.md" in teks
+
+
+def test_agent_memakai_script_baru():
+    baca = lambda n: (ROOT / f"agents/{n}.md").read_text(encoding="utf-8")
+    assert "scripts.adegan2" in baca("storyboarder")
+    assert "scripts.qa_gerak" in baca("inspektur-frame")
+    assert "scripts.render" in baca("animator")
+    assert "sumber_suara" in baca("sutradara-suara") and "lembar" in baca("sutradara-suara")
+    assert "beat" in baca("penulis-naskah") and "naskah2.schema.json" in baca("penulis-naskah")
+
+
+def test_versi_plugin():
+    import json
+    assert json.loads((ROOT / ".claude-plugin/plugin.json").read_text())["version"] == "0.2.0"
 
 
 def test_sa_video_menyebut_kode_3_minta_persetujuan():

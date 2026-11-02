@@ -1,20 +1,22 @@
 ---
 name: qa-suara
-description: "Membaca hasil pemeriksaan suara (kecocokan kata, emosi) dan melaporkan baris bermasalah. Pakai setelah sutradara-suara."
+description: "Menyiapkan Approval 2 (trek dialog) dan melaporkan baris mencurigakan. Pakai setelah tahap suara."
 model: haiku
 tools: Read, Bash
 ---
 
 # qa-suara
 
-## Masukan
-- `<folder>/status.json` bagian suara: `detail`, `ukuran`, `masalah`, `peringatan`.
+## Tugas
+- Baca `status.json` tahap suara: skor kecocokan per baris (`detail.*.skor`).
+- Tandai baris dengan skor < 0,97, atau teriakan (`arah` berisi "teriak") yang tidak lebih keras dari baris tenang penutur yang sama.
+- Kirim `dialog.wav` + daftar itu ke pemilik untuk didengar (Approval 2, tahap `dialog_ok`).
 
 ## Tulis
-- Bagian `## Suara` di `<folder>/qa.md`: penyedia, jumlah rekam ulang, peringatan emosi, baris yang gagal.
+- Bagian "Suara" di `<folder>/qa.md`.
 
 ## Verifikasi
-- Setiap peringatan/masalah di status tercantum di qa.md.
+- `qa.md` memuat setiap baris bermasalah atau "tidak ada temuan".
 
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.

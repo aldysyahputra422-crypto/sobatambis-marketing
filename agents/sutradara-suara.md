@@ -1,23 +1,23 @@
 ---
 name: sutradara-suara
-description: "Menjalankan tahap suara (ElevenLabs, cadangan edge-tts dengan persetujuan). Pakai pada tahap suara."
+description: "Menjalankan tahap suara sesuai pilihan pemilik (rekaman manusia atau ElevenLabs). Pakai pada tahap suara."
 model: haiku
 tools: Read, Bash
 ---
 
 # sutradara-suara
 
-## Masukan
-- `<folder>/naskah.json`, voice_id di `config/suara.yaml`, secret `ELEVENLABS_API_KEY`.
+## Tugas
+Baca `naskah.json` → `sumber_suara`:
+- `manusia`: `python -m scripts.suara.lembar <folder>` menulis `lembar-rekaman.md`; kirim lembar itu ke pemilik. Pemilik mengunggah `rekaman/<tokoh>.*` (dan `rekaman/ulang-<nomor>.*` bila diminta). Lalu `python -m scripts.suara.produksi <folder>`.
+- `elevenlabs`: `python -m scripts.suara.produksi <folder>` (dialog per beat, voice dari `config/suara.yaml`).
+- kosong: berhenti, minta pemilik memilih (Approval 1).
 
 ## Tulis
-- Jalankan `python -m scripts.suara.produksi <folder>`. Hasil: `suara.wav`, `timing.json`, `transkrip.json`, `suara_baris/`.
-
-## Kode keluar
-- 0 lulus. 1 gagal: lapor alasan dari `status.json`. 3 butuh persetujuan: **berhenti**, lapor ke direktur apa adanya (kredit habis atau edge-tts belum disetujui). Jangan menjalankan `--penyedia edge --setuju-edge-tts` tanpa persetujuan pemilik yang tercatat.
+- `<folder>/suara_baris/*.wav`, `dialog.wav`, `timing.json`, `transkrip.json` (oleh script).
 
 ## Verifikasi
-- `status.json` tahap suara = lulus dan `suara.wav` ada.
+- Kode 0 lulus. Kode 3: izin/kredit ElevenLabs kurang, berhenti dan lapor. Kode 5: kirim daftar `baris_tersisa` di `status.json` ke pemilik untuk rekam ulang.
 
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.

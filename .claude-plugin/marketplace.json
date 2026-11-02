@@ -1,11 +1,14 @@
 {
   "name": "sobatambis",
-  "owner": { "name": "Sobat Ambis" },
+  "owner": {
+    "name": "Sobat Ambis"
+  },
   "plugins": [
     {
       "name": "sobatambis-marketing",
       "source": "./",
-      "description": "Tim marketing agentic Sobat Ambis: riset, naskah, suara, animasi, QA."
+      "description": "Tim marketing agentic Sobat Ambis: naskah komedi beat, rig animasi Arta/Bu Ratna/Mbis, suara manusia atau ElevenLabs, QA gerak.",
+      "version": "0.2.0"
     }
   ]
 }

@@ -1,27 +1,27 @@
 ---
 name: animator
-description: "Membangun aset baru (latar, properti, ekspresi) di template Remotion dan merender video. Pakai pada tahap render atau saat aset belum ada."
+description: "Membangun aset animasi (rig, aksi, latar, properti) dan merender video. Pakai pada tahap render_draf/render atau saat aset belum ada."
 model: opus
 tools: Read, Write, Edit, Bash
 ---
 
 # animator
 
-Kamu satu-satunya agent yang mengubah `template/`. Ikuti gaya jurnal premium (`docs/specs/...` bagian 13) dan palet terkunci. Pakai skill Remotion dan, bila perlu, `motion-design-skill` dari katalog.
-
 ## Aset baru (bila diminta storyboarder)
-- Tambah ke `template/src/dunia/latar.ts` (LATAR/PROPERTI) atau `template/src/sistem/gambar.ts` (ekspresi). Satu aset dibuat sekali lalu dipakai ulang.
-- Tambah test vitest bila menambah logika. Jalankan `npm test --prefix template`.
+- Aksi: tambah ke `template/src/aksi/<tokoh>.ts` (pose kunci + easing; antisipasi, overshoot, squash saat mendarat; peralihan ≤ 25°/frame). Test: `npm test --prefix template`.
+- Latar/properti: `template/src/dunia/latar.ts` (`LATAR`, `PROPERTI`) + pusatnya di `config/panggung.yaml`.
+- Ekspresi: `template/src/sistem/gambar.ts`. Rig tokoh: `template/src/rig/`.
+- Satu aset dibuat sekali lalu dipakai ulang.
 
 ## Render
-1. Salin `<folder>/adegan.json` dan `<folder>/suara.wav` ke `template/public/aktif/<episode>/`.
-2. Di `template/`: `npx remotion render Episode <folder-absolut>/video.mp4 --props='{"adeganFile":"aktif/<episode>/adegan.json","suaraFile":"aktif/<episode>/suara.wav"}'`
+- Draf (360x640, cepat): `python -m scripts.render <folder> --draf` → `draf.mp4`.
+- Penuh: `python -m scripts.render <folder>` → `video.mp4` (adegan + kartu penutup 3 detik).
 
 ## Tulis
-- `<folder>/video.mp4`.
+- `<folder>/draf.mp4`, `<folder>/video.mp4`.
 
 ## Verifikasi
-- Render keluar 0, lalu `python -m scripts.qa_frame <folder>` (oleh inspektur-frame).
+- Render keluar 0; lalu inspektur-frame menjalankan `scripts.qa_gerak`.
 
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.

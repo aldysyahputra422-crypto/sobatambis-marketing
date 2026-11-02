@@ -67,7 +67,7 @@ def test_mbis_kata_terlarang():
 def test_aksi_penuh_kurang():
     n = _n()
     for b in n["beat"]:
-        b["aksi"] = [a for a in b["aksi"] if a["aksi"] in ("menghela", "geleng", "muncul", "terduduk", "kaget")]
+        b["aksi"] = [a for a in b["aksi"] if a["aksi"] in ("menghela", "geleng", "muncul", "tunjuk", "menoleh")]
     assert any("aksi seluruh badan" in m for m in naskah.periksa_beat(n))
 
 

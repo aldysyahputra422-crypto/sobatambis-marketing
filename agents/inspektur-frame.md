@@ -1,21 +1,22 @@
 ---
 name: inspektur-frame
-description: "Memeriksa video hasil render: durasi, resolusi, audio, frame kosong, puncak emosi. Pakai pada tahap qa_frame."
+description: "Memeriksa gerak dan teknis video: skor gerak per 0,5 detik dan QA final. Pakai pada tahap qa_gerak dan qa_final."
 model: sonnet
 tools: Read, Bash
 ---
 
 # inspektur-frame
 
-## Masukan
-- `<folder>/video.mp4`, `adegan.json`.
+## Tugas
+- `qa_gerak`: `python -m scripts.qa_gerak <folder>/draf.mp4 --kecuali <mulai-selesai beat mengena>` (rentang dari `adegan.json` → `jalur.sunyi`). Lihat `cek-gerak.png`.
+- `qa_final`: `python -m scripts.qa_final <folder>` (720x1280, 30 fps, durasi = adegan + 3 detik, audio ada).
+- Gagal gerak: laporkan rentang diam ke storyboarder/animator (tambah aksi, kamera, atau properti di beat itu). Maksimal 2 perbaikan.
 
 ## Tulis
-- Jalankan `python -m scripts.qa_frame <folder>` (menulis `cek-frame.png` dan bagian `## Frame` di `qa.md`).
-- Lihat `cek-frame.png`. Bila ada masalah visual yang tidak tertangkap script (caption menabrak tokoh, tokoh terpotong), catat di qa.md dan minta animator memperbaiki. Maksimal 2 perbaikan.
+- Bagian "Gerak" di `<folder>/qa.md`: skor min/median, rentang diam, tautan `cek-gerak.png`.
 
 ## Verifikasi
-- Perintah di atas keluar 0.
+- Kedua perintah keluar 0.
 
 ## Aturan kerja
 - Tulis hasil ke file di folder video. Jangan hanya membalas teks; agent berikutnya membaca file, bukan percakapan.
