@@ -154,6 +154,25 @@ Connector melekat pada akun Claude, bukan plugin. Di akun utama pemilik perlu me
 - Produksi TikTok dengan talent manusia.
 - Balas komentar/DM otomatis (alurnya ditulis, eksekusinya lewat ManyChat oleh pemilik).
 
-## 13. Keputusan terbuka
+## 13. Identitas visual (disetujui pemilik, 2 November 2026)
 
-- Gaya karakter: ditentukan pemilik dari uji gaya (frame contoh A vs B) sebelum aset dibangun.
+- **Gaya:** "jurnal premium". Dunia buku tulis: kertas krem bertekstur, garis biru, margin merah, lubang binder, cahaya lampu hangat, vignette tipis. Garis tinta rapi dengan sedikit getaran tangan, isian bergaya cat air lembut.
+- **Palet terkunci:** kertas `#F7EEDC`, tinta `#1E3A8A`, stabilo `#FBC531`, merah guru `#C2412D`, kulit `#F1C9A5`. Warna lain hanya untuk pakaian tokoh pendukung dan dibuat redup.
+- **Tipografi:** dialog dan catatan memakai tulisan tangan (Caveat). Caption, judul, dan kartu penutup memakai font brand (Bricolage Grotesque, Plus Jakarta Sans) di atas kartu krem.
+- **Ciri khas berulang:** catatan merah guru, stabilo yang digoreskan, pensil di cepol Arta, Mbis mengintip dari pinggir halaman.
+- **Cover:** judul dan tokoh berada di area aman 3:4 (y 160 sampai 1120 dari 1280) supaya utuh di grid profil.
+- **Rujukan tayang:** `docs/desain/ep1/` (frame kunci, kartu penutup, cover, grid profil). Sumber SVG di `docs/desain/sumber/` menjadi dasar komponen template Remotion.
+
+## 14. Cerita dan format (disetujui pemilik)
+
+- **Pemeran tetap:** Arta (tokoh utama), Mbis (kucing stabilo, suara hati), Bu Ratna (ibu), Kak Bima (mentor, mulai Ep.10).
+- **Format:** serial + edukasi. Setiap episode serial membawa satu pelajaran yang sejalan dengan cara Sobat Ambis mengajar.
+- **Komposisi mingguan:** 10 episode serial Arta + 4 video Mbis Bereaksi.
+- **Struktur episode, aturan nada, dan running gag:** `docs/cerita/story-bible.md`.
+- **Alur Arc 1 (Ep.1 sampai 10):** `docs/cerita/arc-1.md`.
+- **Naskah acuan:** `docs/cerita/ep01-rencana-sempurna.md`. Penulis-naskah memakai naskah ini sebagai contoh standar kualitas.
+- Agent tim kreatif wajib membaca story bible sebelum menulis. Pemeriksa-fakta wajib memverifikasi setiap sumber kandidat di `arc-1.md` sebelum episode diproduksi.
+
+## 15. Keputusan terbuka
+
+- Tidak ada untuk tahap desain. Pertanyaan teknis dijawab di rencana implementasi.
