@@ -1,0 +1,10 @@
+node_modules/
+template/out/
+template/public/aktif/
+videos/**/*.wav
+videos/**/*.mp4
+videos/**/*.png
+.venv/
+__pycache__/
+.pytest_cache/
+.superpowers/

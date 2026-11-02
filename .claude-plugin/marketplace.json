@@ -1,0 +1,11 @@
+{
+  "name": "sobatambis",
+  "owner": { "name": "Sobat Ambis" },
+  "plugins": [
+    {
+      "name": "sobatambis-marketing",
+      "source": "./",
+      "description": "Tim marketing agentic Sobat Ambis: riset, naskah, suara, animasi, QA."
+    }
+  ]
+}
