@@ -1,0 +1,545 @@
+{
+  "tahap": {
+    "naskah": {
+      "keadaan": "lulus",
+      "waktu": "2026-11-02T06:24:40+00:00"
+    },
+    "suara": {
+      "keadaan": "lulus",
+      "waktu": "2026-11-02T06:33:34+00:00",
+      "penyedia": "elevenlabs",
+      "detail": {
+        "b01": {
+          "wav": "suara_baris/b01_0.wav",
+          "level": 0,
+          "rekam_ulang": 0,
+          "kata": [
+            {
+              "kata": "Hari",
+              "mulai": 0.0,
+              "selesai": 0.28
+            },
+            {
+              "kata": "pertama,",
+              "mulai": 0.28,
+              "selesai": 0.72
+            },
+            {
+              "kata": "aku",
+              "mulai": 1.12,
+              "selesai": 1.44
+            },
+            {
+              "kata": "bikin",
+              "mulai": 1.44,
+              "selesai": 1.76
+            },
+            {
+              "kata": "rencana",
+              "mulai": 1.76,
+              "selesai": 2.22
+            },
+            {
+              "kata": "yang",
+              "mulai": 2.22,
+              "selesai": 2.42
+            },
+            {
+              "kata": "nggak",
+              "mulai": 2.42,
+              "selesai": 2.66
+            },
+            {
+              "kata": "mungkin",
+              "mulai": 2.66,
+              "selesai": 3.16
+            },
+            {
+              "kata": "gagal.",
+              "mulai": 3.16,
+              "selesai": 3.66
+            }
+          ]
+        },
+        "b02": {
+          "wav": "suara_baris/b02_0.wav",
+          "level": 0,
+          "rekam_ulang": 0,
+          "kata": [
+            {
+              "kata": "Bangun",
+              "mulai": 0.0,
+              "selesai": 0.48
+            },
+            {
+              "kata": "jam",
+              "mulai": 0.48,
+              "selesai": 0.72
+            },
+            {
+              "kata": "4,",
+              "mulai": 0.72,
+              "selesai": 1.18
+            },
+            {
+              "kata": "belajar",
+              "mulai": 1.54,
+              "selesai": 2.1
+            },
+            {
+              "kata": "5",
+              "mulai": 2.1,
+              "selesai": 2.36
+            },
+            {
+              "kata": "jam",
+              "mulai": 2.36,
+              "selesai": 2.62
+            },
+            {
+              "kata": "sehari,",
+              "mulai": 2.62,
+              "selesai": 3.2
+            },
+            {
+              "kata": "hapeku",
+              "mulai": 3.54,
+              "selesai": 4.14
+            },
+            {
+              "kata": "kutitipkan",
+              "mulai": 4.14,
+              "selesai": 4.74
+            },
+            {
+              "kata": "ke",
+              "mulai": 4.74,
+              "selesai": 4.86
+            },
+            {
+              "kata": "mama.",
+              "mulai": 4.86,
+              "selesai": 5.14
+            }
+          ]
+        },
+        "b03": {
+          "wav": "suara_baris/b03_0.wav",
+          "level": 0,
+          "rekam_ulang": 0,
+          "kata": [
+            {
+              "kata": "Teknik",
+              "mulai": 0.0,
+              "selesai": 0.36
+            },
+            {
+              "kata": "Informatika",
+              "mulai": 0.36,
+              "selesai": 1.18
+            },
+            {
+              "kata": "ITS,",
+              "mulai": 1.18,
+              "selesai": 1.98
+            },
+            {
+              "kata": "seratus",
+              "mulai": 2.34,
+              "selesai": 2.86
+            },
+            {
+              "kata": "hari",
+              "mulai": 2.86,
+              "selesai": 3.08
+            },
+            {
+              "kata": "lagi.",
+              "mulai": 3.08,
+              "selesai": 3.42
+            }
+          ]
+        },
+        "b04": {
+          "wav": "suara_baris/b04_0.wav",
+          "level": 0,
+          "rekam_ulang": 0,
+          "kata": [
+            {
+              "kata": "Teranaknya",
+              "mulai": 0.0,
+              "selesai": 1.18
+            },
+            {
+              "kata": "Businta",
+              "mulai": 1.18,
+              "selesai": 1.64
+            },
+            {
+              "kata": "sekarang",
+              "mulai": 1.64,
+              "selesai": 2.12
+            },
+            {
+              "kata": "les",
+              "mulai": 2.12,
+              "selesai": 2.42
+            },
+            {
+              "kata": "di",
+              "mulai": 2.42,
+              "selesai": 2.64
+            },
+            {
+              "kata": "3",
+              "mulai": 2.64,
+              "selesai": 2.88
+            },
+            {
+              "kata": "tempat",
+              "mulai": 2.88,
+              "selesai": 3.34
+            },
+            {
+              "kata": "loh.",
+              "mulai": 3.34,
+              "selesai": 3.44
+            }
+          ]
+        },
+        "b05": {
+          "wav": "suara_baris/b05_3.wav",
+          "level": 3,
+          "rekam_ulang": 3,
+          "kata": [
+            {
+              "kata": "Tiga",
+              "mulai": 0.0,
+              "selesai": 0.54
+            },
+            {
+              "kata": "Tempat",
+              "mulai": 0.54,
+              "selesai": 1.22
+            }
+          ]
+        },
+        "b06": {
+          "wav": "suara_baris/b06_2.wav",
+          "level": 2,
+          "rekam_ulang": 2,
+          "kata": [
+            {
+              "kata": "Oke,",
+              "mulai": 0.0,
+              "selesai": 0.54
+            },
+            {
+              "kata": "aku",
+              "mulai": 1.04,
+              "selesai": 1.34
+            },
+            {
+              "kata": "belajar",
+              "mulai": 1.34,
+              "selesai": 1.86
+            },
+            {
+              "kata": "tujuh",
+              "mulai": 1.86,
+              "selesai": 2.44
+            },
+            {
+              "kata": "jam.",
+              "mulai": 2.44,
+              "selesai": 2.72
+            }
+          ]
+        },
+        "b07": {
+          "wav": "suara_baris/b07_0.wav",
+          "level": 0,
+          "rekam_ulang": 0,
+          "kata": [
+            {
+              "kata": "Hari",
+              "mulai": 0.0,
+              "selesai": 0.28
+            },
+            {
+              "kata": "ketuju,",
+              "mulai": 0.28,
+              "selesai": 0.88
+            },
+            {
+              "kata": "rencana",
+              "mulai": 1.64,
+              "selesai": 2.24
+            },
+            {
+              "kata": "aku",
+              "mulai": 2.24,
+              "selesai": 2.44
+            },
+            {
+              "kata": "masih",
+              "mulai": 2.44,
+              "selesai": 2.84
+            },
+            {
+              "kata": "sempurna.",
+              "mulai": 2.84,
+              "selesai": 3.5
+            }
+          ]
+        },
+        "b08": {
+          "wav": "suara_baris/b08_0.wav",
+          "level": 0,
+          "rekam_ulang": 0,
+          "kata": [
+            {
+              "kata": "Mataku",
+              "mulai": 0.0,
+              "selesai": 0.76
+            },
+            {
+              "kata": "yang",
+              "mulai": 0.76,
+              "selesai": 1.12
+            },
+            {
+              "kata": "ga",
+              "mulai": 1.12,
+              "selesai": 1.56
+            }
+          ]
+        },
+        "b09": {
+          "wav": "suara_baris/b09_0.wav",
+          "level": 0,
+          "rekam_ulang": 0,
+          "kata": [
+            {
+              "kata": "Hari",
+              "mulai": 0.0,
+              "selesai": 0.32
+            },
+            {
+              "kata": "Kedua",
+              "mulai": 0.32,
+              "selesai": 0.78
+            },
+            {
+              "kata": "Blas",
+              "mulai": 0.78,
+              "selesai": 1.32
+            },
+            {
+              "kata": "Nilai",
+              "mulai": 1.9,
+              "selesai": 2.38
+            },
+            {
+              "kata": "Try",
+              "mulai": 2.38,
+              "selesai": 2.62
+            },
+            {
+              "kata": "Out",
+              "mulai": 2.62,
+              "selesai": 2.82
+            },
+            {
+              "kata": "Pertamaku",
+              "mulai": 2.82,
+              "selesai": 3.48
+            },
+            {
+              "kata": "Keluar",
+              "mulai": 3.48,
+              "selesai": 3.98
+            }
+          ]
+        },
+        "b10": {
+          "wav": "suara_baris/b10_2.wav",
+          "level": 2,
+          "rekam_ulang": 2,
+          "kata": [
+            {
+              "kata": "Lima",
+              "mulai": 0.0,
+              "selesai": 0.46
+            },
+            {
+              "kata": "puluh",
+              "mulai": 0.46,
+              "selesai": 1.54
+            },
+            {
+              "kata": "delapan.",
+              "mulai": 1.54,
+              "selesai": 2.5
+            }
+          ]
+        },
+        "b11": {
+          "wav": "suara_baris/b11_0.wav",
+          "level": 0,
+          "rekam_ulang": 0,
+          "kata": [
+            {
+              "kata": "Rencanamu",
+              "mulai": 0.0,
+              "selesai": 1.08
+            },
+            {
+              "kata": "nggak",
+              "mulai": 1.08,
+              "selesai": 1.28
+            },
+            {
+              "kata": "salah",
+              "mulai": 1.28,
+              "selesai": 1.72
+            },
+            {
+              "kata": "tahu.",
+              "mulai": 1.72,
+              "selesai": 2.1
+            },
+            {
+              "kata": "Cuma",
+              "mulai": 2.56,
+              "selesai": 2.9
+            },
+            {
+              "kata": "kebanyakan.",
+              "mulai": 2.9,
+              "selesai": 3.58
+            }
+          ]
+        },
+        "b12": {
+          "wav": "suara_baris/b12_0.wav",
+          "level": 0,
+          "rekam_ulang": 0,
+          "kata": [
+            {
+              "kata": "Siapa",
+              "mulai": 0.0,
+              "selesai": 1.02
+            },
+            {
+              "kata": "itu?",
+              "mulai": 1.02,
+              "selesai": 1.28
+            }
+          ]
+        }
+      },
+      "ukuran": {
+        "b01": {
+          "rms_db": -18.81,
+          "pitch_hz": 203.2,
+          "kata_per_detik": 2.446
+        },
+        "b02": {
+          "rms_db": -14.1,
+          "pitch_hz": 297.0,
+          "kata_per_detik": 1.993
+        },
+        "b03": {
+          "rms_db": -18.11,
+          "pitch_hz": 216.2,
+          "kata_per_detik": 1.596
+        },
+        "b04": {
+          "rms_db": -12.23,
+          "pitch_hz": 228.5,
+          "kata_per_detik": 2.841
+        },
+        "b05": {
+          "rms_db": -13.85,
+          "pitch_hz": 278.4,
+          "kata_per_detik": 1.19
+        },
+        "b06": {
+          "rms_db": -13.47,
+          "pitch_hz": 344.5,
+          "kata_per_detik": 1.524
+        },
+        "b07": {
+          "rms_db": -21.23,
+          "pitch_hz": 193.0,
+          "kata_per_detik": 1.42
+        },
+        "b08": {
+          "rms_db": -18.27,
+          "pitch_hz": 223.3,
+          "kata_per_detik": 1.5
+        },
+        "b09": {
+          "rms_db": -21.69,
+          "pitch_hz": 175.7,
+          "kata_per_detik": 1.683
+        },
+        "b10": {
+          "rms_db": -23.68,
+          "pitch_hz": 169.6,
+          "kata_per_detik": 1.103
+        },
+        "b11": {
+          "rms_db": -18.61,
+          "pitch_hz": 109.2,
+          "kata_per_detik": 1.415
+        },
+        "b12": {
+          "rms_db": -18.66,
+          "pitch_hz": 366.0,
+          "kata_per_detik": 1.316
+        }
+      },
+      "baris_lulus": [
+        "b01",
+        "b02",
+        "b03",
+        "b04",
+        "b05",
+        "b06",
+        "b07",
+        "b08",
+        "b09",
+        "b10",
+        "b11",
+        "b12"
+      ],
+      "rekam_ulang": 7,
+      "peringatan": [],
+      "catatan": "detail dipulihkan dari suara_baris/, timing.json, transkrip.json setelah bug tandai() (pilot)"
+    },
+    "adegan": {
+      "keadaan": "lulus",
+      "waktu": "2026-11-02T06:27:22+00:00"
+    },
+    "render": {
+      "keadaan": "lulus",
+      "waktu": "2026-11-02T06:31:46+00:00"
+    },
+    "qa_frame": {
+      "keadaan": "lulus",
+      "waktu": "2026-11-02T06:32:12+00:00"
+    },
+    "kemasan": {
+      "keadaan": "lulus",
+      "waktu": "2026-11-02T06:32:38+00:00"
+    },
+    "gerbang": {
+      "keadaan": "lulus",
+      "waktu": "2026-11-02T06:34:03+00:00"
+    }
+  },
+  "mulai": "2026-11-02T06:24:40+00:00",
+  "selesai": "2026-11-02T06:34:03+00:00"
+}

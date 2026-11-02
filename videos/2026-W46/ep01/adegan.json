@@ -1,0 +1,697 @@
+{
+  "episode": "ep01",
+  "judul": "Rencana Sempurna",
+  "durasi": 45.7,
+  "adegan": [
+    {
+      "id": "b01",
+      "mulai": 0.0,
+      "selesai": 3.68,
+      "akhir_jeda": 3.98,
+      "penutur": "arta",
+      "emosi": "semangat",
+      "intensitas": 7,
+      "visual": {
+        "latar": "kamar",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "ambis",
+            "pose": "tunjuk"
+          }
+        ],
+        "properti": [
+          "papan_100_hari"
+        ],
+        "kamera": "pantul",
+        "catatan_merah": "semangat level dewa"
+      },
+      "caption": {
+        "teks": "Hari pertama. Aku bikin rencana yang nggak mungkin gagal.",
+        "kata": [
+          {
+            "kata": "Hari",
+            "mulai": 0.0,
+            "selesai": 0.28
+          },
+          {
+            "kata": "pertama.",
+            "mulai": 0.28,
+            "selesai": 0.72
+          },
+          {
+            "kata": "Aku",
+            "mulai": 1.12,
+            "selesai": 1.44
+          },
+          {
+            "kata": "bikin",
+            "mulai": 1.44,
+            "selesai": 1.76
+          },
+          {
+            "kata": "rencana",
+            "mulai": 1.76,
+            "selesai": 2.22
+          },
+          {
+            "kata": "yang",
+            "mulai": 2.22,
+            "selesai": 2.42
+          },
+          {
+            "kata": "nggak",
+            "mulai": 2.42,
+            "selesai": 2.66
+          },
+          {
+            "kata": "mungkin",
+            "mulai": 2.66,
+            "selesai": 3.16
+          },
+          {
+            "kata": "gagal.",
+            "mulai": 3.16,
+            "selesai": 3.66
+          }
+        ]
+      }
+    },
+    {
+      "id": "b02",
+      "mulai": 3.98,
+      "selesai": 9.5,
+      "akhir_jeda": 9.8,
+      "penutur": "arta",
+      "emosi": "semangat",
+      "intensitas": 8,
+      "visual": {
+        "latar": "dinding_sticky",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "ambis",
+            "pose": "bust"
+          }
+        ],
+        "properti": [
+          "sticky_0400",
+          "sticky_5jam",
+          "sticky_0hp",
+          "sticky_tryout"
+        ],
+        "kamera": "pantul",
+        "catatan_merah": "realistis??"
+      },
+      "caption": {
+        "teks": "Bangun jam empat! Belajar lima jam sehari! HP-ku kutitipkan ke Mama!",
+        "kata": [
+          {
+            "kata": "Bangun",
+            "mulai": 3.98,
+            "selesai": 4.46
+          },
+          {
+            "kata": "jam",
+            "mulai": 4.46,
+            "selesai": 4.7
+          },
+          {
+            "kata": "empat!",
+            "mulai": 4.7,
+            "selesai": 5.16
+          },
+          {
+            "kata": "Belajar",
+            "mulai": 5.52,
+            "selesai": 6.08
+          },
+          {
+            "kata": "lima",
+            "mulai": 6.08,
+            "selesai": 6.34
+          },
+          {
+            "kata": "jam",
+            "mulai": 6.34,
+            "selesai": 6.6
+          },
+          {
+            "kata": "sehari!",
+            "mulai": 6.6,
+            "selesai": 7.18
+          },
+          {
+            "kata": "HP-ku",
+            "mulai": 7.52,
+            "selesai": 8.12
+          },
+          {
+            "kata": "kutitipkan",
+            "mulai": 8.12,
+            "selesai": 8.72
+          },
+          {
+            "kata": "ke",
+            "mulai": 8.72,
+            "selesai": 8.84
+          },
+          {
+            "kata": "Mama!",
+            "mulai": 8.84,
+            "selesai": 9.12
+          }
+        ]
+      }
+    },
+    {
+      "id": "b03",
+      "mulai": 9.8,
+      "selesai": 13.56,
+      "akhir_jeda": 13.96,
+      "penutur": "arta",
+      "emosi": "semangat",
+      "intensitas": 7,
+      "visual": {
+        "latar": "kamar",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "senyum",
+            "pose": "pinggang"
+          }
+        ],
+        "properti": [
+          "papan_100_hari"
+        ],
+        "kamera": "zoom_masuk",
+        "catatan_merah": null
+      },
+      "caption": {
+        "teks": "Teknik Informatika ITS. Seratus hari lagi.",
+        "kata": [
+          {
+            "kata": "Teknik",
+            "mulai": 9.8,
+            "selesai": 10.16
+          },
+          {
+            "kata": "Informatika",
+            "mulai": 10.16,
+            "selesai": 10.98
+          },
+          {
+            "kata": "ITS.",
+            "mulai": 10.98,
+            "selesai": 11.78
+          },
+          {
+            "kata": "Seratus",
+            "mulai": 12.14,
+            "selesai": 12.66
+          },
+          {
+            "kata": "hari",
+            "mulai": 12.66,
+            "selesai": 12.88
+          },
+          {
+            "kata": "lagi.",
+            "mulai": 12.88,
+            "selesai": 13.22
+          }
+        ]
+      }
+    },
+    {
+      "id": "b04",
+      "mulai": 13.96,
+      "selesai": 17.48,
+      "akhir_jeda": 17.88,
+      "penutur": "ratna",
+      "emosi": "tertekan",
+      "intensitas": 4,
+      "visual": {
+        "latar": "ruang_tamu",
+        "tokoh": [
+          {
+            "id": "ratna",
+            "ekspresi": "lirik",
+            "pose": "bust"
+          }
+        ],
+        "properti": [
+          "wa_grup"
+        ],
+        "kamera": "diam",
+        "catatan_merah": "aduh..."
+      },
+      "caption": {
+        "teks": "Ta... anaknya Bu Sinta sekarang les di tiga tempat, lho.",
+        "kata": [
+          {
+            "kata": "Ta...",
+            "mulai": 13.96,
+            "selesai": 14.312
+          },
+          {
+            "kata": "anaknya",
+            "mulai": 14.312,
+            "selesai": 14.664
+          },
+          {
+            "kata": "Bu",
+            "mulai": 14.664,
+            "selesai": 15.016
+          },
+          {
+            "kata": "Sinta",
+            "mulai": 15.016,
+            "selesai": 15.368
+          },
+          {
+            "kata": "sekarang",
+            "mulai": 15.368,
+            "selesai": 15.72
+          },
+          {
+            "kata": "les",
+            "mulai": 15.72,
+            "selesai": 16.072
+          },
+          {
+            "kata": "di",
+            "mulai": 16.072,
+            "selesai": 16.424
+          },
+          {
+            "kata": "tiga",
+            "mulai": 16.424,
+            "selesai": 16.776
+          },
+          {
+            "kata": "tempat,",
+            "mulai": 16.776,
+            "selesai": 17.128
+          },
+          {
+            "kata": "lho.",
+            "mulai": 17.128,
+            "selesai": 17.48
+          }
+        ]
+      }
+    },
+    {
+      "id": "b05",
+      "mulai": 17.88,
+      "selesai": 19.56,
+      "akhir_jeda": 19.76,
+      "penutur": "arta",
+      "emosi": "marah",
+      "intensitas": 7,
+      "visual": {
+        "latar": "dinding_sticky",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "marah",
+            "pose": "bust"
+          }
+        ],
+        "properti": [
+          "sticky_3tempat"
+        ],
+        "kamera": "zoom_masuk",
+        "catatan_merah": null
+      },
+      "caption": {
+        "teks": "Tiga tempat?",
+        "kata": [
+          {
+            "kata": "Tiga",
+            "mulai": 17.88,
+            "selesai": 18.42
+          },
+          {
+            "kata": "tempat?",
+            "mulai": 18.42,
+            "selesai": 19.1
+          }
+        ]
+      }
+    },
+    {
+      "id": "b06",
+      "mulai": 19.76,
+      "selesai": 23.04,
+      "akhir_jeda": 23.54,
+      "penutur": "arta",
+      "emosi": "marah",
+      "intensitas": 9,
+      "visual": {
+        "latar": "dinding_sticky",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "marah",
+            "pose": "bust"
+          }
+        ],
+        "properti": [
+          "sticky_7jam"
+        ],
+        "kamera": "goyang",
+        "catatan_merah": null
+      },
+      "caption": {
+        "teks": "OKE. Aku belajar TUJUH jam!",
+        "kata": [
+          {
+            "kata": "OKE.",
+            "mulai": 19.76,
+            "selesai": 20.3
+          },
+          {
+            "kata": "Aku",
+            "mulai": 20.8,
+            "selesai": 21.1
+          },
+          {
+            "kata": "belajar",
+            "mulai": 21.1,
+            "selesai": 21.62
+          },
+          {
+            "kata": "TUJUH",
+            "mulai": 21.62,
+            "selesai": 22.2
+          },
+          {
+            "kata": "jam!",
+            "mulai": 22.2,
+            "selesai": 22.48
+          }
+        ]
+      }
+    },
+    {
+      "id": "b07",
+      "mulai": 23.54,
+      "selesai": 27.06,
+      "akhir_jeda": 27.86,
+      "penutur": "arta",
+      "emosi": "lelah",
+      "intensitas": 3,
+      "visual": {
+        "latar": "meja_malam",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "datar",
+            "pose": "bust"
+          }
+        ],
+        "properti": [
+          "jam_0047"
+        ],
+        "kamera": "diam",
+        "catatan_merah": "ini jam tidur atau jam kerja?"
+      },
+      "caption": {
+        "teks": "Hari ketujuh. Rencanaku masih sempurna.",
+        "kata": [
+          {
+            "kata": "Hari",
+            "mulai": 23.54,
+            "selesai": 24.244
+          },
+          {
+            "kata": "ketujuh.",
+            "mulai": 24.244,
+            "selesai": 24.948
+          },
+          {
+            "kata": "Rencanaku",
+            "mulai": 24.948,
+            "selesai": 25.652
+          },
+          {
+            "kata": "masih",
+            "mulai": 25.652,
+            "selesai": 26.356
+          },
+          {
+            "kata": "sempurna.",
+            "mulai": 26.356,
+            "selesai": 27.06
+          }
+        ]
+      }
+    },
+    {
+      "id": "b08",
+      "mulai": 27.86,
+      "selesai": 29.86,
+      "akhir_jeda": 30.36,
+      "penutur": "arta",
+      "emosi": "lelah",
+      "intensitas": 3,
+      "visual": {
+        "latar": "meja_malam",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "datar",
+            "pose": "bust"
+          }
+        ],
+        "properti": [],
+        "kamera": "diam",
+        "catatan_merah": null
+      },
+      "caption": {
+        "teks": "Mataku yang nggak.",
+        "kata": [
+          {
+            "kata": "Mataku",
+            "mulai": 27.86,
+            "selesai": 28.62
+          },
+          {
+            "kata": "yang",
+            "mulai": 28.62,
+            "selesai": 28.98
+          },
+          {
+            "kata": "nggak.",
+            "mulai": 28.98,
+            "selesai": 29.42
+          }
+        ]
+      }
+    },
+    {
+      "id": "b09",
+      "mulai": 30.36,
+      "selesai": 34.52,
+      "akhir_jeda": 36.02,
+      "penutur": "arta",
+      "emosi": "hancur",
+      "intensitas": 6,
+      "visual": {
+        "latar": "meja_malam",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "datar",
+            "pose": "bust"
+          }
+        ],
+        "properti": [
+          "kertas_58"
+        ],
+        "kamera": "zoom_masuk",
+        "catatan_merah": null
+      },
+      "caption": {
+        "teks": "Hari kedua belas. Nilai tryout pertamaku keluar.",
+        "kata": [
+          {
+            "kata": "Hari",
+            "mulai": 30.36,
+            "selesai": 30.954
+          },
+          {
+            "kata": "kedua",
+            "mulai": 30.954,
+            "selesai": 31.549
+          },
+          {
+            "kata": "belas.",
+            "mulai": 31.549,
+            "selesai": 32.143
+          },
+          {
+            "kata": "Nilai",
+            "mulai": 32.143,
+            "selesai": 32.737
+          },
+          {
+            "kata": "tryout",
+            "mulai": 32.737,
+            "selesai": 33.331
+          },
+          {
+            "kata": "pertamaku",
+            "mulai": 33.331,
+            "selesai": 33.926
+          },
+          {
+            "kata": "keluar.",
+            "mulai": 33.926,
+            "selesai": 34.52
+          }
+        ]
+      }
+    },
+    {
+      "id": "b10",
+      "mulai": 36.02,
+      "selesai": 38.74,
+      "akhir_jeda": 39.34,
+      "penutur": "arta",
+      "emosi": "hancur",
+      "intensitas": 9,
+      "visual": {
+        "latar": "meja_malam",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "hancur",
+            "pose": "bust"
+          }
+        ],
+        "properti": [
+          "kertas_58"
+        ],
+        "kamera": "zoom_masuk",
+        "catatan_merah": null
+      },
+      "caption": {
+        "teks": "58",
+        "kata": [
+          {
+            "kata": "58",
+            "mulai": 36.02,
+            "selesai": 38.74
+          }
+        ]
+      }
+    },
+    {
+      "id": "b11",
+      "mulai": 39.34,
+      "selesai": 43.58,
+      "akhir_jeda": 43.88,
+      "penutur": "mbis",
+      "emosi": "misterius",
+      "intensitas": 5,
+      "visual": {
+        "latar": "meja_malam",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "hancur",
+            "pose": "bust"
+          },
+          {
+            "id": "mbis",
+            "ekspresi": "intip",
+            "pose": "intip"
+          }
+        ],
+        "properti": [
+          "kertas_58"
+        ],
+        "kamera": "diam",
+        "catatan_merah": null
+      },
+      "caption": {
+        "teks": "Rencanamu nggak salah, Ta. Cuma kebanyakan.",
+        "kata": [
+          {
+            "kata": "Rencanamu",
+            "mulai": 39.34,
+            "selesai": 40.42
+          },
+          {
+            "kata": "nggak",
+            "mulai": 40.42,
+            "selesai": 40.62
+          },
+          {
+            "kata": "salah,",
+            "mulai": 40.62,
+            "selesai": 41.06
+          },
+          {
+            "kata": "Ta.",
+            "mulai": 41.06,
+            "selesai": 41.44
+          },
+          {
+            "kata": "Cuma",
+            "mulai": 41.9,
+            "selesai": 42.24
+          },
+          {
+            "kata": "kebanyakan.",
+            "mulai": 42.24,
+            "selesai": 42.92
+          }
+        ]
+      }
+    },
+    {
+      "id": "b12",
+      "mulai": 43.88,
+      "selesai": 45.4,
+      "akhir_jeda": 45.7,
+      "penutur": "arta",
+      "emosi": "kaget",
+      "intensitas": 7,
+      "visual": {
+        "latar": "meja_malam",
+        "tokoh": [
+          {
+            "id": "arta",
+            "ekspresi": "kaget",
+            "pose": "bust"
+          }
+        ],
+        "properti": [],
+        "kamera": "goyang",
+        "catatan_merah": null
+      },
+      "caption": {
+        "teks": "...Siapa itu?!",
+        "kata": [
+          {
+            "kata": "...Siapa",
+            "mulai": 43.88,
+            "selesai": 44.9
+          },
+          {
+            "kata": "itu?!",
+            "mulai": 44.9,
+            "selesai": 45.16
+          }
+        ]
+      }
+    }
+  ],
+  "penutup": {
+    "judul_berikut": "Ep.2: Kenapa rencana yang sempurna justru bikin nilai turun?"
+  }
+}
