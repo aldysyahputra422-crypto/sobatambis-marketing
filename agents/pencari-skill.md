@@ -27,7 +27,9 @@ Sumber kebenaran peta ini: field `agent` di `katalog/skill.yaml`.
    - `[sudah: ...]` → jawab "sudah tersedia" ke peminta.
    - `[pemilik: alasan]` → jangan pasang. Minta penjadwal-notion mencatat alasan di "Butuh dari pemilik", lalu beri tahu peminta alternatif `[boleh]` dari hasil yang sama bila ada.
    - Tidak ada hasil relevan → catat usulan ke Notion ("tambahkan ke katalog: <kebutuhan>"). Boleh membuat skill baru dengan `skill-creator` **hanya** bila kebutuhannya kecil dan bisa ditulis dari pengetahuan sendiri (tanpa kode luar), simpan di `skills/<nama>/SKILL.md`, lalu jalankan `python -m scripts.cek_plugin`.
-3. **Gagal pasang**: ulangi sekali. Gagal lagi → catat ke Notion, berhenti. Jangan mencoba cara pasang lain.
+3. **Repo wajib pemilik** (13 repo: karpathy-skills, ecc, youmind-opus-prompts, threejs, gsap, design-dna, motion-design-skill, genjutsu, hyperframes, onetake, gbro-collage-broll, claude-animation-base, lemo-opuscar): ambil satu dengan `--id <id>` saat agent membutuhkannya, atau semua sekaligus dengan `python -m scripts.pasang_otomatis --wajib`. Repo rujukan ada di `rujukan/<id>`, paket npm di `template/node_modules`, skill di `~/.claude/skills`. Plugin (karpathy aktif bawaan; ecc, genjutsu, hyperframes, lemo-opuscar terdaftar) dipasang pemilik dengan `/plugin install <id>` bila perlu.
+   Mode `config/kebijakan.yaml`: `eksplorasi` (sekarang) mengabaikan lisensi; yang berbayar/ber-API-key tetap di-skip (gbro-collage-broll, higgsfield, open-generative-ai, elevenlabs).
+4. **Gagal pasang**: ulangi sekali. Gagal lagi → catat ke Notion, berhenti. Jangan mencoba cara pasang lain.
 
 ## Aturan hemat token (wajib)
 - Jangan membuka atau membaca `katalog/skill.yaml`, README repo luar, atau isi skill yang dipasang. Cukup keluaran script.

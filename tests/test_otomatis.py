@@ -230,7 +230,7 @@ def test_alasan_sesuai_jenis():
     assert "setup.sh" in pasang_otomatis.alasan_tidak_boleh(BY_ID["ffmpeg"])
     assert "setup.sh" in pasang_otomatis.alasan_tidak_boleh(BY_ID["faster-whisper"])
     assert "settings" in pasang_otomatis.alasan_tidak_boleh(BY_ID["caveman"])
-    assert "izin pemilik" in pasang_otomatis.alasan_tidak_boleh(BY_ID["threejs"])
+    assert "izin pemilik" in pasang_otomatis.alasan_tidak_boleh(BY_ID["voicestudio"], saat="diminta")
 
 
 def test_pasang_untuk_agent_hanya_skill_miliknya(tmp_path):
@@ -249,3 +249,65 @@ def test_cari_ringkas_maksimal_tiga_baris_berlabel():
     baris = r.stdout.strip().splitlines()
     assert 1 <= len(baris) <= 3
     assert all(("[boleh]" in b) or ("[pemilik:" in b) or ("[sudah:" in b) for b in baris)
+
+
+# ---------- 13 repo wajib, mode eksplorasi ----------
+WAJIB = ["karpathy-skills", "ecc", "youmind-opus-prompts", "threejs", "gsap", "design-dna", "motion-design-skill",
+         "genjutsu", "hyperframes", "onetake", "gbro-collage-broll", "claude-animation-base", "lemo-opuscar"]
+
+
+def test_tiga_belas_repo_wajib_bisa_diambil_kecuali_berbayar(monkeypatch):
+    monkeypatch.setattr(pasang_otomatis, "mode", lambda: "eksplorasi")
+    for i in WAJIB:
+        e = BY_ID[i]
+        assert e.wajib, i
+        alasan = pasang_otomatis.alasan_tidak_boleh(e, saat="diminta")
+        if i == "gbro-collage-broll":
+            assert alasan and "GEMINI_API_KEY" in alasan
+        else:
+            assert alasan is None or "settings" in alasan, f"{i}: {alasan}"
+
+
+def test_mode_komersial_menghidupkan_cek_lisensi(monkeypatch):
+    monkeypatch.setattr(pasang_otomatis, "mode", lambda: "komersial")
+    assert "lisensi" in pasang_otomatis.alasan_tidak_boleh(BY_ID["onetake"], saat="diminta")
+    monkeypatch.setattr(pasang_otomatis, "mode", lambda: "eksplorasi")
+    assert pasang_otomatis.alasan_tidak_boleh(BY_ID["onetake"], saat="diminta") is None
+
+
+def test_repo_besar_tidak_ikut_dipasang_tiap_sesi():
+    assert not pasang_otomatis.boleh_otomatis(BY_ID["lemo-opuscar"])  # 197 MB: hanya saat diminta
+    assert not BY_ID["onetake"].otomatis and not BY_ID["ecc"].otomatis
+
+
+def test_cara_ambil_npm_unduh_rujukan(tmp_path, monkeypatch):
+    monkeypatch.setattr(pasang_otomatis, "mode", lambda: "eksplorasi")
+    monkeypatch.setattr(pasang_otomatis, "RUJUKAN", tmp_path / "rujukan")
+    monkeypatch.setattr(pasang_otomatis, "TEMPLATE", tmp_path / "template")
+    jalan = []
+
+    def runner(cmd, **kw):
+        jalan.append(cmd)
+        if cmd[0] == "npm":
+            for p in cmd[4:]:
+                (tmp_path / "template/node_modules" / p).mkdir(parents=True, exist_ok=True)
+        elif cmd[0] == "curl":
+            Path(cmd[cmd.index("-o") + 1]).parent.mkdir(parents=True, exist_ok=True)
+            Path(cmd[cmd.index("-o") + 1]).write_text("<html>")
+        elif cmd[:2] == ["git", "clone"]:
+            Path(cmd[-1]).mkdir(parents=True)
+            (Path(cmd[-1]) / "README.md").write_text("x")
+        return subprocess.CompletedProcess(cmd, 0, "", "")
+    for i in ("threejs", "gsap", "youmind-opus-prompts", "claude-animation-base", "ecc"):
+        h = pasang_otomatis.pasang_satu(BY_ID[i], skills_dir=tmp_path / "s", runner=runner, log=tmp_path / "t.md", cache=tmp_path / "c")
+        assert h["status"] == "terpasang", (i, h)
+    assert ["npm", "install", "--prefix", str(tmp_path / "template"), "three", "@remotion/three"] in jalan
+    assert (tmp_path / "rujukan/ecc/README.md").exists()
+
+
+def test_settings_mendaftarkan_marketplace_repo_wajib():
+    s = json.loads((ROOT / "config/claude-settings.json").read_text())
+    for m in ("karpathy-skills", "ecc", "genjutsu", "hyperframes", "lemolab"):
+        assert m in s["extraKnownMarketplaces"], m
+    assert s["enabledPlugins"]["andrej-karpathy-skills@karpathy-skills"] is True
+    assert "ecc@ecc" not in s["enabledPlugins"]

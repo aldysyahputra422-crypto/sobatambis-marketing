@@ -33,6 +33,10 @@ Semua agent, skill, perintah, dan hook dimuat langsung dari folder repo (lewat `
 - **Skill luar yang terpasang sendiri** (dipilih per bidang, lisensi diperiksa): `humanizer` dan `stop-slop` (anti-slop naskah/caption), `claude-screenwriting` (struktur cerita + lint naskah), `marketingskills` (copywriting, copy-editing, content-strategy, social, marketing-psychology, marketing-ideas, video), `canvas-design` dan `skill-creator` (Anthropic resmi), skill Remotion resmi, `motion-design-skill`. Plugin hemat token: caveman, ponytail.
 - **3 perintah**: `/sa-video`, `/sa-status`, `/sa-pasang-skill`.
 
+### 13 repo wajib
+Semua tercatat di `katalog/skill.yaml` (`wajib: true`) dan bisa diambil kapan saja dengan `python -m scripts.pasang_otomatis --wajib` atau satu per satu dengan `--id <id>`:
+karpathy-skills (plugin, aktif bawaan), ECC / genjutsu / hyperframes / lemo-opuscar (plugin terdaftar + clone ke `rujukan/`), design-dna dan motion-design-skill (skill, otomatis), onetake (skill), ClaudeAnimationBase (`rujukan/`), three.js dan GSAP (npm ke template), youmind opus prompts (diunduh ke `rujukan/`). gbro-collage-broll di-skip karena wajib Gemini API berbayar. Mode `eksplorasi` di `config/kebijakan.yaml` membuat lisensi tidak membatasi selama belum komersial.
+
 ### Konektor
 - **Wajib: Notion.** Semua catatan produksi untukmu masuk ke database Notion "Produksi Sobat Ambis": tahap, status, apa yang ditunggu darimu, angka QA, token. Sambungkan di claude.ai → Settings → Connectors → Notion. Database dibuat otomatis saat episode pertama (kamu hanya ditanya halaman induknya). Tanpa Notion, catatan jatuh ke `catatan-notion.md` di folder episode.
 - **Opsional, untuk pemeriksa-fakta** bila naskah memuat klaim ilmiah (Ep.1 tidak): salah satu dari Consensus, Elicit, atau SciSpace.

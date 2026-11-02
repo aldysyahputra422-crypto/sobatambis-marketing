@@ -18,6 +18,7 @@ Plugin Claude Code yang memproduksi serial animasi Reels "Arta & Mbis" untuk Sob
 - SessionStart: dependensi + skill katalog `otomatis: true` terpasang sendiri; mode hemat token (caveman + ponytail) aktif.
 - Stop: produksi dengan penanda `.sa/aktif.json` tidak boleh berhenti sebelum titik persetujuan; macet 2 kali → catat ke Notion.
 - PreToolUse: semua perintah ElevenLabs ditolak sampai pemilik membuat `.sa/izin-elevenlabs`.
+- Mode eksplorasi (`config/kebijakan.yaml`): 13 repo wajib pemilik bisa diambil kapan saja (`python -m scripts.pasang_otomatis --wajib`), lisensi tidak membatasi; yang berbayar di-skip. Ganti ke `komersial` saat mulai menghasilkan uang.
 - Kemampuan yang kurang dipasang pencari-skill lewat `scripts/pasang_otomatis.py` tanpa bertanya, hanya bila lolos aturan ketatnya; selain itu catat ke Notion.
 
 ## Kerja

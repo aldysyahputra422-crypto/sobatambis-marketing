@@ -172,6 +172,7 @@
   ukuran: kecil
   status: direkomendasikan
 - id: motion-design-skill
+  wajib: true
   sumber: https://github.com/LottieFiles/motion-design-skill
   fungsi: prinsip motion design timing easing koreografi gerak
   pakai_saat: animasi gerak easing timing transisi koreografi
@@ -190,6 +191,8 @@
   fungsi: library animasi JavaScript dengan easing lengkap
   pakai_saat: animasi gerak easing timeline web
   cara_pasang: npm install gsap di template bila dibutuhkan
+  wajib: true
+  pasang: {jenis: npm, paket: [gsap]}
   lisensi: GSAP Standard License
   catatan_lisensi: gratis termasuk plugin bonus sejak 2025; cek gsap.com/standard-license
   butuh_key: null
@@ -201,6 +204,8 @@
   fungsi: grafis 3D di web
   pakai_saat: 3d tiga dimensi kamera objek ruang
   cara_pasang: npm install three @remotion/three di template bila dibutuhkan
+  wajib: true
+  pasang: {jenis: npm, paket: [three, "@remotion/three"]}
   lisensi: MIT
   catatan_lisensi: bebas dipakai
   butuh_key: null
@@ -212,6 +217,10 @@
   fungsi: mengekstrak dan menerapkan identitas visual sebagai design token
   pakai_saat: identitas visual design token gaya konsisten brand
   cara_pasang: npx skills add zanwei/design-dna
+  wajib: true
+  otomatis: true
+  pasang: {jenis: git_skill, url: "https://github.com/zanwei/design-dna"}
+  agent: [desainer-cover, animator]
   lisensi: MIT
   catatan_lisensi: bebas dipakai
   butuh_key: null
@@ -223,6 +232,8 @@
   fungsi: skill creative coding untuk animasi antarmuka dan tampilan web
   pakai_saat: animasi web antarmuka creative coding canvas
   cara_pasang: ikuti README repo (plugin Claude Code)
+  wajib: true
+  pasang: {jenis: rujukan, url: "https://github.com/AThevon/genjutsu", plugin: genjutsu@genjutsu}
   lisensi: MIT
   catatan_lisensi: bebas dipakai
   butuh_key: null
@@ -234,6 +245,8 @@
   fungsi: contoh animasi karakter buatan tangan dengan p5.js dan storyboard per shot
   pakai_saat: animasi karakter storyboard gaya tangan rujukan
   cara_pasang: git clone --depth 1 ke folder rujukan; baca ANIMATION_GUIDE.md
+  wajib: true
+  pasang: {jenis: rujukan, url: "https://github.com/JohnHeibel/ClaudeAnimationBase"}
   lisensi: MIT
   catatan_lisensi: bebas dipakai
   butuh_key: null
@@ -245,6 +258,8 @@
   fungsi: 66 gaya film yang dibuat dengan kode beserta prompt gayanya
   pakai_saat: gaya film rujukan visual gaya baru episode spesial
   cara_pasang: git clone --depth 1 ke folder rujukan; jangan dimuat utuh ke konteks
+  wajib: true
+  pasang: {jenis: rujukan, url: "https://github.com/lemomo-ai/lemo-opuscar", plugin: lemo-opuscar@lemolab}
   lisensi: MIT
   catatan_lisensi: bebas dipakai
   butuh_key: null
@@ -256,6 +271,8 @@
   fungsi: b-roll kolase kertas halftone dari satu kalimat
   pakai_saat: b-roll kolase kertas video pendek
   cara_pasang: ikuti README repo; butuh Gemini API
+  wajib: true
+  pasang: {jenis: git_skill, url: "https://github.com/pyang5166/gbro-collage-broll"}
   lisensi: MIT
   catatan_lisensi: bebas dipakai, generasi videonya berbayar
   butuh_key: GEMINI_API_KEY
@@ -267,6 +284,8 @@
   fungsi: motion film satu tarikan tanpa potongan untuk teaser dan peluncuran
   pakai_saat: teaser peluncuran motion film satu tarikan
   cara_pasang: ikuti README repo
+  wajib: true
+  pasang: {jenis: git_skill, url: "https://github.com/feitangyuan/onetake"}
   lisensi: PolyForm-Noncommercial-1.0.0
   catatan_lisensi: hanya nonkomersial; boleh selama Sobat Ambis diperlakukan sebagai project mata kuliah, cek ulang bila mulai menerima bayaran
   butuh_key: null
@@ -278,6 +297,8 @@
   fungsi: render HTML menjadi video, alternatif Remotion
   pakai_saat: render video html alternatif
   cara_pasang: npx hyperframes skills update
+  wajib: true
+  pasang: {jenis: rujukan, url: "https://github.com/heygen-com/hyperframes", plugin: hyperframes@hyperframes}
   lisensi: Apache-2.0
   catatan_lisensi: bebas dipakai; tidak dipasang bawaan karena Remotion sudah dipilih
   butuh_key: null
@@ -322,6 +343,8 @@
   fungsi: koleksi besar skill dan agent Claude Code
   pakai_saat: skill tambahan pengembangan agent umum
   cara_pasang: salin hanya skill yang dibutuhkan ke ~/.claude/skills; jangan pasang plugin utuh
+  wajib: true
+  pasang: {jenis: rujukan, url: "https://github.com/affaan-m/ECC", plugin: ecc@ecc}
   lisensi: MIT
   catatan_lisensi: jangan pasang utuh (1.068 skill, 385 agent) karena membebani konteks setiap sesi
   butuh_key: null
@@ -333,6 +356,9 @@
   fungsi: aturan kerja coding ala Karpathy agar agent tidak berasumsi dan tidak berlebihan
   pakai_saat: aturan coding kualitas kode agent
   cara_pasang: baca dan rujuk dari repo asli; jangan salin isinya ke plugin ini
+  wajib: true
+  pasang: {jenis: plugin, id: andrej-karpathy-skills@karpathy-skills}
+  agent: [semua]
   lisensi: tidak ada
   catatan_lisensi: repo tanpa lisensi, jadi tidak boleh disalin atau didistribusikan ulang
   butuh_key: null
@@ -344,6 +370,8 @@
   fungsi: kumpulan contoh prompt untuk Claude Opus
   pakai_saat: contoh prompt rujukan penulisan instruksi
   cara_pasang: baca halaman sebagai rujukan saat dibutuhkan; tidak dipasang
+  wajib: true
+  pasang: {jenis: unduh, url: "https://youmind.com/opus-5-5-prompts", file: youmind-opus-prompts.html}
   lisensi: tidak diketahui
   catatan_lisensi: halaman web, hanya dibaca
   butuh_key: null

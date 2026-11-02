@@ -1,16 +1,20 @@
-"""Pasang skill dari katalog secara otomatis, dengan aturan ketat.
+"""Pasang/ambil skill dan repo dari katalog secara otomatis, dengan aturan ketat.
 
-Boleh dipasang TANPA bertanya hanya bila semua benar:
-  - butuh_key kosong dan biaya "gratis"
-  - lisensi bebas komersial (MIT, Apache-2.0, BSD, ISC, LGPL)
-  - status direkomendasikan atau opsional (bukan rujukan/sebagian/alternatif)
-  - ukuran bukan GB dan tidak lebih dari 200 MB
-  - punya cara pasang terstruktur (pasang.jenis git_skill, git_subskill, atau npx_skill)
-Selain itu: status "butuh_pemilik" + alasan (dicatat ke Notion lewat penjadwal-notion), tidak dipasang.
+Selalu ditolak (kapan pun): yang butuh API key atau berbiaya (berbayar = skip).
+Mode kebijakan (config/kebijakan.yaml):
+  - eksplorasi (bawaan, belum komersial): lisensi tidak membatasi
+  - komersial: hanya lisensi bebas komersial (MIT, Apache-2.0, BSD, ISC, LGPL, Remotion License, GSAP Standard)
+Saat "otomatis" (hook SessionStart, setiap sesi) ditambah: status direkomendasikan/opsional dan <= 200 MB.
+Saat "diminta" (pencari-skill, --id, --wajib): ukuran dan status tidak membatasi.
 
-python -m scripts.pasang_otomatis            → pasang semua entri bertanda otomatis: true
-python -m scripts.pasang_otomatis --id <id>  → pasang satu entri (dipakai pencari-skill)
+Jenis pasang: git_skill, git_subskill, npx_skill (→ ~/.claude/skills), npm (→ template/node_modules),
+rujukan (git clone → rujukan/<id>, untuk dipelajari/dipakai agent), unduh (halaman web → rujukan/),
+plugin dan setup (diatur .claude/settings.json dan scripts/setup.sh, bukan di sini).
+
+python -m scripts.pasang_otomatis            → pasang semua entri otomatis: true (aturan "otomatis")
+python -m scripts.pasang_otomatis --id <id>  → ambil satu entri (aturan "diminta")
 python -m scripts.pasang_otomatis --agent <nama>  → pasang semua skill dasar milik satu agent
+python -m scripts.pasang_otomatis --wajib    → ambil semua 13 repo wajib pemilik (kecuali berbayar)
 """
 import argparse
 import json
@@ -25,7 +29,17 @@ from scripts.katalog import Entri, muat
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = Path.home() / ".claude/skills"
 LOG = ROOT / "katalog/terpasang.md"
-LISENSI_BEBAS = ("mit", "apache-2.0", "bsd", "isc", "lgpl", "remotion license")  # Remotion License: lisensi mesin inti proyek, sudah diterima pemilik
+LISENSI_BEBAS = ("mit", "apache-2.0", "bsd", "isc", "lgpl", "remotion license", "gsap standard")
+RUJUKAN = ROOT / "rujukan"
+TEMPLATE = ROOT / "template"
+
+
+def mode() -> str:
+    try:
+        import yaml
+        return yaml.safe_load((ROOT / "config/kebijakan.yaml").read_text(encoding="utf-8")).get("mode", "komersial")
+    except OSError:
+        return "komersial"
 CACHE = Path.home() / ".cache/sobatambis/repo"
 STATUS_BOLEH = ("direkomendasikan", "opsional")
 MAKS_MB = 200
@@ -39,29 +53,30 @@ def _mb(ukuran: str) -> float:
     return float(m.group(1).replace(",", ".")) if m else 0
 
 
-def alasan_tidak_boleh(e: Entri) -> str | None:
+def alasan_tidak_boleh(e: Entri, saat: str = "otomatis") -> str | None:
     jenis = (e.pasang or {}).get("jenis")
     if jenis == "setup":
         return "sudah ditangani scripts/setup.sh (dependensi proyek)"
     if jenis == "plugin":
         return "plugin aktif lewat .claude/settings.json (scripts/aktifkan_otomatis.sh)"
     if e.butuh_key:
-        return f"butuh {e.butuh_key}"
+        return f"berbayar: butuh {e.butuh_key}"
     if (e.biaya or "").lower() != "gratis":
-        return f"biaya: {e.biaya}"
-    if not (e.lisensi or "").lower().startswith(LISENSI_BEBAS):
-        return f"lisensi {e.lisensi} perlu ditinjau pemilik"
-    if e.status not in STATUS_BOLEH:
-        return f"status {e.status}"
-    if _mb(e.ukuran) > MAKS_MB:
-        return f"ukuran {e.ukuran}"
-    if not e.pasang or e.pasang.get("jenis") not in ("git_skill", "git_subskill", "npx_skill"):
+        return f"berbayar: {e.biaya}"
+    if mode() == "komersial" and not (e.lisensi or "").lower().startswith(LISENSI_BEBAS):
+        return f"lisensi {e.lisensi} tidak untuk komersial (mode komersial)"
+    if saat == "otomatis":
+        if e.status not in STATUS_BOLEH:
+            return f"status {e.status}: hanya diambil saat diminta"
+        if _mb(e.ukuran) > MAKS_MB:
+            return f"ukuran {e.ukuran}: hanya diambil saat diminta"
+    if not e.pasang or jenis not in ("git_skill", "git_subskill", "npx_skill", "npm", "rujukan", "unduh"):
         return "tidak ada cara pasang otomatis; pasang manual hanya dengan izin pemilik"
     return None
 
 
 def boleh_otomatis(e: Entri) -> bool:
-    return alasan_tidak_boleh(e) is None
+    return alasan_tidak_boleh(e, saat="otomatis") is None
 
 
 def perintah(e: Entri, skills_dir: Path = SKILLS) -> list[str]:
@@ -74,6 +89,13 @@ def perintah(e: Entri, skills_dir: Path = SKILLS) -> list[str]:
 
 
 def sudah_terpasang(e: Entri, skills_dir: Path = SKILLS) -> bool:
+    jenis = (e.pasang or {}).get("jenis")
+    if jenis == "npm":
+        return all((TEMPLATE / "node_modules" / p).exists() for p in e.pasang["paket"])
+    if jenis == "rujukan":
+        return (RUJUKAN / e.id).is_dir() and any((RUJUKAN / e.id).iterdir())
+    if jenis == "unduh":
+        return (RUJUKAN / e.pasang["file"]).exists()
     if e.pasang and e.pasang.get("jenis") == "git_subskill":
         nama = e.pasang.get("skills") or [Path(x).name for x in e.pasang["paths"] if not x.endswith("*")]
         return bool(nama) and all((Path(skills_dir) / n / "SKILL.md").exists() for n in nama)
@@ -112,16 +134,28 @@ def _catat(log: Path, e: Entri, hasil: str) -> None:
         f.write(f"| {datetime.now(timezone.utc).isoformat(timespec='minutes')} | {e.id} | {hasil} |\n")
 
 
-def pasang_satu(e: Entri, skills_dir: Path | None = None, runner=subprocess.run, log: Path | None = None, cache: Path | None = None) -> dict:
+def pasang_satu(e: Entri, skills_dir: Path | None = None, runner=subprocess.run, log: Path | None = None,
+                cache: Path | None = None, saat: str = "diminta") -> dict:
     skills_dir, log, cache = skills_dir or SKILLS, log or LOG, cache or CACHE
-    alasan = alasan_tidak_boleh(e)
+    alasan = alasan_tidak_boleh(e, saat=saat)
     if alasan:
         return {"id": e.id, "status": "butuh_pemilik", "alasan": alasan}
     if sudah_terpasang(e, skills_dir):
         return {"id": e.id, "status": "sudah_ada"}
     try:
-        if e.pasang["jenis"] == "git_subskill":
+        jenis = e.pasang["jenis"]
+        if jenis == "git_subskill":
             ok = _pasang_subskill(e, skills_dir, runner, cache) and (sudah_terpasang(e, skills_dir) or not e.pasang.get("skills"))
+        elif jenis in ("npm", "rujukan", "unduh"):
+            if jenis == "npm":
+                cmd = ["npm", "install", "--prefix", str(TEMPLATE), *e.pasang["paket"]]
+            elif jenis == "rujukan":
+                RUJUKAN.mkdir(parents=True, exist_ok=True)
+                cmd = ["git", "clone", "--depth", "1", e.pasang["url"], str(RUJUKAN / e.id)]
+            else:
+                cmd = ["curl", "-sSL", "-o", str(RUJUKAN / e.pasang["file"]), e.pasang["url"]]
+            r = runner(cmd, capture_output=True, text=True, timeout=900)
+            ok = r.returncode == 0 and sudah_terpasang(e, skills_dir)
         else:
             r = runner(perintah(e, skills_dir), capture_output=True, text=True, timeout=180)
             ok = r.returncode == 0 and sudah_terpasang(e, skills_dir)
@@ -136,7 +170,7 @@ def pasang_semua(katalog: list[Entri], skills_dir: Path | None = None, runner=su
     for e in katalog:
         if not e.otomatis:
             continue
-        h = pasang_satu(e, skills_dir, runner, log, cache)
+        h = pasang_satu(e, skills_dir, runner, log, cache, saat="otomatis")
         hasil[h["status"]].append(e.id)
     return hasil
 
@@ -154,13 +188,26 @@ def pasang_untuk_agent(katalog: list[Entri], agent: str, skills_dir: Path | None
     return hasil
 
 
+def ambil_wajib(katalog: list[Entri], **kw) -> dict:
+    """Ambil semua repo wajib pemilik (aturan "diminta"); plugin didaftarkan lewat settings, berbayar di-skip."""
+    hasil = {"terpasang": [], "sudah_ada": [], "gagal": [], "butuh_pemilik": []}
+    for e in katalog:
+        if e.wajib and (e.pasang or {}).get("jenis") != "plugin":
+            h = pasang_satu(e, saat="diminta", **kw)
+            hasil[h["status"]].append(e.id if h["status"] != "butuh_pemilik" else f"{e.id} ({h['alasan']})")
+    return hasil
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--id")
     ap.add_argument("--agent")
+    ap.add_argument("--wajib", action="store_true")
     a = ap.parse_args()
     kat = muat(ROOT / "katalog/skill.yaml")
-    if a.agent:
+    if a.wajib:
+        print(json.dumps({k: v for k, v in ambil_wajib(kat).items() if v}, ensure_ascii=False))
+    elif a.agent:
         print(json.dumps({k: v for k, v in pasang_untuk_agent(kat, a.agent).items() if v}, ensure_ascii=False))
     elif a.id:
         e = next((x for x in kat if x.id == a.id), None)

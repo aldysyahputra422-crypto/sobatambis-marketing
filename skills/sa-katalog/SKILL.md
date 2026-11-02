@@ -11,7 +11,9 @@ Katalog: `katalog/skill.yaml`. Cari dengan:
 python -m scripts.katalog cari "<kebutuhan tugas>"
 ```
 
-Pintas: `python -m scripts.pasang_otomatis --agent <nama-agent>` memasang semua skill dasar milik satu agent sekaligus.
+Pintas: `python -m scripts.pasang_otomatis --agent <nama-agent>` memasang semua skill dasar milik satu agent sekaligus; `--wajib` mengambil 13 repo wajib pemilik.
+
+Kebijakan (`config/kebijakan.yaml`): `mode: eksplorasi` → lisensi tidak membatasi (proyek belum komersial); yang berbayar/ber-API-key selalu di-skip. Ganti ke `komersial` saat hasilnya mulai dipakai untuk pendapatan.
 
 Prosedur (wajib berurutan, tanpa bertanya ke pemilik kecuali langkah 4):
 1. Cocokkan kebutuhan: `python -m scripts.katalog cari "<kebutuhan>"` → maksimal 3 baris berlabel `[boleh]`, `[sudah: ...]`, atau `[pemilik: alasan]`. Jangan membaca file katalog langsung (hemat token).

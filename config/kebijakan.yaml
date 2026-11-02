@@ -1,0 +1,4 @@
+# Kebijakan pemasangan repo/skill (dibaca scripts/pasang_otomatis.py).
+# eksplorasi: belajar, belum komersial → batasan lisensi dimatikan; yang berbayar/ber-API-key tetap di-skip.
+# komersial: setelah Sobat Ambis memakai hasilnya untuk pendapatan → lisensi nonkomersial/tanpa lisensi ditolak lagi.
+mode: eksplorasi
