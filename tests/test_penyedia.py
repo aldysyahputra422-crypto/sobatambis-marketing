@@ -92,3 +92,16 @@ def test_elevenlabs_error_lain_tetap_error(monkeypatch, tmp_path):
     monkeypatch.setattr(penyedia.requests, "post", lambda *a, **k: _RespGagal(500, {"status": "server_error"}))
     with pytest.raises(requests.HTTPError):
         ElevenLabs("kunci", {"arta": "v1"}).sintesis({"id": "b1", "penutur": "arta", "teks": "halo"}, tmp_path / "b1.wav")
+
+
+def test_elevenlabs_kunci_tanpa_izin_user_read_kredit_tidak_diketahui(monkeypatch):
+    # Kunci API terbatas (hanya text_to_speech) tidak boleh membaca langganan: kredit dianggap tidak diketahui.
+    monkeypatch.setattr(penyedia.requests, "get", lambda *a, **k: _RespGagal(401, {"status": "missing_permissions"}))
+    assert ElevenLabs("kunci", {"arta": "v1"}).sisa_kredit() is None
+
+
+def test_elevenlabs_kunci_salah_tetap_error(monkeypatch):
+    import requests
+    monkeypatch.setattr(penyedia.requests, "get", lambda *a, **k: _RespGagal(401, {"status": "invalid_api_key"}))
+    with pytest.raises(requests.HTTPError):
+        ElevenLabs("kunci", {"arta": "v1"}).sisa_kredit()

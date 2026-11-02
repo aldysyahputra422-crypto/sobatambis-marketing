@@ -10,6 +10,7 @@ import { adeganAktif, type DataAdegan } from "./data/adegan";
 import { Caption } from "./teks/Caption";
 import { pecahCatatan, posisiCatatan } from "./teks/catatan";
 import { KartuPenutup } from "./KartuPenutup";
+import { ARTA_PENUH } from "./tata";
 
 export type PropsEpisode = { adeganFile: string; suaraFile: string; data?: DataAdegan };
 const DEPAN = new Set(["kertas_58"]);
@@ -34,7 +35,7 @@ function gambarTokoh(sc, frame: number, buka: number) {
       belakang.push(
         bust
           ? `<g transform="translate(${x} ${650 + napas})">${artaBust(t.ekspresi, o)}</g>`
-          : `<g transform="translate(250 ${690 + napas}) scale(.92)">${artaFull(t.ekspresi, t.pose, o)}</g>`,
+          : `<g transform="translate(${ARTA_PENUH.x} ${ARTA_PENUH.y + napas}) scale(${ARTA_PENUH.skala})">${artaFull(t.ekspresi, t.pose, o)}</g>`,
       );
     } else if (t.id === "ratna") {
       belakang.push(`<g transform="translate(330 ${760 + napas})">${ratnaBust(t.ekspresi, { kedip: kedipan(frame, 37), buka: bicara })}</g>`);

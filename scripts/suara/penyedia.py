@@ -50,6 +50,14 @@ def ke_wav(src: Path, dst: Path) -> Path:
     return dst
 
 
+def _status_detail(r) -> str | None:
+    try:
+        detail = r.json().get("detail", {})
+    except ValueError:
+        return None
+    return detail.get("status") if isinstance(detail, dict) else None
+
+
 class ElevenLabs:
     nama = "elevenlabs"
 
@@ -61,6 +69,8 @@ class ElevenLabs:
 
     def sisa_kredit(self) -> int | None:
         r = requests.get(f"{API}/user/subscription", headers=self._h(), timeout=30)
+        if r.status_code == 401 and _status_detail(r) == "missing_permissions":
+            return None  # kunci terbatas tanpa izin user_read: kuota dijaga lewat galat 401/402 saat sintesis
         r.raise_for_status()
         d = r.json()
         return int(d["character_limit"]) - int(d["character_count"])
@@ -77,11 +87,7 @@ class ElevenLabs:
             timeout=120,
         )
         if r.status_code in (401, 402, 429):
-            try:
-                detail = r.json().get("detail", {})
-            except ValueError:
-                detail = {}
-            if isinstance(detail, dict) and detail.get("status") in ("quota_exceeded", "insufficient_credits"):
+            if _status_detail(r) in ("quota_exceeded", "insufficient_credits"):
                 raise KreditKurang(len(self.teks_kirim(baris)), 0)
         r.raise_for_status()
         with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:

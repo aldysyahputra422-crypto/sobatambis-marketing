@@ -118,7 +118,9 @@
             "pose": "bust"
           }
         ],
-        "properti": [],
+        "properti": [
+          "sticky_3tempat"
+        ],
         "kamera": "zoom_masuk",
         "catatan_merah": null
       },

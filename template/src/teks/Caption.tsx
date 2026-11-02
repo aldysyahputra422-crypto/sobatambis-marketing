@@ -3,6 +3,7 @@ import { AbsoluteFill } from "remotion";
 import { measureText } from "@remotion/layout-utils";
 import { P } from "../sistem/gambar";
 import { pecahCaption } from "./pecah";
+import { CAPTION } from "../tata";
 import type { Adegan } from "../data/adegan";
 import type { Efek } from "../efek/emosi";
 
@@ -39,10 +40,10 @@ export const Caption: React.FC<{ adegan: Adegan; detik: number; efek: Efek; fram
     : { background: "#FFFCF5", boxShadow: "0 10px 24px rgba(90,59,28,.18)", borderRadius: 18 };
 
   return (
-    <AbsoluteFill style={{ justifyContent: "flex-end", alignItems: "center", paddingBottom: 120 }}>
-      <div style={{ ...gayaKartu, width: 592, padding: "18px 0", textAlign: "center" }}>
+    <AbsoluteFill style={{ justifyContent: "flex-end", alignItems: "center", paddingBottom: CAPTION.jarakBawah }}>
+      <div style={{ ...gayaKartu, width: 592, padding: `${CAPTION.padding}px 0`, textAlign: "center" }}>
         {baris.map((b, bi) => (
-          <div key={bi} style={{ lineHeight: 1.25 }}>
+          <div key={bi} style={{ lineHeight: CAPTION.tinggiBaris }}>
             {b.split(" ").map((w, wi) => {
               const i = indeks++;
               const aktif = i === sudah - 1;

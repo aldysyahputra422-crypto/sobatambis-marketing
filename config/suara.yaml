@@ -1,6 +1,8 @@
-# voice_id ElevenLabs per tokoh. Diisi saat pilot (Task 12) setelah memilih suara dari pustaka ElevenLabs.
+# voice_id ElevenLabs per tokoh. Dipilih saat pilot Ep.1 (2026-11-02) dari suara bawaan (default) ElevenLabs,
+# karena akun gratis tidak boleh memakai suara pustaka (library) lewat API (galat 402 paid_plan_required).
+# Audisi: satu baris naskah per kandidat, model eleven_v3, didengar ulang dengan faster-whisper (bahasa id).
 elevenlabs:
-  arta: ISI_VOICE_ID_ARTA
-  mbis: ISI_VOICE_ID_MBIS
-  ratna: ISI_VOICE_ID_RATNA
-  bima: ISI_VOICE_ID_BIMA
+  arta: FGY2WhTYpPnrIDTdsKH5   # Laura: muda, ceria, nada paling tinggi (f0 ~271 Hz), kecocokan 1,00
+  mbis: N2lVS1w4EtoT3dr4eOWO   # Callum: serak, kering, rendah (f0 ~124 Hz), kecocokan 1,00
+  ratna: EXAVITQu4vr4xnSDxMaL  # Sarah: dewasa, tenang (f0 ~222 Hz), kecocokan 1,00
+  bima: CwhRBWXzGAHq8TQ4Fs17   # Roger: sementara; Kak Bima belum muncul di Arc 1, pilih ulang di Rencana 2
