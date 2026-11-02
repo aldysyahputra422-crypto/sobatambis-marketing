@@ -39,3 +39,10 @@ def test_sampel_dan_laporan(tmp_path):
         assert nama in md
     assert len(list((tmp_path / "arta").glob("*.mp3"))) == 4
     assert "OKE. Aku belajar TUJUH jam!" in md
+
+
+def test_audisi_tidak_menambah_suara_ke_akun(tmp_path):
+    k = _Klien()
+    assert audisi.main(["arta", "ratna", "mbis", "bima"], klien=k, folder=tmp_path) == 0
+    assert k.ditambah == []
+    assert "`v0`" in (tmp_path / "audisi.md").read_text()

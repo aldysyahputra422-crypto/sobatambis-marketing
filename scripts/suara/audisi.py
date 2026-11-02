@@ -2,7 +2,7 @@
 
 python -m scripts.suara.audisi arta ratna mbis   → audisi/<tokoh>/<nama>.mp3 + audisi/audisi.md
 Kode keluar 3 bila kunci API kurang izin (voices_read / voices_write) atau paket belum berbayar.
-Pemilik memilih satu kandidat per tokoh; voice_id hasil 'tambah' lalu dicatat di config/suara.yaml.
+Pemilik memilih satu kandidat per tokoh; voice_id-nya lalu dicatat di config/suara.yaml (audisi tidak menambah suara ke akun).
 """
 import os
 import re
@@ -92,9 +92,11 @@ def main(argv: list[str], klien=None, folder: Path | None = None) -> int:
             kandidat = cari(klien, tokoh)
             (folder / tokoh).mkdir(parents=True, exist_ok=True)
             baris += [f"## {tokoh.capitalize()} ({KRITERIA[tokoh]['kata']})", "", "Teks sampel: " + " / ".join(TEKS[tokoh]), "",
-                      "| Kandidat | Aksen | Deskripsi | voice_id akun | File |", "|---|---|---|---|---|"]
+                      "| Kandidat | Aksen | Deskripsi | voice_id | File |", "|---|---|---|---|---|"]
             for s in kandidat:
-                vid = klien.tambah(s["public_owner_id"], s["voice_id"], f"SA {tokoh} {s['name']}")
+                # Sampel memakai voice_id pustaka langsung (boleh di paket berbayar); tidak menambah ke akun,
+                # supaya slot suara tidak habis. Hanya suara terpilih yang dicatat di config/suara.yaml.
+                vid = s["voice_id"]
                 f = folder / tokoh / f"{_aman(s['name'])}.mp3"
                 f.write_bytes(klien.tts(vid, " ".join(TEKS[tokoh])))
                 baris.append(f"| {s['name']} | {s.get('accent', '')} | {s.get('description', '')[:80]} | `{vid}` | `{f.relative_to(folder)}` |")
