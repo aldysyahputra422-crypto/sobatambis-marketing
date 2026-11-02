@@ -19,6 +19,14 @@ SUARA_EDGE_BAWAAN = {
 }
 
 
+# Arah emosi untuk edge-tts (tanpa tag): (rate %, volume %, pitch Hz) per emosi, ditambah per level penguatan.
+PROSODI_EMOSI = {
+    "semangat": (10, 10, 10), "marah": (8, 40, 15), "kaget": (10, 25, 20), "tertekan": (-8, -10, -5),
+    "lelah": (-18, -15, -10), "hancur": (-22, -25, -8), "misterius": (-10, -30, -5), "hangat": (-5, 0, 0), "datar": (0, 0, 0),
+}
+PENGUAT = (3, 10, 5)
+
+
 class KreditKurang(Exception):
     def __init__(self, dibutuhkan: int, sisa: int):
         super().__init__(f"kredit kurang: butuh {dibutuhkan}, sisa {sisa}")
@@ -95,6 +103,16 @@ class EdgeTTS:
     def teks_kirim(self, baris: dict) -> str:
         return baris["teks"]
 
+    def prosodi(self, baris: dict) -> dict:
+        dasar = self.suara[baris["penutur"]]
+        r, v, p = PROSODI_EMOSI.get(baris.get("emosi", "datar"), (0, 0, 0))
+        k = baris.get("_kuat", 0)
+        tanda = 1 if (r + v + p) >= 0 else -1
+        r, v, p = r + tanda * k * PENGUAT[0], v + tanda * k * PENGUAT[1], p + tanda * k * PENGUAT[2]
+        rate = int(dasar["rate"].rstrip("%")) + r
+        pitch = int(dasar["pitch"].rstrip("Hz")) + p
+        return {"rate": f"{rate:+d}%", "volume": f"{v:+d}%", "pitch": f"{pitch:+d}Hz"}
+
     def sintesis(self, baris: dict, keluar: Path) -> Path:
         import edge_tts
 
@@ -103,6 +121,6 @@ class EdgeTTS:
         mp3 = Path(tempfile.mkstemp(suffix=".mp3")[1])
         proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")
         asyncio.run(
-            edge_tts.Communicate(self.teks_kirim(baris), s["voice"], rate=s["rate"], pitch=s["pitch"], proxy=proxy).save(str(mp3))
+            edge_tts.Communicate(self.teks_kirim(baris), s["voice"], proxy=proxy, **self.prosodi(baris)).save(str(mp3))
         )
         return ke_wav(mp3, Path(keluar))

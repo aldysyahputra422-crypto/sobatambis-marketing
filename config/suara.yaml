@@ -1,0 +1,6 @@
+# voice_id ElevenLabs per tokoh. Diisi saat pilot (Task 12) setelah memilih suara dari pustaka ElevenLabs.
+elevenlabs:
+  arta: ISI_VOICE_ID_ARTA
+  mbis: ISI_VOICE_ID_MBIS
+  ratna: ISI_VOICE_ID_RATNA
+  bima: ISI_VOICE_ID_BIMA
