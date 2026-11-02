@@ -129,6 +129,11 @@ def main(argv: list[str]) -> int:
             print("ELEVENLABS_API_KEY belum ada di environment")
             return 3
         suara = yaml.safe_load((Path(__file__).resolve().parents[2] / "config/suara.yaml").read_text(encoding="utf-8"))["elevenlabs"]
+        dibutuhkan = {d["penutur"] for b in n["beat"] for d in b["dialog"]}
+        kosong = [t for t in dibutuhkan if not str(suara.get(t, "")) or str(suara.get(t)).startswith("ISI_")]
+        if kosong:
+            print(f"voice ElevenLabs belum dipilih untuk {', '.join(sorted(kosong))}: jalankan audisi (python -m scripts.suara.audisi) lalu isi config/suara.yaml")
+            return 3
         k = v2.jalankan(folder, v2.KlienElevenLabsV2(kunci), suara)
     else:
         print("Pilih sumber suara di naskah.json: \"sumber_suara\": \"manusia\" atau \"elevenlabs\" (Approval 1)")

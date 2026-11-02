@@ -214,3 +214,14 @@ def test_produksi_tanpa_pilihan_suara_kode_4(tmp_path):
     from scripts.suara import produksi
     _folder(tmp_path, None)
     assert produksi.main([str(tmp_path)]) == 4
+
+
+def test_produksi_elevenlabs_tanpa_voice_terpilih_kode_3(tmp_path, monkeypatch, capsys):
+    from scripts.suara import produksi
+    _folder(tmp_path, "elevenlabs")
+    monkeypatch.setenv("ELEVENLABS_API_KEY", "kunci-palsu")
+    def jangan(*a, **k):
+        raise AssertionError("tidak boleh memanggil API")
+    monkeypatch.setattr(v2.requests, "post", jangan)
+    assert produksi.main([str(tmp_path)]) == 3
+    assert "config/suara.yaml" in capsys.readouterr().out
