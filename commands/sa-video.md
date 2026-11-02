@@ -25,6 +25,10 @@ Setelah setiap tahap lulus, tandai dengan:
 python -c "from scripts import status; status.tandai('$ARGUMENTS', '<tahap>', 'lulus')"
 ```
 
+Untuk `mix` sertakan `lufs=<nilai>` dan untuk `qa_gerak` sertakan `skor_median=<nilai>` supaya angkanya tercatat di Notion.
+
+Setiap tahap berubah dan setiap kali produksi berhenti, agent **penjadwal-notion** mencatat ke database Notion "Produksi Sobat Ambis" memakai `python -m scripts.notion_catatan $ARGUMENTS` (skill `sa-jadwal`). Tanpa konektor Notion, catatan masuk ke `$ARGUMENTS/catatan-notion.md`.
+
 Tahap yang gagal 2 kali: tandai `gagal` beserta alasannya, laporkan ke pemilik, dan berhenti. Laporan ke pemilik memuat angka QA (skor gerak, LUFS, skor suara), bukan klaim "bagus".
 
 Untuk mengulang tahap tertentu: `python -m scripts.tahap ulang $ARGUMENTS <tahap>`.

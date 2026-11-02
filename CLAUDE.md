@@ -12,6 +12,7 @@ Plugin Claude Code yang memproduksi serial animasi Reels "Arta & Mbis" untuk Sob
 - Jangan membuat contoh/render uji yang memakai layanan berbayar tanpa bertanya.
 - Laporan ke pemilik memuat angka QA (skor gerak, LUFS, skor suara), bukan klaim "bagus". Pemilik yang menonton dan menilai.
 - Tiga titik persetujuan pemilik: naskah + sumber suara, trek dialog, video final.
+- Catatan dan laporan progres untuk pemilik masuk ke **Notion** (database "Produksi Sobat Ambis", skill `sa-jadwal`, agent `penjadwal-notion`). Chat hanya untuk ringkasan singkat + tautan Notion.
 
 ## Kerja
 - Python: `.venv/bin/python -m scripts.<modul>` dari root repo. Test: `.venv/bin/python -m pytest -q` (tambah `-m lambat` untuk test render) dan `npm test --prefix template`.

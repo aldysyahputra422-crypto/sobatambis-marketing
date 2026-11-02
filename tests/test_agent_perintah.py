@@ -9,7 +9,7 @@ MODEL = {
     "direktur-marketing": "opus", "penulis-naskah": "sonnet", "pembasmi-slop": "sonnet", "pemeriksa-fakta": "sonnet",
     "storyboarder": "sonnet", "animator": "opus", "sutradara-suara": "haiku", "qa-suara": "haiku",
     "inspektur-frame": "sonnet", "desainer-cover": "sonnet", "penulis-caption": "sonnet",
-    "penjaga-gerbang-qa": "sonnet", "pencari-skill": "haiku", "akuntan-token": "haiku",
+    "penjaga-gerbang-qa": "sonnet", "pencari-skill": "haiku", "akuntan-token": "haiku", "penjadwal-notion": "haiku",
 }
 
 
@@ -73,3 +73,14 @@ def test_sa_video_menyebut_approval_naskah_kode_4():
 
 def test_cek_plugin_lulus():
     assert periksa(ROOT) == []
+
+
+def test_notion_tercatat_di_alur():
+    sa = (ROOT / "commands/sa-video.md").read_text(encoding="utf-8")
+    assert "penjadwal-notion" in sa and "scripts.notion_catatan" in sa
+    assert "penjadwal-notion" in (ROOT / "agents/direktur-marketing.md").read_text(encoding="utf-8")
+    skill = (ROOT / "skills/sa-jadwal/SKILL.md").read_text(encoding="utf-8")
+    for kolom in ("Episode", "Tahap", "Status", "Butuh dari pemilik", "Skor gerak (median)", "LUFS", "Token output"):
+        assert kolom in skill
+    agen = (ROOT / "agents/penjadwal-notion.md").read_text(encoding="utf-8")
+    assert "catatan-notion.md" in agen and "config/notion.yaml" in agen
