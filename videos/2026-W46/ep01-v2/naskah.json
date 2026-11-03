@@ -1,0 +1,374 @@
+{
+  "episode": "ep01",
+  "judul": "Rencana Sempurna",
+  "disetujui": true,
+  "sumber_suara": null,
+  "judul_berikut": "Ep.2: Kenapa rencana yang sempurna justru bikin nilai turun?",
+  "beat": [
+    {
+      "id": "t01",
+      "jenis": "hook",
+      "latar": "kamar",
+      "emosi": "semangat",
+      "intensitas": 8,
+      "dialog": [
+        {
+          "penutur": "arta",
+          "teks": "HARI PERTAMA RENCANA SEMPURNA!",
+          "arah": "teriak semangat",
+          "puncak": "SEMPURNA"
+        }
+      ],
+      "aksi": [
+        {
+          "tokoh": "arta",
+          "aksi": "lompat",
+          "pada": "awal",
+          "ekspresi": "ambis"
+        }
+      ],
+      "properti": [
+        "papan_100_hari"
+      ],
+      "musik": "ceria_konyol",
+      "punchline": "HARI PERTAMA RENCANA SEMPURNA!"
+    },
+    {
+      "id": "t02",
+      "jenis": "lucu",
+      "latar": "kamar",
+      "emosi": "kaget",
+      "intensitas": 6,
+      "durasi": 2.0,
+      "dialog": [],
+      "aksi": [
+        {
+          "tokoh": "arta",
+          "aksi": "tabrak",
+          "ekspresi": "panik"
+        },
+        {
+          "tokoh": "mbis",
+          "aksi": "tutup_mata",
+          "pada": "akhir",
+          "ekspresi": "tutup"
+        }
+      ],
+      "properti": [
+        "papan_100_hari"
+      ],
+      "musik": "ceria_konyol",
+      "punchline": "(lari semangat, menabrak pintu)"
+    },
+    {
+      "id": "t03",
+      "jenis": "lucu",
+      "latar": "dinding_sticky",
+      "emosi": "semangat",
+      "intensitas": 7,
+      "dialog": [
+        {
+          "penutur": "arta",
+          "teks": "Bangun jam empat. Belajar lima jam. Nol main HP!",
+          "arah": "semangat cepat",
+          "puncak": "Nol"
+        }
+      ],
+      "aksi": [
+        {
+          "tokoh": "arta",
+          "aksi": "tunjuk",
+          "pada": "awal",
+          "ekspresi": "ambis"
+        }
+      ],
+      "properti": [
+        "sticky_0400",
+        "sticky_5jam",
+        "sticky_0hp",
+        "sticky_tryout"
+      ],
+      "musik": "ceria_konyol",
+      "punchline": "Nol main HP!"
+    },
+    {
+      "id": "t04",
+      "jenis": "lucu",
+      "latar": "ruang_tamu",
+      "emosi": "semangat",
+      "intensitas": 6,
+      "dialog": [
+        {
+          "penutur": "arta",
+          "teks": "Ma, HP-ku kutitipkan. Seratus hari.",
+          "arah": "dramatis seperti melepas anak merantau"
+        },
+        {
+          "penutur": "ratna",
+          "teks": "...Ini cuma HP, Ta.",
+          "arah": "datar"
+        }
+      ],
+      "aksi": [
+        {
+          "tokoh": "arta",
+          "aksi": "serahkan",
+          "benda": "hp",
+          "pada_kata": "kutitipkan",
+          "ekspresi": "senyum"
+        },
+        {
+          "tokoh": "ratna",
+          "aksi": "menghela",
+          "pada": "akhir",
+          "ekspresi": "datar"
+        }
+      ],
+      "musik": "ceria_konyol",
+      "punchline": "...Ini cuma HP, Ta."
+    },
+    {
+      "id": "t05",
+      "jenis": "lucu",
+      "latar": "ruang_tamu",
+      "emosi": "tertekan",
+      "intensitas": 5,
+      "dialog": [
+        {
+          "penutur": "ratna",
+          "teks": "Anak Bu Sinta... les tiga tempat.",
+          "arah": "ragu, lembut, pelan seperti tidak bermaksud membandingkan"
+        },
+        {
+          "penutur": "arta",
+          "teks": "Tiga tempat?",
+          "arah": "kesal ditahan"
+        }
+      ],
+      "aksi": [
+        {
+          "tokoh": "ratna",
+          "aksi": "lirik_hp",
+          "pada": "awal",
+          "ekspresi": "lirik"
+        },
+        {
+          "tokoh": "arta",
+          "aksi": "menoleh",
+          "pada_kata": "Tiga",
+          "ekspresi": "marah"
+        },
+        {
+          "tokoh": "mbis",
+          "aksi": "tutup_mata",
+          "pada": "akhir",
+          "ekspresi": "tutup"
+        }
+      ],
+      "properti": [
+        "wa_grup"
+      ],
+      "sfx": [
+        {
+          "nama": "notif_wa",
+          "pada": "awal"
+        }
+      ],
+      "musik": "tegang_naik",
+      "punchline": "Tiga tempat? (Mbis menutup mata, tahu ledakan akan datang)"
+    },
+    {
+      "id": "t06",
+      "jenis": "naik",
+      "latar": "dinding_sticky",
+      "emosi": "marah",
+      "intensitas": 9,
+      "dialog": [
+        {
+          "penutur": "arta",
+          "teks": "OKE. Aku belajar TUJUH jam!",
+          "arah": "teriak kesal",
+          "puncak": "TUJUH"
+        }
+      ],
+      "aksi": [
+        {
+          "tokoh": "arta",
+          "aksi": "hentak",
+          "pada_kata": "OKE",
+          "ekspresi": "marah"
+        },
+        {
+          "tokoh": "arta",
+          "aksi": "banting",
+          "benda": "sticky_7jam_b",
+          "pada_kata": "TUJUH",
+          "ekspresi": "marah"
+        }
+      ],
+      "properti": [
+        "sticky_0400",
+        "sticky_5jam",
+        "sticky_0hp",
+        "sticky_tryout"
+      ],
+      "musik": "tegang_naik",
+      "punchline": "TUJUH jam!"
+    },
+    {
+      "id": "t07",
+      "jenis": "lucu",
+      "latar": "kamar",
+      "emosi": "lelah",
+      "intensitas": 3,
+      "durasi": 2.8,
+      "dialog": [],
+      "aksi": [
+        {
+          "tokoh": "arta",
+          "aksi": "tidur_berdiri",
+          "ekspresi": "tidur"
+        },
+        {
+          "tokoh": "mbis",
+          "aksi": "geleng",
+          "pada": "akhir",
+          "ekspresi": "datar"
+        }
+      ],
+      "properti": [
+        "papan_100_hari"
+      ],
+      "musik": "ceria_konyol",
+      "punchline": "(hari ketiga: tidur sambil berdiri)"
+    },
+    {
+      "id": "t08",
+      "jenis": "lucu",
+      "latar": "ruang_tamu",
+      "emosi": "kaget",
+      "intensitas": 6,
+      "dialog": [
+        {
+          "penutur": "ratna",
+          "teks": "Ta, kok tidur sambil berdiri?",
+          "arah": "heran"
+        },
+        {
+          "penutur": "arta",
+          "teks": "Aku nggak tidur, Ma. Aku MERENUNG.",
+          "arah": "kaget, membela diri",
+          "puncak": "MERENUNG"
+        }
+      ],
+      "aksi": [
+        {
+          "tokoh": "arta",
+          "aksi": "kaget",
+          "pada": "awal",
+          "ekspresi": "kaget"
+        }
+      ],
+      "musik": "ceria_konyol",
+      "punchline": "Aku MERENUNG."
+    },
+    {
+      "id": "t09",
+      "jenis": "lucu",
+      "latar": "meja_malam",
+      "emosi": "lelah",
+      "intensitas": 4,
+      "dialog": [
+        {
+          "penutur": "arta",
+          "teks": "Hari ketujuh. Rencanaku masih sempurna.",
+          "arah": "capek"
+        },
+        {
+          "penutur": "arta",
+          "teks": "Mataku yang nggak.",
+          "arah": "capek, datar"
+        }
+      ],
+      "aksi": [
+        {
+          "tokoh": "arta",
+          "aksi": "lemas",
+          "pada": "awal",
+          "ekspresi": "datar"
+        }
+      ],
+      "properti": [
+        "jam_0047"
+      ],
+      "musik": "ceria_konyol",
+      "punchline": "Mataku yang nggak."
+    },
+    {
+      "id": "t10",
+      "jenis": "mengena",
+      "latar": "meja_malam",
+      "emosi": "hancur",
+      "intensitas": 9,
+      "durasi": 4.5,
+      "dialog": [
+        {
+          "penutur": "arta",
+          "teks": "Lima puluh... delapan.",
+          "arah": "bisik, suara pecah"
+        }
+      ],
+      "aksi": [
+        {
+          "tokoh": "arta",
+          "aksi": "lemas",
+          "pada": "awal",
+          "ekspresi": "hancur"
+        }
+      ],
+      "properti": [
+        "kertas_58"
+      ],
+      "punchline": "58"
+    },
+    {
+      "id": "t11",
+      "jenis": "penutup",
+      "latar": "meja_malam",
+      "emosi": "misterius",
+      "intensitas": 6,
+      "dialog": [
+        {
+          "penutur": "mbis",
+          "teks": "Rencanamu nggak salah, Ta. Cuma kebanyakan.",
+          "arah": "bisik kering"
+        },
+        {
+          "penutur": "arta",
+          "teks": "KUCINGNYA NGOMONG?!",
+          "arah": "kaget, teriak",
+          "puncak": "NGOMONG"
+        }
+      ],
+      "aksi": [
+        {
+          "tokoh": "mbis",
+          "aksi": "muncul",
+          "pada": "awal",
+          "ekspresi": "datar"
+        },
+        {
+          "tokoh": "arta",
+          "aksi": "kaget",
+          "pada_kata": "KUCINGNYA",
+          "ekspresi": "kaget"
+        }
+      ],
+      "properti": [
+        "kertas_58"
+      ],
+      "musik": "tema_mbis",
+      "punchline": "KUCINGNYA NGOMONG?!"
+    }
+  ]
+}

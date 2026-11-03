@@ -1,0 +1,4 @@
+# Ambang QA. Kalibrasi: lihat docs/superpowers/plans/2026-11-02-fase1-adegan-contoh.md Task 5 Step 5.
+gerak:
+  # skor = rata-rata |selisih piksel| grayscale 180x320 antar sampel 10 fps, per jendela 0,5 detik
+  ambang: 1.5   # kalibrasi Task 8: pilot lama median 0,81 (gagal, 7 rentang diam); adegan contoh Fase 1 median 4,1, min 0,54 (lulus)

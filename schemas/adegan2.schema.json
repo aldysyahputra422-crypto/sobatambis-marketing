@@ -1,0 +1,362 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "adegan.json versi 2 (timeline adegan)",
+  "type": "object",
+  "required": [
+    "durasi",
+    "fps",
+    "jalur"
+  ],
+  "properties": {
+    "durasi": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "fps": {
+      "const": 30
+    },
+    "jalur": {
+      "type": "object",
+      "required": [
+        "latar",
+        "kamera",
+        "tokoh",
+        "properti",
+        "teks",
+        "dialog",
+        "sfx",
+        "musik",
+        "transisi"
+      ],
+      "properties": {
+        "latar": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "mulai",
+              "latar"
+            ],
+            "properties": {
+              "mulai": {
+                "type": "number"
+              },
+              "latar": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "kamera": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "mulai",
+              "selesai",
+              "jenis"
+            ],
+            "properties": {
+              "mulai": {
+                "type": "number"
+              },
+              "selesai": {
+                "type": "number"
+              },
+              "jenis": {
+                "enum": [
+                  "lebar",
+                  "dekat",
+                  "sisipan"
+                ]
+              },
+              "gerak": {
+                "enum": [
+                  "diam",
+                  "dorong",
+                  "hentak",
+                  "sapu",
+                  "getar"
+                ]
+              },
+              "target": {
+                "type": "object",
+                "required": [
+                  "x",
+                  "y"
+                ]
+              }
+            }
+          }
+        },
+        "tokoh": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "arta": {
+              "$ref": "#/$defs/rig"
+            },
+            "ratna": {
+              "$ref": "#/$defs/rig"
+            },
+            "mbis": {
+              "$ref": "#/$defs/rig"
+            }
+          }
+        },
+        "properti": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "masuk",
+              "cara",
+              "pusat"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "masuk": {
+                "type": "number"
+              },
+              "cara": {
+                "enum": [
+                  "pop",
+                  "jatuh",
+                  "banting",
+                  "terlempar"
+                ]
+              },
+              "keluar": {
+                "type": "number"
+              },
+              "caraKeluar": {
+                "enum": [
+                  "jatuh",
+                  "terlempar"
+                ]
+              },
+              "pusat": {
+                "type": "object",
+                "required": [
+                  "x",
+                  "y"
+                ]
+              },
+              "pegang": {
+                "type": "object",
+                "required": [
+                  "tokoh",
+                  "mulai"
+                ]
+              }
+            }
+          }
+        },
+        "teks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "kata",
+              "mulai",
+              "selesai",
+              "gaya"
+            ],
+            "properties": {
+              "kata": {
+                "type": "string"
+              },
+              "mulai": {
+                "type": "number"
+              },
+              "selesai": {
+                "type": "number"
+              },
+              "gaya": {
+                "enum": [
+                  "biasa",
+                  "cap"
+                ]
+              },
+              "layar": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "dialog": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "penutur",
+              "mulai",
+              "selesai"
+            ]
+          }
+        },
+        "sfx": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "nama",
+              "pada"
+            ],
+            "properties": {
+              "nama": {
+                "type": "string"
+              },
+              "pada": {
+                "type": "number"
+              },
+              "volume_db": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "musik": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "trek",
+              "mulai",
+              "selesai"
+            ]
+          }
+        },
+        "transisi": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "pada",
+              "jenis"
+            ],
+            "properties": {
+              "pada": {
+                "type": "number"
+              },
+              "jenis": {
+                "enum": [
+                  "halaman",
+                  "coret",
+                  "potong"
+                ]
+              }
+            }
+          }
+        },
+        "rona": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "mulai",
+              "selesai",
+              "warna"
+            ]
+          }
+        },
+        "sunyi": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "mulai",
+              "selesai"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "rig": {
+      "type": "object",
+      "required": [
+        "awal",
+        "aksi"
+      ],
+      "properties": {
+        "awal": {
+          "type": "object",
+          "required": [
+            "x",
+            "y",
+            "skala",
+            "ekspresi"
+          ]
+        },
+        "aksi": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "mulai",
+              "aksi"
+            ],
+            "properties": {
+              "mulai": {
+                "type": "number"
+              },
+              "aksi": {
+                "type": "string"
+              },
+              "ekspresi": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "tampil": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "mulai",
+              "selesai"
+            ]
+          }
+        },
+        "lapis": {
+          "oneOf": [
+            {
+              "enum": [
+                "depan",
+                "belakang"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "mulai",
+                  "lapis"
+                ],
+                "properties": {
+                  "mulai": {
+                    "type": "number"
+                  },
+                  "lapis": {
+                    "enum": [
+                      "depan",
+                      "belakang"
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

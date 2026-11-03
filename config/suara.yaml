@@ -1,0 +1,10 @@
+# voice_id ElevenLabs per tokoh. BELUM DIPILIH: dikerjakan di akun utama sesudah berlangganan ElevenLabs
+# (lihat docs/lanjutan-elevenlabs.md). Voice bawaan berlogat Inggris dari pilot sengaja dicabut.
+elevenlabs:
+  arta: ISI_VOICE_ID_ARTA
+  mbis: ISI_VOICE_ID_MBIS
+  ratna: ISI_VOICE_ID_RATNA
+  bima: ISI_VOICE_ID_BIMA
+# Jalur rekaman manusia
+manusia:
+  mbis_efek: false  # true: suara Mbis diturunkan sedikit + gema tipis

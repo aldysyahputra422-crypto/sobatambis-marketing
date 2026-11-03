@@ -1,0 +1,510 @@
+{
+  "durasi": 11.4,
+  "fps": 30,
+  "jalur": {
+    "latar": [
+      {
+        "mulai": 0,
+        "latar": "ruang_tamu"
+      },
+      {
+        "mulai": 5.85,
+        "latar": "dinding_sticky"
+      }
+    ],
+    "kamera": [
+      {
+        "mulai": 0,
+        "selesai": 4.4,
+        "jenis": "lebar",
+        "gerak": "dorong"
+      },
+      {
+        "mulai": 4.4,
+        "selesai": 5.85,
+        "jenis": "dekat",
+        "target": {
+          "x": 180,
+          "y": 610
+        },
+        "gerak": "dorong"
+      },
+      {
+        "mulai": 5.85,
+        "selesai": 6.7,
+        "jenis": "lebar",
+        "gerak": "sapu"
+      },
+      {
+        "selesai": 7.6,
+        "jenis": "lebar",
+        "gerak": "hentak",
+        "mulai": 6.7
+      },
+      {
+        "mulai": 7.6,
+        "selesai": 8.56,
+        "jenis": "lebar",
+        "gerak": "dorong"
+      },
+      {
+        "selesai": 10.0,
+        "jenis": "lebar",
+        "gerak": "hentak",
+        "mulai": 8.56
+      },
+      {
+        "mulai": 10.0,
+        "selesai": 11.4,
+        "jenis": "lebar",
+        "gerak": "getar"
+      }
+    ],
+    "tokoh": {
+      "arta": {
+        "awal": {
+          "x": -140,
+          "y": 1020,
+          "skala": 0.85,
+          "ekspresi": "senyum"
+        },
+        "aksi": [
+          {
+            "mulai": 0.3,
+            "aksi": "jalan",
+            "param": {
+              "dx": 320
+            },
+            "ekspresi": "senyum"
+          },
+          {
+            "mulai": 1.9,
+            "aksi": "diam_hidup",
+            "ekspresi": "datar"
+          },
+          {
+            "mulai": 3.25,
+            "aksi": "diam_hidup",
+            "ekspresi": "kaget"
+          },
+          {
+            "mulai": 4.4,
+            "aksi": "diam_hidup",
+            "ekspresi": "marah"
+          },
+          {
+            "mulai": 5.85,
+            "aksi": "diam_hidup",
+            "ekspresi": "marah",
+            "param": {
+              "pindah": {
+                "x": 290,
+                "y": 1020
+              }
+            }
+          },
+          {
+            "aksi": "hentak",
+            "ekspresi": "marah",
+            "mulai": 6.36
+          },
+          {
+            "mulai": 7.2,
+            "aksi": "diam_hidup",
+            "ekspresi": "marah"
+          },
+          {
+            "aksi": "banting",
+            "ekspresi": "marah",
+            "mulai": 8.06
+          },
+          {
+            "aksi": "lompat",
+            "ekspresi": "marah",
+            "mulai": 9.3
+          },
+          {
+            "mulai": 10.5,
+            "aksi": "diam_hidup",
+            "ekspresi": "ambis"
+          }
+        ]
+      },
+      "ratna": {
+        "awal": {
+          "x": 520,
+          "y": 955,
+          "skala": 0.95,
+          "ekspresi": "lirik"
+        },
+        "lapis": "belakang",
+        "tampil": [
+          {
+            "mulai": 0,
+            "selesai": 4.4
+          }
+        ],
+        "aksi": [
+          {
+            "mulai": 0,
+            "aksi": "lirik_hp",
+            "ekspresi": "lirik"
+          },
+          {
+            "mulai": 3.3,
+            "aksi": "menghela",
+            "ekspresi": "lirik"
+          }
+        ]
+      },
+      "mbis": {
+        "awal": {
+          "x": 630,
+          "y": 1000,
+          "skala": 0.72,
+          "ekspresi": "intip"
+        },
+        "lapis": "belakang",
+        "tampil": [
+          {
+            "mulai": 2.2,
+            "selesai": 4.4
+          },
+          {
+            "mulai": 10.3,
+            "selesai": 11.4
+          }
+        ],
+        "aksi": [
+          {
+            "mulai": 2.2,
+            "aksi": "ngintip",
+            "ekspresi": "intip"
+          },
+          {
+            "mulai": 3.1,
+            "aksi": "geleng",
+            "ekspresi": "datar"
+          },
+          {
+            "mulai": 10.3,
+            "aksi": "muncul",
+            "ekspresi": "datar",
+            "param": {
+              "pindah": {
+                "x": 630,
+                "y": 1010
+              }
+            }
+          },
+          {
+            "mulai": 10.9,
+            "aksi": "geleng",
+            "ekspresi": "datar"
+          }
+        ]
+      }
+    },
+    "properti": [
+      {
+        "id": "wa_grup",
+        "masuk": 0.2,
+        "cara": "pop",
+        "pusat": {
+          "x": 405,
+          "y": 285
+        },
+        "keluar": 4.1,
+        "caraKeluar": "terlempar"
+      },
+      {
+        "id": "sticky_0400",
+        "masuk": 5.95,
+        "cara": "pop",
+        "pusat": {
+          "x": 225,
+          "y": 255
+        },
+        "keluar": 8.66,
+        "caraKeluar": "jatuh"
+      },
+      {
+        "id": "sticky_5jam",
+        "masuk": 6.05,
+        "cara": "pop",
+        "pusat": {
+          "x": 455,
+          "y": 235
+        },
+        "keluar": 8.72,
+        "caraKeluar": "jatuh"
+      },
+      {
+        "id": "sticky_0hp",
+        "masuk": 6.15,
+        "cara": "pop",
+        "pusat": {
+          "x": 250,
+          "y": 460
+        },
+        "keluar": 8.78,
+        "caraKeluar": "jatuh"
+      },
+      {
+        "id": "sticky_tryout",
+        "masuk": 6.25,
+        "cara": "pop",
+        "pusat": {
+          "x": 480,
+          "y": 455
+        },
+        "keluar": 8.84,
+        "caraKeluar": "jatuh"
+      },
+      {
+        "id": "sticky_7jam_b",
+        "cara": "banting",
+        "pusat": {
+          "x": 500,
+          "y": 560
+        },
+        "pegang": {
+          "tokoh": "arta",
+          "mulai": 7.2
+        },
+        "masuk": 8.56
+      },
+      {
+        "id": "hp",
+        "masuk": 99,
+        "cara": "pop",
+        "pusat": {
+          "x": 360,
+          "y": 640
+        },
+        "pegang": {
+          "tokoh": "ratna",
+          "mulai": 0
+        }
+      }
+    ],
+    "teks": [
+      {
+        "kata": "Ta...",
+        "mulai": 0.6,
+        "selesai": 1.1,
+        "gaya": "biasa",
+        "layar": 0
+      },
+      {
+        "kata": "anaknya",
+        "mulai": 1.1,
+        "selesai": 1.78,
+        "gaya": "biasa",
+        "layar": 0
+      },
+      {
+        "kata": "Bu",
+        "mulai": 1.78,
+        "selesai": 2.0,
+        "gaya": "biasa",
+        "layar": 0
+      },
+      {
+        "kata": "Sinta",
+        "mulai": 2.0,
+        "selesai": 2.24,
+        "gaya": "biasa",
+        "layar": 0
+      },
+      {
+        "kata": "les",
+        "mulai": 2.72,
+        "selesai": 3.02,
+        "gaya": "biasa",
+        "layar": 1
+      },
+      {
+        "kata": "di",
+        "mulai": 3.02,
+        "selesai": 3.24,
+        "gaya": "biasa",
+        "layar": 1
+      },
+      {
+        "kata": "tiga",
+        "mulai": 3.24,
+        "selesai": 3.48,
+        "gaya": "biasa",
+        "layar": 1
+      },
+      {
+        "kata": "tempat,",
+        "mulai": 3.48,
+        "selesai": 3.94,
+        "gaya": "biasa",
+        "layar": 1
+      },
+      {
+        "kata": "lho.",
+        "mulai": 3.94,
+        "selesai": 4.2,
+        "gaya": "biasa",
+        "layar": 1
+      },
+      {
+        "kata": "Tiga",
+        "gaya": "biasa",
+        "layar": 2,
+        "mulai": 4.45,
+        "selesai": 4.99
+      },
+      {
+        "kata": "tempat?",
+        "gaya": "biasa",
+        "layar": 2,
+        "mulai": 4.99,
+        "selesai": 5.67
+      },
+      {
+        "kata": "OKE.",
+        "gaya": "cap",
+        "layar": 3,
+        "mulai": 6.7,
+        "selesai": 7.24
+      },
+      {
+        "kata": "Aku",
+        "gaya": "biasa",
+        "layar": 4,
+        "mulai": 7.74,
+        "selesai": 8.04
+      },
+      {
+        "kata": "belajar",
+        "gaya": "biasa",
+        "layar": 4,
+        "mulai": 8.04,
+        "selesai": 8.56
+      },
+      {
+        "kata": "TUJUH",
+        "gaya": "cap",
+        "layar": 4,
+        "mulai": 8.56,
+        "selesai": 9.14
+      },
+      {
+        "kata": "jam!",
+        "gaya": "biasa",
+        "layar": 4,
+        "mulai": 9.14,
+        "selesai": 9.42
+      }
+    ],
+    "dialog": [
+      {
+        "penutur": "ratna",
+        "mulai": 0.6,
+        "selesai": 4.12
+      },
+      {
+        "penutur": "arta",
+        "mulai": 4.45,
+        "selesai": 6.13
+      },
+      {
+        "penutur": "arta",
+        "mulai": 6.7,
+        "selesai": 9.98
+      }
+    ],
+    "sfx": [
+      {
+        "nama": "notif_wa",
+        "pada": 0.2
+      },
+      {
+        "nama": "langkah",
+        "pada": 0.45,
+        "volume_db": -6
+      },
+      {
+        "nama": "langkah",
+        "pada": 1.05,
+        "volume_db": -6
+      },
+      {
+        "nama": "langkah",
+        "pada": 1.6,
+        "volume_db": -6
+      },
+      {
+        "nama": "bel_mbis",
+        "pada": 2.2,
+        "volume_db": -8
+      },
+      {
+        "nama": "desis_marah",
+        "pada": 4.42,
+        "volume_db": -4
+      },
+      {
+        "nama": "whoosh",
+        "pada": 5.7
+      },
+      {
+        "nama": "pop",
+        "pada": 5.95,
+        "volume_db": -8
+      },
+      {
+        "nama": "pop",
+        "pada": 6.15,
+        "volume_db": -8
+      },
+      {
+        "nama": "hentak",
+        "pada": 6.7
+      },
+      {
+        "nama": "brak",
+        "pada": 8.56
+      },
+      {
+        "nama": "getar_kertas",
+        "volume_db": -4,
+        "pada": 8.68
+      },
+      {
+        "nama": "gedebuk",
+        "pada": 10.08
+      }
+    ],
+    "musik": [
+      {
+        "trek": "ceria_konyol",
+        "mulai": 0,
+        "selesai": 4.5
+      },
+      {
+        "trek": "tegang_naik",
+        "mulai": 4.4,
+        "selesai": 10.4
+      }
+    ],
+    "transisi": [
+      {
+        "pada": 5.85,
+        "jenis": "coret"
+      }
+    ],
+    "rona": [
+      {
+        "mulai": 8.5,
+        "selesai": 10.3,
+        "warna": "merah"
+      }
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+# Tingkat sumber untuk agent periset-tren (dibaca scripts/riset.py).
+# Pola diawali titik = akhiran domain (".go.id" cocok dengan kemdikbud.go.id); tanpa titik = domain itu dan subdomainnya.
+# A: resmi / ilmiah. Boleh dipakai untuk klaim fakta.
+# B: media kredibel dengan redaksi. Boleh untuk fakta, sebaiknya dikonfirmasi satu sumber A.
+# C: tren saja (apa yang sedang ramai). TIDAK boleh menjadi dasar klaim fakta.
+A:
+  - .go.id
+  - .ac.id
+  - snpmb.id
+  - pubmed.ncbi.nlm.nih.gov
+  - ncbi.nlm.nih.gov
+  - doi.org
+  - consensus.app
+  - elicit.com
+  - semanticscholar.org
+  - who.int
+  - unicef.org
+  - oecd.org
+  - unesco.org
+  - apa.org
+  - nature.com
+  - sciencedirect.com
+  - springer.com
+  - frontiersin.org
+  - wiley.com
+B:
+  - kompas.com
+  - kompas.id
+  - tempo.co
+  - antaranews.com
+  - detik.com
+  - cnnindonesia.com
+  - tirto.id
+  - theconversation.com
+  - republika.co.id
+  - jawapos.com
+  - suarasurabaya.net
+  - bbc.com
+  - kumparan.com
+  - liputan6.com
+C:
+  - youtube.com
+  - youtu.be
+  - tiktok.com
+  - instagram.com
+  - x.com
+  - twitter.com
+  - threads.net
+  - trends.google.com
+  - reddit.com
+  - facebook.com
+# Situs yang hanya bisa dibaca dengan login/cookie: agent-reach TIDAK dipakai ke sini (risiko akun diblokir).
+# Tren dari situs ini diambil lewat web search biasa (judul + tanggal), bukan dibaca isinya.
+wajib_login:
+  - instagram.com
+  - facebook.com
+  - x.com
+  - twitter.com
+  - threads.net
+  - tiktok.com
+  - reddit.com
+  - xiaohongshu.com
+# Sumber tren lebih tua dari ini dianggap basi.
+tren_maks_hari: 30
+pilar: [relate_siswa, relate_ortu, edukasi_belajar]

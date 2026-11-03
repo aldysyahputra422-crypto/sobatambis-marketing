@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "naskah.json Sobat Ambis",
+  "type": "object",
+  "required": ["episode", "judul", "baris"],
+  "properties": {
+    "episode": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "judul": {"type": "string", "minLength": 1},
+    "disetujui": {"type": "boolean", "default": false},
+    "judul_berikut": {"type": "string"},
+    "baris": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "penutur", "teks", "emosi", "intensitas", "visual"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9]+$"},
+          "penutur": {"enum": ["arta", "mbis", "ratna", "bima"]},
+          "teks": {"type": "string", "minLength": 1},
+          "emosi": {"enum": ["semangat", "marah", "tertekan", "lelah", "hancur", "kaget", "misterius", "hangat", "datar"]},
+          "intensitas": {"type": "integer", "minimum": 1, "maximum": 10},
+          "tag": {"type": "string"},
+          "jeda_sesudah": {"type": "number", "minimum": 0, "maximum": 5},
+          "caption": {"type": "string"},
+          "visual": {
+            "type": "object",
+            "required": ["latar", "tokoh", "kamera"],
+            "properties": {
+              "latar": {"type": "string"},
+              "tokoh": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["id", "ekspresi", "pose"],
+                  "properties": {"id": {"type": "string"}, "ekspresi": {"type": "string"}, "pose": {"type": "string"}}
+                }
+              },
+              "properti": {"type": "array", "items": {"type": "string"}},
+              "kamera": {"enum": ["diam", "zoom_masuk", "zoom_keluar", "goyang", "pantul"]},
+              "catatan_merah": {"type": ["string", "null"]}
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,200 @@
+{
+ "episode": "ep01",
+ "judul": "Rencana Sempurna",
+ "durasi": 6.0,
+ "adegan": [
+  {
+   "id": "b01",
+   "mulai": 0.0,
+   "selesai": 1.8,
+   "akhir_jeda": 2.0,
+   "penutur": "arta",
+   "emosi": "semangat",
+   "intensitas": 7,
+   "visual": {
+    "latar": "kamar",
+    "tokoh": [
+     {
+      "id": "arta",
+      "ekspresi": "ambis",
+      "pose": "tunjuk"
+     }
+    ],
+    "properti": [
+     "papan_100_hari"
+    ],
+    "kamera": "pantul",
+    "catatan_merah": "semangat level dewa"
+   },
+   "caption": {
+    "teks": "Hari pertama. Aku bikin rencana yang nggak mungkin gagal.",
+    "kata": [
+     {
+      "kata": "Hari",
+      "mulai": 0.0,
+      "selesai": 0.2
+     },
+     {
+      "kata": "pertama.",
+      "mulai": 0.2,
+      "selesai": 0.4
+     },
+     {
+      "kata": "Aku",
+      "mulai": 0.4,
+      "selesai": 0.6
+     },
+     {
+      "kata": "bikin",
+      "mulai": 0.6,
+      "selesai": 0.8
+     },
+     {
+      "kata": "rencana",
+      "mulai": 0.8,
+      "selesai": 1.0
+     },
+     {
+      "kata": "yang",
+      "mulai": 1.0,
+      "selesai": 1.2
+     },
+     {
+      "kata": "nggak",
+      "mulai": 1.2,
+      "selesai": 1.4
+     },
+     {
+      "kata": "mungkin",
+      "mulai": 1.4,
+      "selesai": 1.6
+     },
+     {
+      "kata": "gagal.",
+      "mulai": 1.6,
+      "selesai": 1.8
+     }
+    ]
+   }
+  },
+  {
+   "id": "b06",
+   "mulai": 2.0,
+   "selesai": 3.8,
+   "akhir_jeda": 4.0,
+   "penutur": "arta",
+   "emosi": "marah",
+   "intensitas": 9,
+   "visual": {
+    "latar": "dinding_sticky",
+    "tokoh": [
+     {
+      "id": "arta",
+      "ekspresi": "marah",
+      "pose": "bust"
+     }
+    ],
+    "properti": [
+     "sticky_0400",
+     "sticky_5jam",
+     "sticky_7jam"
+    ],
+    "kamera": "goyang",
+    "catatan_merah": null
+   },
+   "caption": {
+    "teks": "OKE. Aku belajar TUJUH jam!",
+    "kata": [
+     {
+      "kata": "OKE.",
+      "mulai": 2.0,
+      "selesai": 2.36
+     },
+     {
+      "kata": "Aku",
+      "mulai": 2.36,
+      "selesai": 2.72
+     },
+     {
+      "kata": "belajar",
+      "mulai": 2.72,
+      "selesai": 3.08
+     },
+     {
+      "kata": "TUJUH",
+      "mulai": 3.08,
+      "selesai": 3.44
+     },
+     {
+      "kata": "jam!",
+      "mulai": 3.44,
+      "selesai": 3.8
+     }
+    ]
+   }
+  },
+  {
+   "id": "b07",
+   "mulai": 4.0,
+   "selesai": 5.8,
+   "akhir_jeda": 6.0,
+   "penutur": "arta",
+   "emosi": "lelah",
+   "intensitas": 3,
+   "visual": {
+    "latar": "meja_malam",
+    "tokoh": [
+     {
+      "id": "arta",
+      "ekspresi": "datar",
+      "pose": "bust"
+     },
+     {
+      "id": "mbis",
+      "ekspresi": "intip",
+      "pose": "intip"
+     }
+    ],
+    "properti": [
+     "jam_0047",
+     "kertas_58"
+    ],
+    "kamera": "diam",
+    "catatan_merah": "ini jam tidur atau jam kerja?"
+   },
+   "caption": {
+    "teks": "Hari ketujuh. Rencanaku masih sempurna.",
+    "kata": [
+     {
+      "kata": "Hari",
+      "mulai": 4.0,
+      "selesai": 4.36
+     },
+     {
+      "kata": "ketujuh.",
+      "mulai": 4.36,
+      "selesai": 4.72
+     },
+     {
+      "kata": "Rencanaku",
+      "mulai": 4.72,
+      "selesai": 5.08
+     },
+     {
+      "kata": "masih",
+      "mulai": 5.08,
+      "selesai": 5.44
+     },
+     {
+      "kata": "sempurna.",
+      "mulai": 5.44,
+      "selesai": 5.8
+     }
+    ]
+   }
+  }
+ ],
+ "penutup": {
+  "judul_berikut": "Ep.2: Kenapa rencana yang sempurna justru bikin nilai turun?"
+ }
+}

@@ -1,0 +1,104 @@
+whoosh:
+  prompt: fast cartoon whoosh swish, camera whip pan, short and clean
+  durasi: 0.6
+  file: whoosh.mp3
+  tag:
+  - kamera
+  - transisi
+  sumber: elevenlabs-sound-generation
+  lisensi: elevenlabs-paket-tidak-terbaca-anggap-nonkomersial
+tok:
+  prompt: sticky note slapped onto a wall, light paper tap, single hit
+  durasi: 0.5
+  file: tok.mp3
+  tag:
+  - kertas
+  - tempel
+  sumber: elevenlabs-sound-generation
+  lisensi: elevenlabs-paket-tidak-terbaca-anggap-nonkomersial
+brak:
+  prompt: cartoon loud paper slam onto wall with a punchy thud, comedic impact
+  durasi: 0.8
+  file: brak.mp3
+  tag:
+  - banting
+  - puncak
+  sumber: elevenlabs-sound-generation
+  lisensi: elevenlabs-paket-tidak-terbaca-anggap-nonkomersial
+pop:
+  prompt: cute cartoon pop bubble, quick, for text appearing
+  durasi: 0.5
+  file: pop.mp3
+  tag:
+  - teks
+  - muncul
+  sumber: elevenlabs-sound-generation
+  lisensi: elevenlabs-paket-tidak-terbaca-anggap-nonkomersial
+langkah:
+  prompt: two quick girl footsteps on wooden floor indoors, sneakers
+  durasi: 0.6
+  file: langkah.mp3
+  tag:
+  - jalan
+  sumber: elevenlabs-sound-generation
+  lisensi: elevenlabs-paket-tidak-terbaca-anggap-nonkomersial
+hentak:
+  prompt: single angry foot stomp on wooden floor, cartoon heavy thump
+  durasi: 0.6
+  file: hentak.mp3
+  tag:
+  - hentak
+  - marah
+  sumber: elevenlabs-sound-generation
+  lisensi: elevenlabs-paket-tidak-terbaca-anggap-nonkomersial
+notif_wa:
+  prompt: smartphone chat message notification ding, short two-tone
+  durasi: 0.7
+  file: notif_wa.mp3
+  tag:
+  - hp
+  sumber: elevenlabs-sound-generation
+  lisensi: elevenlabs-paket-tidak-terbaca-anggap-nonkomersial
+bel_mbis:
+  prompt: tiny magical cat bell jingle, soft and warm, single shake
+  durasi: 0.8
+  file: bel_mbis.mp3
+  tag:
+  - mbis
+  sumber: elevenlabs-sound-generation
+  lisensi: elevenlabs-paket-tidak-terbaca-anggap-nonkomersial
+tabrak_kartun:
+  prompt: cartoon bonk head bump into door, funny boing
+  durasi: 0.7
+  file: tabrak_kartun.mp3
+  tag:
+  - lucu
+  - jatuh
+  sumber: elevenlabs-sound-generation
+  lisensi: elevenlabs-paket-tidak-terbaca-anggap-nonkomersial
+getar_kertas:
+  prompt: several paper notes rustling and fluttering down from a wall
+  durasi: 1.0
+  file: getar_kertas.mp3
+  tag:
+  - kertas
+  - jatuh
+  sumber: elevenlabs-sound-generation
+  lisensi: elevenlabs-paket-tidak-terbaca-anggap-nonkomersial
+gedebuk:
+  prompt: cartoon landing thud after a jump, soft body landing on floor
+  durasi: 0.5
+  file: gedebuk.mp3
+  tag:
+  - lompat
+  - mendarat
+  sumber: elevenlabs-sound-generation
+  lisensi: elevenlabs-paket-tidak-terbaca-anggap-nonkomersial
+desis_marah:
+  prompt: comedic angry steam hiss from a kettle, short cartoon anger
+  durasi: 0.9
+  file: desis_marah.mp3
+  tag:
+  - marah
+  sumber: elevenlabs-sound-generation
+  lisensi: elevenlabs-paket-tidak-terbaca-anggap-nonkomersial

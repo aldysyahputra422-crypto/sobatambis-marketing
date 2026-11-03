@@ -1,0 +1,83 @@
+{
+  "b04": [
+    {
+      "kata": "Teranaknya",
+      "mulai": 0.6,
+      "selesai": 1.78
+    },
+    {
+      "kata": "Businta",
+      "mulai": 1.78,
+      "selesai": 2.24
+    },
+    {
+      "kata": "sekarang",
+      "mulai": 2.24,
+      "selesai": 2.72
+    },
+    {
+      "kata": "les",
+      "mulai": 2.72,
+      "selesai": 3.02
+    },
+    {
+      "kata": "di",
+      "mulai": 3.02,
+      "selesai": 3.24
+    },
+    {
+      "kata": "3",
+      "mulai": 3.24,
+      "selesai": 3.48
+    },
+    {
+      "kata": "tempat",
+      "mulai": 3.48,
+      "selesai": 3.94
+    },
+    {
+      "kata": "loh.",
+      "mulai": 3.94,
+      "selesai": 4.04
+    }
+  ],
+  "b05": [
+    {
+      "kata": "Tiga",
+      "mulai": 4.45,
+      "selesai": 4.99
+    },
+    {
+      "kata": "Tempat",
+      "mulai": 4.99,
+      "selesai": 5.67
+    }
+  ],
+  "b06": [
+    {
+      "kata": "Oke,",
+      "mulai": 6.7,
+      "selesai": 7.24
+    },
+    {
+      "kata": "aku",
+      "mulai": 7.74,
+      "selesai": 8.04
+    },
+    {
+      "kata": "belajar",
+      "mulai": 8.04,
+      "selesai": 8.56
+    },
+    {
+      "kata": "tujuh",
+      "mulai": 8.56,
+      "selesai": 9.14
+    },
+    {
+      "kata": "jam.",
+      "mulai": 9.14,
+      "selesai": 9.42
+    }
+  ]
+}

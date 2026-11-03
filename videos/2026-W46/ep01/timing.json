@@ -1,0 +1,74 @@
+[
+  {
+    "id": "b01",
+    "mulai": 0.0,
+    "selesai": 3.68,
+    "akhir_jeda": 3.98
+  },
+  {
+    "id": "b02",
+    "mulai": 3.98,
+    "selesai": 9.5,
+    "akhir_jeda": 9.8
+  },
+  {
+    "id": "b03",
+    "mulai": 9.8,
+    "selesai": 13.56,
+    "akhir_jeda": 13.96
+  },
+  {
+    "id": "b04",
+    "mulai": 13.96,
+    "selesai": 17.48,
+    "akhir_jeda": 17.88
+  },
+  {
+    "id": "b05",
+    "mulai": 17.88,
+    "selesai": 19.56,
+    "akhir_jeda": 19.76
+  },
+  {
+    "id": "b06",
+    "mulai": 19.76,
+    "selesai": 23.04,
+    "akhir_jeda": 23.54
+  },
+  {
+    "id": "b07",
+    "mulai": 23.54,
+    "selesai": 27.06,
+    "akhir_jeda": 27.86
+  },
+  {
+    "id": "b08",
+    "mulai": 27.86,
+    "selesai": 29.86,
+    "akhir_jeda": 30.36
+  },
+  {
+    "id": "b09",
+    "mulai": 30.36,
+    "selesai": 34.52,
+    "akhir_jeda": 36.02
+  },
+  {
+    "id": "b10",
+    "mulai": 36.02,
+    "selesai": 38.74,
+    "akhir_jeda": 39.34
+  },
+  {
+    "id": "b11",
+    "mulai": 39.34,
+    "selesai": 43.58,
+    "akhir_jeda": 43.88
+  },
+  {
+    "id": "b12",
+    "mulai": 43.88,
+    "selesai": 45.4,
+    "akhir_jeda": 45.7
+  }
+]

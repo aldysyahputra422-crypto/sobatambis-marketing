@@ -1,0 +1,9 @@
+{
+  "title": "Departemen Marketing · Sobat Ambis",
+  "port": 8788,
+  "names": {
+    "ketua": "Direktur Marketing"
+  },
+  "autostart": true,
+  "tailscale": true
+}

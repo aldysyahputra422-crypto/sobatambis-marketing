@@ -1,0 +1,35 @@
+# Posisi tokoh per latar untuk timeline otomatis (scripts/adegan2.py).
+# x, y = tengah telapak kaki di layar 720x1280; kaki harus di atas caption (y <= 1020 pada skala 0,9).
+# lapis: belakang = digambar di balik perabot depan latar (sofa, meja).
+skala: {arta: 0.9, ratna: 0.95, mbis: 0.72}
+latar:
+  kamar:
+    arta: {x: 330, y: 1020}
+    ratna: {x: 560, y: 1020}
+    mbis: {x: 610, y: 1010}
+  ruang_tamu:
+    arta: {x: 190, y: 1020}
+    ratna: {x: 520, y: 955, lapis: belakang}
+    mbis: {x: 630, y: 1000, lapis: belakang}
+  dinding_sticky:
+    arta: {x: 300, y: 1020}
+    ratna: {x: 560, y: 1020}
+    mbis: {x: 620, y: 1010}
+  meja_malam:
+    arta: {x: 320, y: 1000, lapis: belakang}
+    ratna: {x: 580, y: 1020}
+    mbis: {x: 590, y: 815}
+# Pusat (poros) properti dan benda yang dibanting/dipegang.
+pusat:
+  papan_100_hari: {x: 310, y: 330}
+  sticky_0400: {x: 225, y: 255}
+  sticky_5jam: {x: 455, y: 235}
+  sticky_0hp: {x: 250, y: 460}
+  sticky_tryout: {x: 480, y: 455}
+  sticky_7jam: {x: 360, y: 350}
+  sticky_7jam_b: {x: 500, y: 560}
+  sticky_3tempat: {x: 495, y: 405}
+  wa_grup: {x: 405, y: 285}
+  jam_0047: {x: 250, y: 260}
+  kertas_58: {x: 461, y: 783}
+  hp: {x: 360, y: 640}

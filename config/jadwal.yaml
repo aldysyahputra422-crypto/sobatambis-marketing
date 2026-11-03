@@ -1,0 +1,5 @@
+# Pengaturan jadwal mingguan (scripts/jadwal_minggu.py). Pemilik boleh mengubah semuanya.
+target_serial: 7          # episode serial per minggu yang diinginkan
+jam_tayang: "19:00"       # WIB; titik awal, ganti setelah melihat Insights Instagram (jam audiens paling aktif)
+jeda_produksi_hari: 2     # produksi dimulai H-2 supaya ada waktu untuk 3 titik persetujuan
+cadangan_persen: 15       # sisa batas mingguan Claude untuk revisi dan chat biasa

@@ -1,0 +1,21 @@
+ceria_konyol:
+  file: aset/musik/ceria_konyol.mp3
+  bpm: 112
+  suasana: komedi ringan, marimba + bas + shaker
+  sumber: dibuat-sendiri (scripts/musik_sintetis.py)
+  lisensi: milik-sendiri
+  sementara: true  # ganti dengan trek ElevenLabs Music / berlisensi saat paket berbayar aktif
+tegang_naik:
+  file: aset/musik/tegang_naik.mp3
+  bpm: 128
+  suasana: tegang naik, pizzicato ostinato + timpani, crescendo
+  sumber: dibuat-sendiri (scripts/musik_sintetis.py)
+  lisensi: milik-sendiri
+  sementara: true
+tema_mbis:
+  file: aset/musik/tema_mbis.mp3
+  bpm: 84
+  suasana: hangat-misterius, arpeggio celesta + pad; dipakai setiap Mbis muncul
+  sumber: dibuat-sendiri (scripts/musik_sintetis.py)
+  lisensi: milik-sendiri
+  sementara: true

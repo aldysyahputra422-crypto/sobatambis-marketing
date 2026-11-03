@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light dark">
+<title>{{TITLE}}</title>
+<style>
+:root {
+  --biru: #294D82; --kuning: #FFC400; --hijau: #2A9D8F; --merah: #D94662;
+  --bg1: #E9EFF7; --bg2: #CBD9EA; --kartu: rgba(255,255,255,.92); --teks: #1B2433; --redup: #5B667A; --garis: rgba(27,36,51,.12);
+  --bayang: 0 6px 24px rgba(20,40,80,.14);
+  --judul: #294D82; --tab-teks: #294D82; --tab-bg: rgba(41,77,130,.12);
+  --lbl-teks: #1F4D47; --lbl-bg: rgba(255,255,255,.92); --lbl-garis: #1F4D47;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg1: #141F3A; --bg2: #0B1226; --kartu: rgba(22,32,58,.92); --teks: #EEF2FA; --redup: #9FB0CF; --garis: rgba(238,242,250,.14); --bayang: 0 6px 24px rgba(0,0,0,.4); --judul: #BBD2FF; --tab-teks: #BBD2FF; --tab-bg: rgba(187,210,255,.14); --lbl-teks: #CDEBE6; --lbl-bg: rgba(15,30,40,.88); --lbl-garis: #7FBFB4; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg1: #141F3A; --bg2: #0B1226; --kartu: rgba(22,32,58,.92); --teks: #EEF2FA; --redup: #9FB0CF; --garis: rgba(238,242,250,.14); --bayang: 0 6px 24px rgba(0,0,0,.4); --judul: #BBD2FF; --tab-teks: #BBD2FF; --tab-bg: rgba(187,210,255,.14); --lbl-teks: #CDEBE6; --lbl-bg: rgba(15,30,40,.88); --lbl-garis: #7FBFB4; color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--teks); background: linear-gradient(160deg, var(--bg1), var(--bg2)); }
+#scene { position: fixed; inset: 0; }
+#scene canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+.labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+.loading { position: fixed; inset: 0; display: grid; place-items: center; background: var(--bg1); z-index: 20; font-weight: 600; color: var(--biru); }
+.nogl { display: none; position: fixed; inset: 0; place-items: center; padding: 24px; text-align: center; z-index: 15; }
+body.no-webgl .nogl { display: grid; }
+.card-ui { background: var(--kartu); backdrop-filter: blur(8px); border: 1px solid var(--garis); border-radius: 14px; box-shadow: var(--bayang); }
+
+/* label 3D */
+.zona-label { display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+.zona-label span { font: 600 9.5px/1 system-ui, sans-serif; letter-spacing: .07em; text-transform: uppercase; color: var(--lbl-teks); background: var(--lbl-bg); padding: 4px 8px; border: 1px solid var(--lbl-garis); white-space: nowrap; }
+.zona-label i { width: 1px; height: 34px; background: var(--lbl-garis); }
+.nama { pointer-events: auto; cursor: pointer; font: 700 10px/1 system-ui, sans-serif; color: #1B2433; background: #fff; border: 2px solid #1B2433; border-left: 6px solid var(--w, var(--biru)); padding: 2px 6px; border-radius: 7px; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,.18); }
+.gelembung { max-width: 170px; font: 600 10.5px/1.25 system-ui, sans-serif; color: #1B2433; background: #fff; border: 2px solid #1B2433; border-radius: 10px; padding: 4px 8px; box-shadow: 0 2px 6px rgba(0,0,0,.18); }
+.gelembung.penting { background: var(--kuning); max-width: 220px; animation: kedip 1.2s ease-in-out infinite; }
+@keyframes denyut { 50% { transform: translateY(-4px); } }
+@keyframes kedip { 50% { box-shadow: 0 0 0 6px rgba(217,70,98,.45); } }
+
+.labels.jauh .nama.diam { display: none; }
+
+/* atas: kepala, spanduk demo, dan panggilan pemilik disusun berurutan agar tidak saling tumpuk */
+.atas { position: fixed; top: 12px; left: 12px; right: 12px; z-index: 6; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.atas > * { pointer-events: auto; }
+.top { display: flex; gap: 10px; justify-content: space-between; align-items: flex-start; width: 100%; pointer-events: none; }
+.top > * { pointer-events: auto; }
+.brand { padding: 10px 14px; min-width: 0; }
+.brand h1 { margin: 0; font-size: 15px; line-height: 1.2; color: var(--judul); }
+.brand p { margin: 2px 0 0; color: var(--redup); font-size: 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.chip { padding: 6px 10px; font-weight: 600; font-size: 12px; }
+.chip .dot, .live .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--redup); margin-right: 6px; }
+#liveDot[data-ok="true"] { background: var(--hijau); }
+#liveDot[data-ok="false"] { background: var(--merah); }
+#chipPemilik[data-menunggu="true"] { background: var(--merah); color: #fff; border-color: transparent; animation: denyut 1.2s ease-in-out infinite; }
+.banner { align-self: center; background: var(--kuning); color: #1B2433; font-weight: 700; padding: 6px 14px; border-radius: 999px; font-size: 12px; box-shadow: var(--bayang); max-width: 92vw; text-align: center; }
+.panggilan { align-self: center; display: flex; gap: 10px; align-items: center; padding: 10px 14px; max-width: min(560px, 92vw); border-left: 6px solid var(--merah); }
+.panggilan b { color: var(--merah); }
+.panggilan button { border: 0; background: var(--biru); color: #fff; font-weight: 700; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+[hidden] { display: none !important; }
+
+/* panel kanan */
+.panel { position: fixed; top: 64px; right: 12px; bottom: 56px; width: 340px; z-index: 5; display: flex; flex-direction: column; overflow: hidden; }
+.panel header { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px 0 8px; }
+.tabs { display: flex; gap: 4px; }
+.tabs button { border: 0; background: transparent; color: var(--redup); font-weight: 700; padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+.tabs button[aria-selected="true"] { color: var(--tab-teks); background: var(--tab-bg); }
+.n { margin-left: 4px; font-size: 11px; background: var(--garis); padding: 1px 6px; border-radius: 999px; }
+#lipat { border: 0; background: transparent; color: var(--redup); cursor: pointer; font-size: 18px; padding: 4px 8px; }
+.panes { overflow: auto; padding: 8px 10px 12px; flex: 1; }
+.pane { display: none; } .pane.on { display: block; }
+body.lipat .panes { display: none; }
+@media (min-width: 861px) { body.lipat .panel { bottom: auto; } }
+.grup h3 { margin: 10px 0 4px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--redup); }
+.kartu { display: grid; grid-template-columns: 12px 1fr auto; gap: 2px 8px; width: 100%; text-align: left; border: 1px solid var(--garis); border-left: 5px solid var(--w, var(--biru)); background: transparent; color: inherit; border-radius: 10px; padding: 6px 8px; margin-bottom: 5px; cursor: pointer; font: inherit; }
+.kartu .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--redup); align-self: center; }
+.kartu[data-state="bekerja"] .dot { background: var(--hijau); animation: denyut 1s ease-in-out infinite; }
+.kartu[data-state="selesai"] .dot { background: var(--kuning); }
+.kartu .st { font-size: 11px; color: var(--redup); font-weight: 600; }
+.kartu .tugas { grid-column: 2 / 4; color: var(--redup); font-size: 11.5px; min-height: 0; }
+.kartu .tugas:empty { display: none; }
+.feed { list-style: none; margin: 0; padding: 0; }
+.feed li { display: grid; grid-template-columns: auto 1fr; gap: 0 8px; padding: 6px 0 6px 8px; border-left: 4px solid var(--w, var(--biru)); margin-bottom: 4px; font-size: 12px; }
+.feed li.kosong { border-left-color: var(--garis); color: var(--redup); display: block; }
+.feed time { color: var(--redup); font-variant-numeric: tabular-nums; }
+.feed b { grid-column: 2; } .feed span { grid-column: 1 / 3; color: var(--redup); }
+.tahap { list-style: none; margin: 6px 0; padding: 0; display: grid; gap: 4px; }
+.tahap li { padding: 6px 10px; border-radius: 8px; background: var(--garis); font-weight: 600; font-size: 12px; }
+.tahap li.lulus { background: rgba(42,157,143,.22); } .tahap li.lulus::before { content: "✓ "; }
+.tahap li.sekarang { background: var(--kuning); color: #1B2433; }
+.ep { font-weight: 700; margin: 4px 0; } .butuh { background: rgba(217,70,98,.15); border-radius: 8px; padding: 8px 10px; font-size: 12px; }
+.fl { color: var(--redup); font-size: 12px; margin-top: 8px; }
+
+/* bawah */
+.zonaNav { position: fixed; left: 12px; right: 364px; bottom: 12px; z-index: 5; display: flex; gap: 6px; overflow-x: auto; padding: 6px; scrollbar-width: none; }
+.zonaNav::-webkit-scrollbar { display: none; }
+.zn { flex: 0 0 auto; border: 1px solid var(--garis); background: transparent; color: var(--teks); padding: 6px 11px; border-radius: 999px; font-weight: 600; font-size: 12px; cursor: pointer; }
+.zn:hover { background: rgba(41,77,130,.12); }
+
+@media (max-width: 860px) {
+  .panel { top: auto; left: 8px; right: 8px; bottom: 56px; width: auto; height: 46vh; }
+  body.lipat .panel { height: auto; bottom: 56px; top: auto; }
+  .zonaNav { right: 12px; }
+  .top { flex-direction: column; align-items: stretch; }
+  .chips { justify-content: flex-start; }
+  .brand p { display: none; }
+  .panggilan { font-size: 12px; padding: 8px 10px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "/kerja/assets/vendor/three/build/three.module.js",
+  "three/addons/": "/kerja/assets/vendor/three/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div class="loading" id="loading">Menyiapkan kantor…</div>
+<div id="scene" aria-hidden="true"></div>
+<div class="labels" id="labels" aria-hidden="true"></div>
+<div class="nogl">Browser ini tidak mendukung WebGL, jadi kantor 3D tidak bisa ditampilkan. Panel aktivitas tetap berjalan.</div>
+
+<div class="atas">
+<div class="top">
+  <div class="brand card-ui">
+    <h1 id="judul">{{TITLE}}</h1>
+    <p>Agent bekerja secara langsung dari transkrip Claude Code</p>
+  </div>
+  <div class="chips">
+    <span class="chip card-ui live"><i class="dot" id="liveDot"></i><span id="liveTxt">Menghubungkan…</span></span>
+    <span class="chip card-ui" id="chipAktif">Bekerja: –</span>
+    <span class="chip card-ui" id="chipTahap">Tidak ada produksi</span>
+    <span class="chip card-ui" id="chipPemilik" data-menunggu="false">Aldy santai</span>
+  </div>
+</div>
+<div class="banner" id="banner" role="status" hidden></div>
+<div class="panggilan card-ui" id="panggilan" role="alert" hidden><span><b>Aldy ditunggu.</b> <span id="panggilanTeks"></span></span><button type="button" id="panggilanBtn">Lihat kursi</button></div>
+</div>
+
+<aside class="panel card-ui" aria-label="Panel kantor">
+  <header>
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="tim" aria-selected="true">Tim <span class="n" id="nTim">0</span></button>
+      <button role="tab" data-tab="aktivitas" aria-selected="false">Aktivitas <span class="n" id="nFeed">0</span></button>
+      <button role="tab" data-tab="tahap" aria-selected="false">Tahap</button>
+    </div>
+    <button type="button" id="lipat" aria-expanded="true" title="Lipat panel">⌄</button>
+  </header>
+  <div class="panes">
+    <section class="pane on" data-pane="tim"><div id="tim"></div><p class="fl" id="flInfo"></p></section>
+    <section class="pane" data-pane="aktivitas"><ul class="feed" id="feed"></ul></section>
+    <section class="pane" data-pane="tahap"><div id="tahapList" class="tahap-wrap"></div></section>
+  </div>
+</aside>
+<nav class="zonaNav card-ui" id="zonaNav" aria-label="Lompat ke ruang"></nav>
+
+{{CONFIG_SCRIPT}}
+<script type="module">
+  const galeri = new URLSearchParams(location.search).has('galeri');
+  import(galeri ? '/kerja/assets/sa/galeri.js?v=1' : '/kerja/assets/sa/kantor3d.js?v=200');
+</script>
+</body>
+</html>

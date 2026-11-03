@@ -1,0 +1,393 @@
+# Katalog skill & alat Sobat Ambis. Dibaca oleh agent pencari-skill lewat scripts/katalog.py.
+# status: direkomendasikan | opsional | alternatif | sebagian | rujukan
+- id: remotion-skills
+  sumber: plugin remotion (sudah terpasang di Claude Code) / https://www.remotion.dev
+  fungsi: membuat, mempratinjau, dan merender video dengan kode React
+  pakai_saat: render video animasi template remotion komposisi caption audio
+  cara_pasang: skill resmi remotion-dev/skills dipasang otomatis (folder skills/*); dependensi npm ada di template/package.json
+  otomatis: true
+  pasang: {jenis: git_subskill, url: "https://github.com/remotion-dev/skills", paths: ["skills/*"], skills: [remotion-best-practices], pin: "c7cb2fdcacd134fb2ccb9b7a44f9ffa44e467271"}
+  agent: [animator, storyboarder, inspektur-frame]
+  lisensi: Remotion License
+  catatan_lisensi: gratis untuk individu dan tim kecil; cek remotion.dev/license bila tim membesar
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: elevenlabs
+  sumber: https://elevenlabs.io (API)
+  fungsi: suara voice over narasi berkualitas dengan emosi kuat lewat tag v3
+  pakai_saat: suara voice over narasi emosi marah bisik episode serial
+  cara_pasang: simpan ELEVENLABS_API_KEY di secret environment; dipakai scripts/suara/penyedia.py
+  lisensi: layanan berbayar
+  catatan_lisensi: paket gratis berkredit terbatas; saat kredit habis wajib minta persetujuan pemilik sebelum pindah penyedia
+  butuh_key: ELEVENLABS_API_KEY
+  biaya: gratis terbatas, Creator sekitar US$22/bulan
+  ukuran: tidak ada (API)
+  status: direkomendasikan
+- id: edge-tts
+  sumber: https://pypi.org/project/edge-tts/
+  fungsi: suara voice over narasi gratis bahasa Indonesia, emosi terbatas
+  pakai_saat: suara voice over narasi cadangan mbis bereaksi datar
+  cara_pasang: pip install edge-tts==7.3.1 (ada di requirements.txt)
+  pasang: {jenis: setup}
+  lisensi: LGPL-3.0
+  catatan_lisensi: memakai layanan TTS Microsoft secara tidak resmi; bisa berhenti sewaktu-waktu
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: faster-whisper
+  sumber: https://github.com/SYSTRAN/faster-whisper
+  fungsi: transkripsi suara lokal dengan waktu per kata untuk mengecek hasil voice over
+  pakai_saat: dengar ulang transkrip cek suara caption waktu kata
+  cara_pasang: pip install faster-whisper==1.2.1 (ada di requirements.txt); model small diunduh saat pertama dipakai
+  pasang: {jenis: setup}
+  lisensi: MIT
+  catatan_lisensi: bobot model Whisper berlisensi MIT
+  butuh_key: null
+  biaya: gratis
+  ukuran: sekitar 500 MB model small
+  status: direkomendasikan
+- id: ffmpeg
+  sumber: https://ffmpeg.org
+  fungsi: olah audio dan video, potong, gabung, konversi, ekstrak frame
+  pakai_saat: audio video konversi gabung potong frame cuplikan
+  cara_pasang: sudah terpasang di environment (ffmpeg 6)
+  pasang: {jenis: setup}
+  lisensi: LGPL/GPL
+  catatan_lisensi: dipakai sebagai alat baris perintah
+  butuh_key: null
+  biaya: gratis
+  ukuran: sudah ada
+  status: direkomendasikan
+- id: stop-slop
+  sumber: https://github.com/hardikpandya/stop-slop
+  fungsi: membuang pola tulisan AI dari naskah dan caption
+  pakai_saat: naskah caption tulisan slop AI sunting gaya bahasa
+  cara_pasang: git clone --depth 1 https://github.com/hardikpandya/stop-slop ~/.claude/skills/stop-slop
+  otomatis: true
+  pasang: {jenis: git_skill, url: "https://github.com/hardikpandya/stop-slop", pin: "8da1f030185bdfe8471220585162991eaeb970e9"}
+  agent: [pembasmi-slop, penulis-naskah, penulis-caption, penjaga-gerbang-qa]
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: caveman
+  sumber: https://github.com/JuliusBrussee/caveman
+  fungsi: menghemat token dengan gaya komunikasi ringkas antar agent
+  pakai_saat: hemat token kuota log komunikasi agent ringkas
+  cara_pasang: aktif bawaan lewat .claude/settings.json (plugin caveman@caveman); di sesi web aturannya disuntikkan hook SessionStart. Hanya untuk komunikasi internal, bukan naskah, caption, atau catatan Notion
+  pasang: {jenis: plugin, id: caveman@caveman}
+  agent: [semua]
+  lisensi: Apache-2.0
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: sedang
+  status: direkomendasikan
+- id: humanizer
+  sumber: https://github.com/blader/humanizer
+  fungsi: menulis ulang teks yang terdengar buatan AI berdasarkan 24 pola "Signs of AI writing" Wikipedia, tanpa mengubah isi
+  pakai_saat: naskah caption anti slop ai tulisan manusiawi sunting dialog
+  cara_pasang: otomatis (git clone ke ~/.claude/skills/humanizer)
+  otomatis: true
+  pasang: {jenis: git_skill, url: "https://github.com/blader/humanizer", pin: "0ef9fe5bc3572734fd3ae6c448fe00a30cd5dcf0"}
+  agent: [pembasmi-slop, penulis-naskah, penulis-caption, penjaga-gerbang-qa]
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: marketingskills
+  sumber: https://github.com/coreyhaines31/marketingskills
+  fungsi: paket skill pemasaran paling banyak dipakai; yang dipasang hanya copywriting, copy-editing, content-strategy, social, marketing-psychology, marketing-ideas, video
+  pakai_saat: caption copywriting strategi konten kalender ide konten media sosial psikologi pemasaran hook video
+  cara_pasang: otomatis (sparse clone, hanya folder skill terpilih)
+  otomatis: true
+  pasang: {jenis: git_subskill, url: "https://github.com/coreyhaines31/marketingskills", paths: [skills/copywriting, skills/copy-editing, skills/content-strategy, skills/social, skills/marketing-psychology, skills/marketing-ideas, skills/video], skills: [copywriting, copy-editing, content-strategy, social, marketing-psychology, marketing-ideas, video], pin: "88c79f6528a9347420e57ceb1fff9a60de651768"}
+  agent: [perencana-konten, penulis-caption, desainer-cover, direktur-marketing, penulis-naskah, storyboarder, periset-tren]
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai; jangan pasang seluruh paket (50+ skill) supaya konteks tetap ringan
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: claude-screenwriting
+  sumber: https://github.com/e06084/claude-screenwriting
+  fungsi: teori struktur cerita (Vogler, McKee, Save the Cat 15 beat), desain karakter, dan lint kesehatan struktur naskah
+  pakai_saat: naskah struktur cerita beat karakter arc diagnosis naskah film
+  cara_pasang: otomatis (sparse clone skill screenwriting, screenwriting-beats, screenwriting-character, screenwriting-lint)
+  otomatis: true
+  pasang: {jenis: git_subskill, url: "https://github.com/e06084/claude-screenwriting", paths: [skills/screenwriting, skills/screenwriting-beats, skills/screenwriting-character, skills/screenwriting-lint], skills: [screenwriting, screenwriting-beats, screenwriting-character, screenwriting-lint], pin: "17e63120cd85dcf029d4ae8607b06c980fa668b5"}
+  agent: [penulis-naskah, perencana-konten]
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai; teks skill berbahasa Mandarin dan alurnya mengandaikan vault Obsidian. Pakai teori dan lint-nya; tetap menulis ke naskah.json, bukan vault
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: anthropic-canvas-design
+  sumber: https://github.com/anthropics/skills/tree/main/skills/canvas-design
+  fungsi: skill resmi Anthropic untuk desain visual statis (poster, cover) dengan filosofi desain yang jelas
+  pakai_saat: cover thumbnail desain visual poster komposisi tipografi
+  cara_pasang: otomatis (sparse clone folder skills/canvas-design)
+  otomatis: true
+  pasang: {jenis: git_subskill, url: "https://github.com/anthropics/skills", paths: [skills/canvas-design], skills: [canvas-design], pin: "ca45fc496a3436251f191354091d557da31c15b5"}
+  agent: [desainer-cover]
+  lisensi: Apache-2.0
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: anthropic-skill-creator
+  sumber: https://github.com/anthropics/skills/tree/main/skills/skill-creator
+  fungsi: skill resmi Anthropic untuk membuat dan menguji skill baru bila katalog tidak punya yang dibutuhkan
+  pakai_saat: buat skill baru kemampuan belum ada
+  cara_pasang: otomatis (sparse clone folder skills/skill-creator)
+  otomatis: true
+  pasang: {jenis: git_subskill, url: "https://github.com/anthropics/skills", paths: [skills/skill-creator], skills: [skill-creator], pin: "ca45fc496a3436251f191354091d557da31c15b5"}
+  agent: [pencari-skill]
+  lisensi: Apache-2.0
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: ponytail
+  sumber: https://github.com/DietrichGebert/ponytail
+  fungsi: menghemat token dengan memaksa solusi kode paling sederhana yang jalan (YAGNI, stdlib dulu)
+  pakai_saat: hemat token kuota kode sederhana minimal coding
+  cara_pasang: aktif bawaan lewat .claude/settings.json (plugin ponytail@ponytail); di sesi web aturannya disuntikkan hook SessionStart
+  pasang: {jenis: plugin, id: ponytail@ponytail}
+  agent: [semua]
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai; uji independen JetBrains mencatat hemat sekitar 10% per tugas (klaim pembuatnya lebih besar)
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: motion-design-skill
+  wajib: true
+  sumber: https://github.com/LottieFiles/motion-design-skill
+  fungsi: prinsip motion design timing easing koreografi gerak
+  pakai_saat: animasi gerak easing timing transisi koreografi
+  cara_pasang: otomatis (sparse clone terkunci ke commit, folder skills/motion-design); bukan npx supaya bisa dikunci
+  otomatis: true
+  pasang: {jenis: git_subskill, url: "https://github.com/LottieFiles/motion-design-skill", paths: [skills/motion-design], skills: [motion-design], pin: "f9a8a041b85185ee4881b3471d3415e939aac772"}
+  agent: [animator, storyboarder, inspektur-frame]
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: direkomendasikan
+- id: gsap
+  sumber: https://github.com/greensock/GSAP
+  fungsi: library animasi JavaScript dengan easing lengkap
+  pakai_saat: animasi gerak easing timeline web
+  cara_pasang: npm install gsap di template bila dibutuhkan
+  wajib: true
+  pasang: {jenis: npm, paket: ["gsap@3.15.0"]}
+  lisensi: GSAP Standard License
+  catatan_lisensi: gratis termasuk plugin bonus sejak 2025; cek gsap.com/standard-license
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: opsional
+- id: threejs
+  sumber: https://github.com/mrdoob/three.js
+  fungsi: grafis 3D di web
+  pakai_saat: 3d tiga dimensi kamera objek ruang
+  cara_pasang: npm install three @remotion/three di template bila dibutuhkan
+  wajib: true
+  pasang: {jenis: npm, paket: ["three@0.178.0", "@remotion/three@4.0.539"]}
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: sedang
+  status: opsional
+- id: design-dna
+  sumber: https://github.com/zanwei/design-dna
+  fungsi: mengekstrak dan menerapkan identitas visual sebagai design token
+  pakai_saat: identitas visual design token gaya konsisten brand
+  cara_pasang: npx skills add zanwei/design-dna
+  wajib: true
+  otomatis: true
+  pasang: {jenis: git_skill, url: "https://github.com/zanwei/design-dna", pin: "593e39bc9e3652734653bd75544a333d7d43615e"}
+  agent: [desainer-cover, animator]
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: opsional
+- id: genjutsu
+  sumber: https://github.com/AThevon/genjutsu
+  fungsi: skill creative coding untuk animasi antarmuka dan tampilan web
+  pakai_saat: animasi web antarmuka creative coding canvas
+  cara_pasang: ikuti README repo (plugin Claude Code)
+  wajib: true
+  pasang: {jenis: rujukan, url: "https://github.com/AThevon/genjutsu", plugin: genjutsu@genjutsu, pin: "ac9ca74156946be8e449f0d6acc8043a105a38f3"}
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: sedang
+  status: opsional
+- id: claude-animation-base
+  sumber: https://github.com/JohnHeibel/ClaudeAnimationBase
+  fungsi: contoh animasi karakter buatan tangan dengan p5.js dan storyboard per shot
+  pakai_saat: animasi karakter storyboard gaya tangan rujukan
+  cara_pasang: git clone --depth 1 ke folder rujukan; baca ANIMATION_GUIDE.md
+  wajib: true
+  pasang: {jenis: rujukan, url: "https://github.com/JohnHeibel/ClaudeAnimationBase", pin: "0ac8bf2b31942376cb6b8c4074715595d512acd2"}
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: 16 MB
+  status: rujukan
+- id: lemo-opuscar
+  sumber: https://github.com/lemomo-ai/lemo-opuscar
+  fungsi: 66 gaya film yang dibuat dengan kode beserta prompt gayanya
+  pakai_saat: gaya film rujukan visual gaya baru episode spesial
+  cara_pasang: git clone --depth 1 ke folder rujukan; jangan dimuat utuh ke konteks
+  wajib: true
+  pasang: {jenis: rujukan, url: "https://github.com/lemomo-ai/lemo-opuscar", plugin: lemo-opuscar@lemolab, pin: "bebbbe1aa92a3cb4bb6f83500e61b23a17d1aa00"}
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai
+  butuh_key: null
+  biaya: gratis
+  ukuran: 197 MB
+  status: rujukan
+- id: gbro-collage-broll
+  sumber: https://github.com/pyang5166/gbro-collage-broll
+  fungsi: b-roll kolase kertas halftone dari satu kalimat
+  pakai_saat: b-roll kolase kertas video pendek
+  cara_pasang: ikuti README repo; butuh Gemini API
+  wajib: true
+  pasang: {jenis: git_skill, url: "https://github.com/pyang5166/gbro-collage-broll", pin: "a1a4ee2e2abf7d44e460026b706d0c72c2cf8a91"}
+  lisensi: MIT
+  catatan_lisensi: bebas dipakai, generasi videonya berbayar
+  butuh_key: GEMINI_API_KEY
+  biaya: berbayar per video
+  ukuran: 14 MB
+  status: opsional
+- id: onetake
+  sumber: https://github.com/feitangyuan/onetake
+  fungsi: motion film satu tarikan tanpa potongan untuk teaser dan peluncuran
+  pakai_saat: teaser peluncuran motion film satu tarikan
+  cara_pasang: ikuti README repo
+  wajib: true
+  pasang: {jenis: git_skill, url: "https://github.com/feitangyuan/onetake", pin: "013a61ac8d98883c73733f59c06e49e9ba444f14"}
+  lisensi: PolyForm-Noncommercial-1.0.0
+  catatan_lisensi: hanya nonkomersial; boleh selama Sobat Ambis diperlakukan sebagai project mata kuliah, cek ulang bila mulai menerima bayaran
+  butuh_key: null
+  biaya: gratis
+  ukuran: 225 MB
+  status: opsional
+- id: hyperframes
+  sumber: https://github.com/heygen-com/hyperframes
+  fungsi: render HTML menjadi video, alternatif Remotion
+  pakai_saat: render video html alternatif
+  cara_pasang: npx hyperframes skills update
+  wajib: true
+  pasang: {jenis: rujukan, url: "https://github.com/heygen-com/hyperframes", plugin: hyperframes@hyperframes, pin: "3baf81f9a92615507f76fe8de33e489034ee77ec"}
+  lisensi: Apache-2.0
+  catatan_lisensi: bebas dipakai; tidak dipasang bawaan karena Remotion sudah dipilih
+  butuh_key: null
+  biaya: gratis
+  ukuran: 408 MB
+  status: alternatif
+- id: open-generative-ai
+  sumber: https://github.com/Anil-matcha/Open-Generative-AI
+  fungsi: studio generasi gambar dan video AI lewat banyak model
+  pakai_saat: gambar video ai generatif latar ilustrasi
+  cara_pasang: ikuti README repo; butuh key MuAPI
+  lisensi: MIT
+  catatan_lisensi: aplikasi MIT, generasinya berbayar per pemakaian
+  butuh_key: MUAPI_API_KEY
+  biaya: berbayar per generasi
+  ukuran: 56 MB
+  status: opsional
+- id: higgsfield
+  sumber: https://higgsfield.ai
+  fungsi: generasi video dan gambar AI berbasis kredit
+  pakai_saat: video ai generatif sinematik gambar
+  cara_pasang: akun Higgsfield; pemakaian lewat aplikasi web atau API bila tersedia
+  lisensi: layanan berbayar
+  catatan_lisensi: sistem kredit
+  butuh_key: HIGGSFIELD_API_KEY
+  biaya: berbayar
+  ukuran: tidak ada (layanan)
+  status: opsional
+- id: agent-reach
+  sumber: https://github.com/Panniantong/Agent-Reach
+  fungsi: CLI baca halaman web, info dan subtitle YouTube, repo GitHub untuk riset topik; keluaran JSON ringkas
+  pakai_saat: riset tren topik terbaru baca web artikel transkrip subtitle youtube sumber
+  cara_pasang: "otomatis saat periset-tren mulai (python -m scripts.pasang_otomatis --agent periset-tren): unduh zip rilis v1.6.1, cocokkan sha256, uv tool install dari berkas lokal, lalu agent-reach setup. JANGAN pip install agent-reach (nama PyPI itu proyek lain)"
+  pasang: {jenis: uv_tool, url: "https://github.com/Panniantong/Agent-Reach/releases/download/v1.6.1/agent-reach.zip", sha256: "51443d733bcb26064262442083a8f8abf6ba5e3e7df54beebafe98c88be04a60", perintah: agent-reach, setelah: [[setup]]}
+  agent: [periset-tren]
+  lisensi: MIT
+  catatan_lisensi: hanya kanal tanpa login (web, youtube, github). Jangan pakai fitur cookie login media sosial (instagram, x, tiktok, reddit, xiaohongshu) karena berisiko akun diblokir; scripts/riset.py menolak URL itu
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: sebagian
+- id: ecc
+  sumber: https://github.com/affaan-m/ECC
+  fungsi: koleksi besar skill dan agent Claude Code
+  pakai_saat: skill tambahan pengembangan agent umum
+  cara_pasang: salin hanya skill yang dibutuhkan ke ~/.claude/skills; jangan pasang plugin utuh
+  wajib: true
+  pasang: {jenis: rujukan, url: "https://github.com/affaan-m/ECC", plugin: ecc@ecc, pin: "b38be6a7f6350964d59328b52f0624e1d1d552d1"}
+  lisensi: MIT
+  catatan_lisensi: jangan pasang utuh (1.068 skill, 385 agent) karena membebani konteks setiap sesi
+  butuh_key: null
+  biaya: gratis
+  ukuran: 111 MB
+  status: sebagian
+- id: karpathy-skills
+  sumber: https://github.com/multica-ai/andrej-karpathy-skills
+  fungsi: aturan kerja coding ala Karpathy agar agent tidak berasumsi dan tidak berlebihan
+  pakai_saat: aturan coding kualitas kode agent
+  cara_pasang: baca dan rujuk dari repo asli; jangan salin isinya ke plugin ini
+  wajib: true
+  pasang: {jenis: plugin, id: andrej-karpathy-skills@karpathy-skills}
+  agent: [semua]
+  lisensi: tidak ada
+  catatan_lisensi: repo tanpa lisensi, jadi tidak boleh disalin atau didistribusikan ulang
+  butuh_key: null
+  biaya: gratis
+  ukuran: kecil
+  status: rujukan
+- id: youmind-opus-prompts
+  sumber: https://youmind.com/opus-5-5-prompts
+  fungsi: kumpulan contoh prompt untuk Claude Opus
+  pakai_saat: contoh prompt rujukan penulisan instruksi
+  cara_pasang: baca halaman sebagai rujukan saat dibutuhkan; tidak dipasang
+  wajib: true
+  pasang: {jenis: unduh, url: "https://youmind.com/opus-5-5-prompts", file: youmind-opus-prompts.html}
+  lisensi: tidak diketahui
+  catatan_lisensi: halaman web, hanya dibaca
+  butuh_key: null
+  biaya: gratis
+  ukuran: tidak ada
+  status: rujukan
+- id: voicestudio
+  sumber: https://github.com/debpalash/VoiceStudio
+  fungsi: aplikasi suara AI lokal untuk kloning suara dan TTS bahasa Indonesia (mesin VoxCPM2)
+  pakai_saat: suara kloning lokal gratis cadangan
+  cara_pasang: pasang di Mac Apple Silicon lewat installer resmi; hasil WAV diimpor ke folder video
+  lisensi: AGPL-3.0
+  catatan_lisensi: tidak praktis di Mac Intel (hanya tampilan, tanpa mesin lokal); lisensi tiap model suara berbeda
+  butuh_key: null
+  biaya: gratis
+  ukuran: sekitar 10 GB dengan model
+  status: opsional
