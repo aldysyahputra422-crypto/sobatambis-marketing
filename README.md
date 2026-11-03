@@ -31,7 +31,7 @@ Semua agent, skill, perintah, dan hook dimuat langsung dari folder repo (lewat `
 - **17 agent**: animator (Opus, hanya untuk aset baru dan perbaikan gerak); direktur-marketing, penulis-naskah, perencana-konten, periset-tren, pembasmi-slop, pemeriksa-fakta, storyboarder, inspektur-frame, desainer-cover, penulis-caption, penjaga-gerbang-qa (Sonnet); sutradara-suara, qa-suara, pencari-skill, akuntan-token, penjadwal-notion (Haiku). Setiap agent punya bagian "Skill dasar" berisi skill terverifikasi yang wajib dimuat.
 - **6 skill di repo**: `sa-riset` (riset topik bersumber, tingkat sumber A/B/C), `sa-brand` (fakta resmi, harga, CTA), `sa-cerita` (story bible, Arc 1), `sa-komedi` (teknik komedi sketsa), `sa-katalog` (katalog + pemasangan otomatis), `sa-jadwal` (catatan produksi di Notion).
 - **Skill luar yang terpasang sendiri** (dipilih per bidang, lisensi diperiksa): `humanizer` dan `stop-slop` (anti-slop naskah/caption), `claude-screenwriting` (struktur cerita + lint naskah), `marketingskills` (copywriting, copy-editing, content-strategy, social, marketing-psychology, marketing-ideas, video), `canvas-design` dan `skill-creator` (Anthropic resmi), skill Remotion resmi, `motion-design-skill`. Plugin hemat token: caveman, ponytail.
-- **4 perintah**: `/sa-minggu`, `/sa-video`, `/sa-status`, `/sa-pasang-skill`.
+- **6 perintah**: `/sa-periksa`, `/sa-minggu`, `/sa-video`, `/sa-status`, `/sa-pasang-skill`, `/sa-kantor`.
 
 ### 13 repo wajib
 Semua tercatat di `katalog/skill.yaml` (`wajib: true`) dan bisa diambil kapan saja dengan `python -m scripts.pasang_otomatis --wajib` atau satu per satu dengan `--id <id>`:
@@ -46,6 +46,7 @@ karpathy-skills (plugin, aktif bawaan), ECC / genjutsu / hyperframes / lemo-opus
 
 ## Pakai
 
+- `/sa-periksa` — cek sekali sesudah pemasangan: Node, dependensi, hook, kantor live, dan hal-hal yang masih perlu kamu sambungkan (Notion, ElevenLabs, Tailscale). Hanya membaca; yang GAGAL diberi perintah perbaikannya.
 - `/sa-minggu 2026-W47` — rencana satu minggu: ukur kapasitas, riset topik (bank topik bersumber), jadwal 7 hari, lalu catat ke Notion.
 - `/sa-video videos/<minggu>/<episode>` — produksi satu episode. Berhenti di tiga titik persetujuan: naskah + pilihan suara, trek dialog, video final.
 - `/sa-status videos/<minggu>/<episode>` — tahap, skor gerak, token.
