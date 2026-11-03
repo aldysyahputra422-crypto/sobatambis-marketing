@@ -65,6 +65,10 @@ Freelancer memakai desain sederhana berkartu pengenal. Benda khas peran tetap ad
 - Papan status di lobi: 12 tahap pipeline, tahap yang sedang berjalan menyala; zona tempat tahap itu bekerja diberi bingkai kuning.
 - Kursi Pemilik menyala saat ada persetujuan yang ditunggu.
 - Freelancer masuk lewat pintu saat empat meja tim penuh.
+- Layar besar di dinding belakang Lantai Produksi (6,2 x 1,9 m): tahap, agent yang bekerja, permintaan untuk Aldy.
+- Hologram di area terbuka tengah (x -1, z 1): merah saat Aldy ditunggu, kuning saat bekerja, teal saat sepi; terdaftar sebagai rintangan jalur jalan.
+- Tema Malam: gelap dengan garis neon di dinding belakang, dasar kaca, dan tepi lantai; hologram dan layar menjadi sumber cahaya.
+- Bar bawah: mode kamera (Semua, Meja, Jelajah, Fokus, Tim) dan chip agent. Ide ini dari tampilan "Daylight Lab" yang ditemukan pemilik; tata letak, karakter, dan warna tetap milik kita.
 
 ## Palet
 - **Utama, palet merek dari logo:** biru tua #294D82 (tulisan logo) dan kuning #FFC400 (topi wisuda). Dipakai untuk papan, kursi, dan label.

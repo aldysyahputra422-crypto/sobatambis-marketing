@@ -92,16 +92,41 @@ body.lipat .panes { display: none; }
 .ep { font-weight: 700; margin: 4px 0; } .butuh { background: rgba(217,70,98,.15); border-radius: 8px; padding: 8px 10px; font-size: 12px; }
 .fl { color: var(--redup); font-size: 12px; margin-top: 8px; }
 
-/* bawah */
-.zonaNav { position: fixed; left: 12px; right: 364px; bottom: 12px; z-index: 5; display: flex; gap: 6px; overflow-x: auto; padding: 6px; scrollbar-width: none; }
-.zonaNav::-webkit-scrollbar { display: none; }
-.zn { flex: 0 0 auto; border: 1px solid var(--garis); background: transparent; color: var(--teks); padding: 6px 11px; border-radius: 999px; font-weight: 600; font-size: 12px; cursor: pointer; }
-.zn:hover { background: rgba(41,77,130,.12); }
+/* bawah: mode kamera, lompat ruang (mode Tim), dan chip agent */
+.dock { position: fixed; left: 12px; right: 364px; bottom: 12px; z-index: 5; display: flex; flex-direction: column; gap: 6px; }
+.modeNav, .zonaNav, .agenNav { display: flex; gap: 6px; overflow-x: auto; padding: 6px; scrollbar-width: none; }
+.modeNav::-webkit-scrollbar, .zonaNav::-webkit-scrollbar, .agenNav::-webkit-scrollbar { display: none; }
+.modeNav { align-self: flex-start; max-width: 100%; }
+.zn, .md, .ag { flex: 0 0 auto; border: 1px solid var(--garis); background: transparent; color: var(--teks); border-radius: 999px; font-weight: 600; font-size: 12px; cursor: pointer; font-family: inherit; }
+.zn { padding: 6px 11px; }
+.md { padding: 6px 12px; display: flex; flex-direction: column; align-items: center; gap: 0; border-radius: 12px; min-width: 64px; }
+.md small { font-size: 10px; font-weight: 500; color: var(--redup); }
+.ag { padding: 5px 11px 5px 9px; display: flex; align-items: center; gap: 7px; border-left: 4px solid var(--w, var(--biru)); }
+.ag .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--redup); }
+.ag[data-state="bekerja"] .dot { background: var(--hijau); animation: denyut 1s ease-in-out infinite; }
+.ag[data-state="selesai"] .dot { background: var(--kuning); }
+.ag[data-state="menunggu"] .dot { background: var(--merah); animation: denyut .8s ease-in-out infinite; }
+.zn:hover, .md:hover, .ag:hover { background: rgba(41,77,130,.12); }
+.md[aria-pressed="true"], .ag[aria-pressed="true"] { background: var(--biru); color: #fff; border-color: transparent; }
+.md[aria-pressed="true"] small { color: rgba(255,255,255,.8); }
+.zn:focus-visible, .md:focus-visible, .ag:focus-visible, #btnMalam:focus-visible { outline: 2px solid var(--kuning); outline-offset: 2px; }
+#btnMalam { cursor: pointer; color: var(--teks); font-family: inherit; }
+#btnMalam[aria-pressed="true"] { background: #0B1226; color: #7FE9FF; border-color: #38E1FF; box-shadow: 0 0 12px rgba(56,225,255,.45); }
+.holo-label { font: 700 10px/1 system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--w, #B45309); background: var(--lbl-bg); border: 1px solid var(--w, #B45309); padding: 3px 7px; white-space: nowrap; pointer-events: none; }
+.holo-label[data-mode="menunggu"] { animation: kedip 1.2s ease-in-out infinite; }
+
+/* tema malam: gelap dengan aksen neon (tombol "Malam"); di dalam adegan 3D diatur kantor3d.js */
+:root[data-malam] { --bg1: #0A0F20; --bg2: #05070F; --kartu: rgba(8,13,28,.82); --garis: rgba(56,225,255,.28); --bayang: 0 0 18px rgba(56,225,255,.16); --judul: #7FE9FF; --tab-teks: #7FE9FF; --tab-bg: rgba(56,225,255,.14); --lbl-teks: #BFF3FF; --lbl-bg: rgba(6,12,26,.88); --lbl-garis: #38E1FF; color-scheme: dark; }
+:root[data-malam] .md[aria-pressed="true"], :root[data-malam] .ag[aria-pressed="true"] { background: rgba(56,225,255,.2); color: #BFF3FF; border-color: #38E1FF; box-shadow: 0 0 10px rgba(56,225,255,.35); }
+:root[data-malam] .zona-label span { box-shadow: 0 0 8px rgba(56,225,255,.45); }
+:root[data-malam] .nama { box-shadow: 0 0 8px rgba(56,225,255,.35); }
 
 @media (max-width: 860px) {
-  .panel { top: auto; left: 8px; right: 8px; bottom: 56px; width: auto; height: 46vh; }
-  body.lipat .panel { height: auto; bottom: 56px; top: auto; }
-  .zonaNav { right: 12px; }
+  .dock { right: 12px; }
+  .md { min-width: 0; padding: 8px 12px; }
+  .md small { display: none; }
+  .panel { top: auto; left: 8px; right: 8px; bottom: calc(var(--dock-h, 100px) + 20px); width: auto; height: 40vh; }
+  body.lipat .panel { height: auto; bottom: calc(var(--dock-h, 100px) + 20px); top: auto; }
   .top { flex-direction: column; align-items: stretch; }
   .chips { justify-content: flex-start; }
   .brand p { display: none; }
@@ -133,6 +158,7 @@ body.lipat .panes { display: none; }
     <span class="chip card-ui" id="chipAktif">Bekerja: –</span>
     <span class="chip card-ui" id="chipTahap">Tidak ada produksi</span>
     <span class="chip card-ui" id="chipPemilik" data-menunggu="false">Aldy santai</span>
+    <button type="button" class="chip card-ui" id="btnMalam" aria-pressed="false" title="Tampilan malam bergaya neon">☾ Malam</button>
   </div>
 </div>
 <div class="banner" id="banner" role="status" hidden></div>
@@ -154,12 +180,16 @@ body.lipat .panes { display: none; }
     <section class="pane" data-pane="tahap"><div id="tahapList" class="tahap-wrap"></div></section>
   </div>
 </aside>
-<nav class="zonaNav card-ui" id="zonaNav" aria-label="Lompat ke ruang"></nav>
+<div class="dock" id="dock">
+  <nav class="zonaNav card-ui" id="zonaNav" aria-label="Lompat ke ruang" hidden></nav>
+  <nav class="modeNav card-ui" id="modeNav" aria-label="Mode kamera"></nav>
+  <nav class="agenNav card-ui" id="agenNav" aria-label="Pilih agent"></nav>
+</div>
 
 {{CONFIG_SCRIPT}}
 <script type="module">
   const galeri = new URLSearchParams(location.search).has('galeri');
-  import(galeri ? '/kerja/assets/sa/galeri.js?v=1' : '/kerja/assets/sa/kantor3d.js?v=200');
+  import(galeri ? '/kerja/assets/sa/galeri.js?v=1' : '/kerja/assets/sa/kantor3d.js?v=201');
 </script>
 </body>
 </html>

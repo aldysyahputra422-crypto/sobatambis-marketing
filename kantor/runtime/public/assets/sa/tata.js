@@ -88,7 +88,12 @@ export const RINTANGAN = {
   kolaborasi: [5.5, 7.8, 9.5, 8.8],
   resepsionis: [-12.8, 4.0, -9.2, 6.1],
   foosball: [14.2, 7.8, 16.2, 9.0],
+  hologram: [-1.95, 0.05, -0.05, 1.95],
 };
+
+// Hologram di area terbuka tengah (menyala sesuai tahap pipeline) dan layar besar di dinding belakang Lantai Produksi.
+export const HOLO = { x: -1.0, z: 1.0, r: 0.9 };
+export const LAYAR = { x: -3.7, y: 2.5, z: -9.47, w: 6.2, h: 1.9 };
 
 // Tahap pipeline → zona yang menyala di lantai.
 export const TAHAP_ZONA = {

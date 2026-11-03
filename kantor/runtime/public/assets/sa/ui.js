@@ -1,5 +1,6 @@
 // Panel antarmuka: kursi pemilik, tim per zona, aktivitas langsung, papan tahap. Hanya textContent (tanpa innerHTML).
 import { ZONA, zonaDariNama } from './tata.js';
+import { namaTahap } from './ringkas.js';
 
 const URUT_ZONA = ['direktur', 'riset', 'naskah', 'suara', 'produksi', 'kreatif', 'gerbang', 'katalog'];
 const $ = (id) => document.getElementById(id);
@@ -12,21 +13,79 @@ const h = (tag, cls, teks) => {
 const jam = new Intl.DateTimeFormat('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
 const waktu = (iso) => (iso ? jam.format(new Date(iso)).replace(/\./g, ':') : '');
 const potong = (s, n) => (s && s.length > n ? `${s.slice(0, n - 1)}…` : s ?? '');
-const NAMA_TAHAP = { dialog_ok: 'Dialog OK', qa_gerak: 'QA Gerak', qa_final: 'QA Final', video_ok: 'Video OK', render_draf: 'Render Draf' };
-const namaTahap = (t) => NAMA_TAHAP[t] ?? t.charAt(0).toUpperCase() + t.slice(1);
 const LABEL_STATE = { bekerja: 'Bekerja', selesai: 'Beres', santai: 'Santai' };
 
-export function bangunUi({ roster, fokus, demo, skenario }) {
-  // navigasi zona
+const MODE = [
+  ['semua', 'Semua', 'gambaran'], ['meja', 'Meja', 'per agent'], ['jelajah', 'Jelajah', 'bebas'], ['fokus', 'Fokus', 'otomatis'], ['tim', 'Tim', 'per ruang'],
+];
+
+// Tema malam: gelap dengan aksen neon. Menandai <html data-malam>; kantor3d.js membaca atribut itu untuk adegan 3D.
+export function aturMalam(on, simpan = true) {
+  const r = document.documentElement;
+  if (on) {
+    if (r.dataset.malam === undefined) r.dataset.temaSebelum = r.dataset.theme ?? '';
+    r.dataset.malam = '1';
+    r.dataset.theme = 'dark';
+  } else if (r.dataset.malam !== undefined) {
+    delete r.dataset.malam;
+    if (r.dataset.temaSebelum) r.dataset.theme = r.dataset.temaSebelum;
+    else delete r.dataset.theme;
+    delete r.dataset.temaSebelum;
+  }
+  $('btnMalam')?.setAttribute('aria-pressed', String(on));
+  if (simpan) {
+    try { localStorage.setItem('kantor.malam', on ? '1' : '0'); } catch { /* penyimpanan tidak tersedia: abaikan */ }
+  }
+}
+export function malamAwal(params) {
+  const q = params.get('malam');
+  if (q === '1' || q === '0') return q === '1';
+  try { return localStorage.getItem('kantor.malam') === '1'; } catch { return false; }
+}
+
+export function bangunUi({ roster, fokus, demo, skenario, kendali }) {
+  // navigasi bawah: mode kamera, chip agent, dan (mode Tim) lompat ke ruang
   const nav = $('zonaNav');
-  const tombol = (teks, id) => {
+  const tombol = (teks, aksi) => {
     const b = h('button', 'zn', teks);
     b.type = 'button';
-    b.addEventListener('click', () => fokus(id));
+    b.addEventListener('click', aksi);
     nav.appendChild(b);
   };
-  tombol('Semua', null);
-  for (const id of ['lobi', ...URUT_ZONA.filter((z) => z !== 'katalog'), 'lounge']) tombol(ZONA[id].nama, id);
+  for (const id of ['lobi', ...URUT_ZONA.filter((z) => z !== 'katalog'), 'lounge']) tombol(ZONA[id].nama, () => fokus(id));
+  tombol('Layar produksi', () => kendali.lihatLayar());
+
+  const navMode = $('modeNav');
+  const tombolMode = new Map();
+  for (const [id, nama, ket] of MODE) {
+    const b = h('button', 'md');
+    b.type = 'button';
+    b.setAttribute('aria-pressed', 'false');
+    b.append(h('span', '', nama), h('small', '', ket));
+    b.addEventListener('click', () => kendali.setMode(id));
+    navMode.appendChild(b);
+    tombolMode.set(id, b);
+  }
+  const navAgen = $('agenNav');
+  const chip = new Map();
+  const buatChip = (kunci, label, warna) => {
+    const b = h('button', 'ag');
+    b.type = 'button';
+    b.dataset.state = 'santai';
+    b.setAttribute('aria-pressed', 'false');
+    b.style.setProperty('--w', warna);
+    b.append(h('i', 'dot'), h('span', '', label));
+    b.addEventListener('click', () => kendali.pilihAgen(kunci));
+    navAgen.appendChild(b);
+    chip.set(kunci, b);
+  };
+  buatChip('pemilik', 'Aldy', '#FFC400');
+  buatChip('ketua', roster.ketua.label, roster.ketua.warna);
+  for (const a of roster.agents) buatChip(a.agent, a.label, a.warna);
+  const ukurDock = () => document.documentElement.style.setProperty('--dock-h', `${$('dock').offsetHeight}px`);
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(ukurDock).observe($('dock'));
+  ukurDock();
+  $('btnMalam').addEventListener('click', () => aturMalam(document.documentElement.dataset.malam === undefined));
 
   // tab
   const tabs = [...document.querySelectorAll('[data-tab]')];
@@ -58,7 +117,7 @@ export function bangunUi({ roster, fokus, demo, skenario }) {
     b.type = 'button';
     b.style.setProperty('--w', warna);
     b.append(h('i', 'dot'), h('b', '', label), h('span', 'st', ''), h('small', 'tugas', ''));
-    b.addEventListener('click', () => fokus(zona));
+    b.addEventListener('click', () => kendali.pilihAgen(kunci));
     grup.get(zona)?.appendChild(b);
     kartu.set(kunci, b);
     return b;
@@ -76,6 +135,15 @@ export function bangunUi({ roster, fokus, demo, skenario }) {
 
   let spanduk = false;
   return {
+    // dipanggil kantor3d.js tiap mode atau agent terpilih berubah
+    tandai({ mode, terpilih }) {
+      for (const [id, b] of tombolMode) b.setAttribute('aria-pressed', String(id === mode));
+      nav.hidden = mode !== 'tim';
+      for (const [k, b] of chip) b.setAttribute('aria-pressed', String(k === terpilih));
+      const c = chip.get(terpilih);
+      if (c) navAgen.scrollTo({ left: c.offsetLeft - navAgen.clientWidth / 2 + c.offsetWidth / 2, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      ukurDock();
+    },
     status(ok) {
       $('liveDot').dataset.ok = String(ok);
       $('liveTxt').textContent = ok ? 'Terhubung' : 'Terputus, mencoba lagi…';
@@ -100,6 +168,16 @@ export function bangunUi({ roster, fokus, demo, skenario }) {
       if (menunggu) {
         $('panggilanTeks').textContent = `${d.pemilik.episode ?? ''}: ${d.pemilik.butuh ?? ''}`;
         $('panggilanBtn').onclick = () => fokusFn('lobi');
+      }
+      // chip agent
+      const ketuaKerja = d.ketua?.state === 'bekerja';
+      chip.get('ketua').dataset.state = ketuaKerja ? 'bekerja' : 'santai';
+      chip.get('pemilik').dataset.state = menunggu ? 'menunggu' : 'santai';
+      for (const r of d.roster ?? []) {
+        const c = chip.get(r.agent);
+        if (!c) continue;
+        c.dataset.state = r.state;
+        c.title = r.run?.task ? `${r.label}: ${r.run.task}` : r.label;
       }
       // kartu
       set(kartu.get('ketua'), d.ketua?.state === 'bekerja' ? 'bekerja' : 'santai', d.ketua?.waiting_on > 0 ? `Menunggu ${d.ketua.waiting_on} agent` : '');

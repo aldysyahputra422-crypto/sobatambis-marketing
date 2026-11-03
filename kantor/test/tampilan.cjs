@@ -17,6 +17,39 @@ const { chromium } = require('playwright');
     const k = window.__kantor;
     return { aktor: k.aktor.size, panggilan: k.renderer.info.render.calls, kartu: document.querySelectorAll('.kartu').length, spanduk: !document.getElementById('banner').hidden };
   });
+  // bar bawah: 5 mode kamera, 18 chip agent (Aldy, direktur, 16 agent), mode berpindah benar, dan tema malam
+  hasil.dock = await p.evaluate(() => ({ mode: document.querySelectorAll('.md').length, chip: document.querySelectorAll('.ag').length, zonaTersembunyi: document.getElementById('zonaNav').hidden, holo: document.querySelector('.holo-label')?.textContent }));
+  hasil.mode = await p.evaluate(() => {
+    const k = window.__kantor;
+    const o = {};
+    k.setMode('tim');
+    o.timZona = !document.getElementById('zonaNav').hidden;
+    k.pilihAgen('animator');
+    o.meja = `${k.kam.mode}:${k.kam.terpilih}`;
+    o.zonaMeja = document.getElementById('zonaNav').hidden;
+    o.chipTerpilih = document.querySelector('.ag[aria-pressed="true"]')?.textContent;
+    k.pilihAgen('animator');
+    o.balik = k.kam.mode;
+    k.setMode('fokus');
+    o.fokus = k.kam.terpilih;
+    k.setMode('jelajah');
+    o.bebas = [k.controls.maxAzimuthAngle === Infinity, k.kam.terpilih];
+    k.setMode('semua');
+    o.batasKembali = Number.isFinite(k.controls.maxAzimuthAngle);
+    return o;
+  });
+  hasil.malam = await p.evaluate(async () => {
+    const b = document.getElementById('btnMalam');
+    const r = document.documentElement;
+    const tik = () => new Promise((x) => setTimeout(x, 80)); // MutationObserver berjalan asinkron
+    const baca = () => ({ malam: r.dataset.malam ?? null, tema: r.dataset.theme ?? null, tekan: b.getAttribute('aria-pressed'), lampu: window.__kantor.scene.children.filter((c) => c.isPointLight).map((c) => c.intensity > 0) });
+    b.click();
+    await tik();
+    const on = baca();
+    b.click();
+    await tik();
+    return { on, off: baca() };
+  });
   // skenario 1: animator bekerja. Terapkan skenario 2 (animator santai) lalu pastikan ia berjalan.
   hasil.gerak = await p.evaluate(async () => {
     const k = window.__kantor;

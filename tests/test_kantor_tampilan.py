@@ -43,6 +43,16 @@ def test_tampilan_demo_render_dan_karakter_berjalan(tmp_path):
     assert h["info"]["aktor"] == 18 + 1, h["info"]  # 16 agent + direktur + pemilik + 1 freelancer demo
     assert h["info"]["kartu"] == 17 and h["info"]["spanduk"] is True
     assert h["info"]["panggilan"] < 1200, "terlalu banyak draw call (penggabungan geometri rusak?)"
+    assert h["dock"] == {"mode": 5, "chip": 18, "zonaTersembunyi": True, "holo": "Tahap: QA Gerak"}, h["dock"]
+    m = h["mode"]
+    assert m["timZona"] is True and m["zonaMeja"] is True, m  # baris ruang hanya tampil di mode Tim
+    assert m["meja"] == "meja:animator" and "Animator" in m["chipTerpilih"], m
+    assert m["balik"] == "semua", m  # mengetuk agent yang sama lagi kembali ke gambaran
+    assert m["fokus"] == "ketua", m  # direktur bekerja di skenario 1, jadi dia disorot dulu
+    assert m["bebas"] == [True, None] and m["batasKembali"] is True, m  # Jelajah membuka batas putar; keluar dari Jelajah memulihkannya
+    ml = h["malam"]
+    assert ml["on"]["malam"] == "1" and ml["on"]["tema"] == "dark" and ml["on"]["tekan"] == "true" and all(ml["on"]["lampu"]), ml
+    assert ml["off"]["malam"] is None and ml["off"]["tekan"] == "false" and not any(ml["off"]["lampu"]), ml
     assert h["gerak"]["segera"]["mode"] == "jalan" and h["gerak"]["segera"]["titik"] > 0
     assert h["gerak"]["jauh"] >= 1.0, "karakter tidak berpindah"
     assert h["galeri"] == [] and h["jumlahLabelGaleri"] == 18, (h["galeri"], h["jumlahLabelGaleri"])
