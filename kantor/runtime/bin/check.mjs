@@ -21,7 +21,7 @@ try {
   } catch {
     cfg = null;
   }
-  t('window.KANTOR terbaca', cfg !== null && Array.isArray(cfg.team) && cfg.team.length === 4);
+  t('window.KANTOR terbaca', cfg !== null && Array.isArray(cfg.team) && cfg.team.length === 4 && cfg.roster?.agents?.length === 16);
   const r = await get('/kerja/api/state');
   const s = await r.json().catch(() => null);
   t('/kerja/api/state → JSON', r.status === 200 && s && s.app === 'kantor-agent', String(r.status));
@@ -32,7 +32,8 @@ try {
     const busy = s.team.filter((m2) => m2.state === 'bekerja').map((m2) => m2.name);
     console.log(`  ${s.project}: transkrip ${s.transcripts ? 'ada' : 'belum ada'} · ${s.ketua.name} ${s.ketua.state} · tim bekerja: ${busy.join(', ') || '—'} · freelancer: ${s.freelancers.length} · ${s.stats.total} subagent (7 hari)`);
   }
-  t('/kerja/assets/kantor.js → 200', (await get('/kerja/assets/kantor.js')).status === 200);
+  t('/kerja/assets/sa/kantor3d.js → 200', (await get('/kerja/assets/sa/kantor3d.js')).status === 200);
+  t('state.roster 16 kursi, pemilik, pipeline', s && s.roster?.length === 16 && s.pemilik && 'pipeline' in s);
   for (const p of ['/kerja/assets/..%2F..%2Fdefaults.json', '/defaults.json', '/kerja/tidak-ada']) t(`404 ${p}`, (await get(p)).status === 404);
 } catch (e) {
   bad.push(`tidak bisa terhubung ke ${base}: ${e.cause?.code || e.message}`);

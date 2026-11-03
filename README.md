@@ -61,7 +61,9 @@ Fork dari [humaedihume/kantor-agent](https://github.com/humaedihume/kantor-agent
 
 Kantor menyala otomatis saat sesi dimulai (`autostart` di `.claude/kantor-agent.json`) di `http://127.0.0.1:8788/kerja`; `/sa-kantor start|status|stop` untuk mengaturnya sendiri. Data tambahan untuk tampilan ada di `/kerja/api/state` (`roster`, `pemilik`, `pipeline`). Kantor membaca transkrip Claude Code di komputer ini, jadi harus dijalankan di mesin yang juga menjalankan Claude Code. Tampilan diperbarui tiap 3 detik.
 
-Status: data dan label (Fase 1) selesai. Tampilan 3D baru mengikuti desain render (Fase 2); sampai itu jadi, tampilan 3D masih bawaan upstream dengan nama bawaan untuk kursi lamanya.
+Tampilan 3D (Fase 2) sudah jadi: denah Opsi A dengan 10 zona, karakter chibi berseragam per fungsi, dan alur produksi sebagai panah kuning di lantai. Zona yang sedang bekerja diberi bingkai kuning. Saat produksi menunggu persetujuan, kursi Aldy menyala merah dengan gelembung tindakannya. Agent yang bekerja berjalan ke mejanya, yang santai ke lounge. Di HP kantor diputar tegak dan panel dilipat.
+
+Lihat tampilan tanpa menunggu produksi: buka `http://127.0.0.1:8788/kerja?demo` (tiga skenario bergantian tiap 14 detik, atau `?demo&skenario=0|1|2`). Mode demo selalu memasang spanduk "data contoh, bukan aktivitas nyata". Tanpa `?demo`, semua yang tampil berasal dari transkrip dan `status.json` nyata.
 
 ### Berapa episode per minggu muat di Claude Pro?
 

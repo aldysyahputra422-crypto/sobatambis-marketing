@@ -8,9 +8,11 @@ export const SECURITY_HEADERS = {
   'Content-Security-Policy': "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
 };
 
+import { loadRoster } from './marketing.mjs';
+
 // Konfigurasi halaman (window.KANTOR): hanya nama & judul — status diambil lewat /kerja/api/state.
 export function pageConfig(cfg) {
-  return { title: cfg.title, ketua: cfg.ketua, team: cfg.team, colors: cfg.colors, spare_desks: cfg.spare_desks };
+  return { title: cfg.title, ketua: cfg.ketua, team: cfg.team, colors: cfg.colors, spare_desks: cfg.spare_desks, roster: loadRoster() };
 }
 
 // Perlindungan DNS rebinding: hanya host IP literal, localhost, *.trycloudflare.com (tunnel), atau KANTOR_ALLOWED_HOSTS.

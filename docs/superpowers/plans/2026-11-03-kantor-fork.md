@@ -10,8 +10,8 @@ Sumber: `humaedihume/kantor-agent` (MIT, commit ad92a7a). Keputusan desain: `doc
 5. Autostart dari hook SessionStart repo kita; plugin kantor-agent upstream dilepas dari `config/claude-settings.json` (hindari dua server). Perintah `/sa-kantor`.
 6. Test: `node --test kantor/test` (fixture transkrip palsu) + parity logika `pemilik` terhadap `scripts/notion_catatan.py` + pytest yang menjalankan keduanya.
 
-## Fase 2 (menunggu desain render)
-Tampilan 3D baru di `kantor/runtime/public/assets/kantor.js` yang membaca `roster`, `pemilik`, `pipeline`.
+## Fase 2 (selesai)
+Tampilan 3D baru di `kantor/runtime/public/assets/sa/` (tata.js denah murni, karakter.js, perabot.js, gabung.js, kantor3d.js, ui.js, demo.js) yang membaca `roster`, `pemilik`, `pipeline`. Diuji: 9 test denah/jalur/demo (Node), uji asap Chromium (render, draw call, gerak).
 
 ## Di luar cakupan
 Tailscale (`tailscale serve`) dikerjakan setelah Fase 1, di mesin pemilik.

@@ -1,0 +1,107 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import test from 'node:test';
+import { fileURLToPath } from 'node:url';
+import { ALUR, jalur, LOUNGE, MEJA, MEJA_CADANGAN, MEJA_KETUA, PEMILIK_KURSI, PINTU, TAHAP_ZONA, ZONA, zonaDariNama } from '../runtime/public/assets/sa/tata.js';
+import { SKENARIO, keadaanDemo } from '../runtime/public/assets/sa/demo.js';
+
+const RUNTIME = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../runtime');
+const roster = JSON.parse(fs.readFileSync(path.join(RUNTIME, 'roster.json'), 'utf8'));
+const dalam = ([x0, z0, x1, z1], [x, z]) => x >= x0 && x <= x1 && z >= z0 && z <= z1;
+const TAHAP = ['naskah', 'suara', 'dialog_ok', 'adegan', 'mix', 'render_draf', 'qa_gerak', 'render', 'qa_final', 'kemasan', 'video_ok', 'gerbang'];
+
+test('setiap agent di roster punya meja di zonanya, di dalam kotak zona', () => {
+  for (const a of roster.agents) {
+    const m = MEJA[a.agent];
+    assert.ok(m, `meja ${a.agent}`);
+    assert.equal(zonaDariNama(a.zona), m.zona, `zona ${a.agent}`);
+    assert.ok(dalam(ZONA[m.zona].rect, [m.x, m.z]), `${a.agent} di luar zona ${m.zona}`);
+  }
+  assert.equal(Object.keys(MEJA).length, roster.agents.length, 'tidak ada meja yatim');
+});
+
+test('ketua, pemilik, dan meja cadangan berada di zona yang benar', () => {
+  assert.equal(zonaDariNama(roster.ketua.zona), 'direktur');
+  assert.ok(dalam(ZONA.direktur.rect, [MEJA_KETUA.x, MEJA_KETUA.z]));
+  assert.equal(zonaDariNama(roster.pemilik.zona), 'lobi');
+  assert.ok(dalam(ZONA.lobi.rect, [PEMILIK_KURSI.x, PEMILIK_KURSI.z]));
+  assert.equal(MEJA_CADANGAN.length, 4);
+  for (const m of MEJA_CADANGAN) assert.ok(dalam(ZONA.produksi.rect, [m.x, m.z]));
+});
+
+test('tidak ada dua meja bertabrakan', () => {
+  const semua = [...Object.entries(MEJA).map(([k, m]) => [k, m]), ...MEJA_CADANGAN.map((m, i) => [`cadangan${i}`, m]), ['ketua', MEJA_KETUA]];
+  for (let i = 0; i < semua.length; i++) {
+    for (let j = i + 1; j < semua.length; j++) {
+      const [a, b] = [semua[i][1], semua[j][1]];
+      assert.ok(Math.abs(a.x - b.x) >= 1.6 || Math.abs(a.z - b.z) >= 1.6, `${semua[i][0]} bertabrakan dengan ${semua[j][0]}`);
+    }
+  }
+});
+
+test('tempat santai di lounge cukup untuk semua agent', () => {
+  assert.ok(LOUNGE.length >= roster.agents.length);
+  for (const s of LOUNGE) {
+    assert.ok(dalam(ZONA.lounge.rect, [s.x, s.z]), `spot ${s.x},${s.z} di luar lounge`);
+    assert.ok(['duduk', 'berdiri'].includes(s.modus));
+  }
+});
+
+test('semua tahap pipeline punya zona dan zonanya ada', () => {
+  for (const t of TAHAP) assert.ok(ZONA[TAHAP_ZONA[t]], t);
+});
+
+test('jalur alur produksi berurutan dan hanya bergerak lurus (sumbu x atau z)', () => {
+  assert.ok(ALUR.length >= 6);
+  for (let i = 1; i < ALUR.length; i++) assert.ok(ALUR[i][0] === ALUR[i - 1][0] || ALUR[i][1] === ALUR[i - 1][1], `segmen ${i} miring`);
+});
+
+test('skenario demo memakai agent yang ada dan tahap yang sah', () => {
+  const ids = new Set(roster.agents.map((a) => a.agent));
+  assert.ok(SKENARIO.length >= 3);
+  for (let i = 0; i < SKENARIO.length; i++) {
+    const d = keadaanDemo(roster, Date.now(), i);
+    assert.equal(d.demo, true);
+    assert.equal(d.roster.length, 16);
+    for (const r of d.roster) assert.ok(ids.has(r.agent));
+    assert.ok(TAHAP.includes(d.pipeline.sekarang));
+    assert.ok(['menunggu', 'santai'].includes(d.pemilik.state));
+    assert.ok(d.roster.some((r) => r.state === 'bekerja'), `skenario ${i} tanpa yang bekerja`);
+  }
+});
+
+// ---- jalur jalan: lurus dan tidak menembus meja mana pun
+const kotakMeja = (m) => [m.x - 0.75, m.z + 0.38, m.x + 0.75, m.z + 1.18];
+const semuaMeja = () => [...Object.values(MEJA), MEJA_KETUA, ...MEJA_CADANGAN].map(kotakMeja);
+function menabrak(a, b, [x0, z0, x1, z1]) {
+  const [ax, az] = a;
+  const [bx, bz] = b;
+  const [sx0, sx1] = [Math.min(ax, bx), Math.max(ax, bx)];
+  const [sz0, sz1] = [Math.min(az, bz), Math.max(az, bz)];
+  return sx1 > x0 && sx0 < x1 && sz1 > z0 && sz0 < z1;
+}
+function periksaJalur(nama, dari, ke) {
+  const pts = [[dari.x, dari.z], ...jalur(dari, ke)];
+  for (let i = 1; i < pts.length; i++) {
+    assert.ok(pts[i][0] === pts[i - 1][0] || pts[i][1] === pts[i - 1][1], `${nama}: segmen ${i} miring ${pts[i - 1]} → ${pts[i]}`);
+    for (const k of semuaMeja()) assert.ok(!menabrak(pts[i - 1], pts[i], k), `${nama}: segmen ${i} menembus meja ${k}`);
+  }
+}
+
+test('setiap agent bisa berjalan dari mejanya ke lounge dan kembali tanpa menembus meja', () => {
+  roster.agents.forEach((a, i) => {
+    const m = MEJA[a.agent];
+    const l = { ...LOUNGE[i], zona: 'lounge' };
+    periksaJalur(`${a.agent} → lounge`, m, l);
+    periksaJalur(`lounge → ${a.agent}`, l, m);
+  });
+});
+
+test('pintu ruang belakang berada di celah antarmeja dan sekat kaca tidak menutup pintu', () => {
+  for (const [zona, p] of Object.entries(PINTU)) {
+    const [x0, , x1] = ZONA[zona].rect;
+    assert.ok(p[0] > x0 + 0.8 && p[0] < x1 - 0.8, `${zona}: pintu terlalu dekat dinding`);
+    for (const m of Object.values(MEJA).filter((m2) => m2.zona === zona)) assert.ok(Math.abs(m.x - p[0]) > 0.75 + 0.3, `${zona}: pintu tertutup meja di x=${m.x}`);
+  }
+});
