@@ -42,12 +42,19 @@
         "source": "github",
         "repo": "lemomo-ai/lemo-opuscar"
       }
+    },
+    "kantor-agent": {
+      "source": {
+        "source": "github",
+        "repo": "humaedihume/kantor-agent"
+      }
     }
   },
   "enabledPlugins": {
     "caveman@caveman": true,
     "ponytail@ponytail": true,
-    "andrej-karpathy-skills@karpathy-skills": true
+    "andrej-karpathy-skills@karpathy-skills": true,
+    "kantor-agent@kantor-agent": true
   },
   "env": {
     "DO_NOT_TRACK": "1"

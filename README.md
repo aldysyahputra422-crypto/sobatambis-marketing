@@ -51,6 +51,14 @@ karpathy-skills (plugin, aktif bawaan), ECC / genjutsu / hyperframes / lemo-opus
 - `/sa-status videos/<minggu>/<episode>` — tahap, skor gerak, token.
 - `/sa-pasang-skill "<kebutuhan>"` — cari dan pasang skill dari katalog.
 
+### Kantor live: lihat agent bekerja
+Departemen marketing divisualisasikan sebagai satu kantor 3D (repo `humaedihume/kantor-agent`, plugin sudah terdaftar di `config/claude-settings.json`):
+- **Hapis** = sesi utama (direktur), bekerja di mejanya.
+- **Dimas, Nadia, Rizky, Ayu** = 4 anggota tim; duduk bekerja saat ada subagent.
+- **Freelancer** (Tono, Wati, dst.) masuk lewat pintu saat tim penuh. Nama diambil dari daftar, bukan peran agent.
+
+Konfigurasi di `.claude/kantor-agent.json`. Kantor menyala otomatis saat sesi dimulai (`autostart`) di `http://127.0.0.1:8788/kerja`. Kantor membaca transkrip Claude Code di komputer ini, jadi harus dijalankan di mesin yang juga menjalankan Claude Code. Tampilan diperbarui tiap 3 detik.
+
 ### Berapa episode per minggu muat di Claude Pro?
 
 Batas Pro tidak diumumkan dalam token, jadi plugin **mengukur**, bukan menebak:
