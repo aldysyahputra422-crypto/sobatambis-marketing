@@ -19,7 +19,7 @@ import { WATAK, WATAK_FREELANCER } from './watak.js';
 const API = '/kerja/api/state';
 const POLL_MS = 3000;
 const params = new URLSearchParams(location.search);
-const DEMO = params.has('demo');
+const DEMO = params.has('demo') || window.KANTOR?.demo === true; // versi mandiri (artefak) selalu demo
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const el = document.getElementById('scene');
 const W = P.W;
@@ -58,7 +58,11 @@ function latarPeta(gelapMode) {
   }
 }
 const gelap = matchMedia('(prefers-color-scheme: dark)');
-latarPeta(gelap.matches);
+const modeGelap = () => { // pilihan tema eksplisit (data-theme) menang atas pengaturan sistem
+  const t = document.documentElement.dataset.theme;
+  return t === 'dark' || (t !== 'light' && gelap.matches);
+};
+latarPeta(modeGelap());
 
 // ---------------------------------------------------------------- renderer
 let renderer;
@@ -113,11 +117,12 @@ matahari.shadow.bias = -0.0005;
 matahari.shadow.radius = 3;
 scene.add(hemi, matahari);
 const tema = () => {
-  hemi.intensity = gelap.matches ? 0.65 : 1.05;
-  matahari.intensity = gelap.matches ? 0.85 : 1.35;
-  latarPeta(gelap.matches);
+  hemi.intensity = modeGelap() ? 0.65 : 1.05;
+  matahari.intensity = modeGelap() ? 0.85 : 1.35;
+  latarPeta(modeGelap());
 };
 gelap.addEventListener?.('change', tema);
+new MutationObserver(tema).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
 // ---------------------------------------------------------------- bangunan
 const dunia = new THREE.Group();
