@@ -4,5 +4,6 @@
   "names": {
     "ketua": "Direktur Marketing"
   },
-  "autostart": true
+  "autostart": true,
+  "tailscale": true
 }

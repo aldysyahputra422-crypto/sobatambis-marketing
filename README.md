@@ -65,6 +65,15 @@ Tampilan 3D (Fase 2) sudah jadi: denah isometrik yang mengikuti poster "Italian 
 
 Lihat tampilan tanpa menunggu produksi: buka `http://127.0.0.1:8788/kerja?demo` (tiga skenario bergantian tiap 14 detik, atau `?demo&skenario=0|1|2`). Mode demo selalu memasang spanduk "data contoh, bukan aktivitas nyata". Tanpa `?demo`, semua yang tampil berasal dari transkrip dan `status.json` nyata.
 
+### Buka kantor dari HP lewat Tailscale
+Kantor membaca transkrip di komputer tempat Claude Code berjalan, jadi komputer itulah yang menyajikan kantornya. Tailscale membuatnya bisa dibuka dari HP atau laptop lain tanpa membuka internet:
+1. Pasang Tailscale di komputer itu dan di HP, masuk dengan akun yang sama (`tailscale up`).
+2. Di folder repo: `bash kantor/runtime/bin/kantor.sh tailscale`. Perintah ini menjalankan `tailscale serve` (hanya perangkat di tailnet-mu; **bukan** `funnel` yang membuka ke internet) dan mencetak alamat `https://<komputer>.<tailnet>.ts.net/kerja`.
+3. Buka alamat itu di HP. Bila perintah meminta, aktifkan HTTPS di konsol admin Tailscale (menu DNS).
+4. Putuskan: `bash kantor/runtime/bin/kantor.sh tailscale-stop`.
+
+Catatan: komputer harus menyala dan Tailscale aktif; server kantor tetap hanya mendengarkan `127.0.0.1` dan hanya menerima nama host `*.ts.net` (diatur `"tailscale": true` di `.claude/kantor-agent.json`). Halaman memuat deskripsi tugas agent dan nama berkas, jadi bagikan akses tailnet hanya ke perangkatmu sendiri. Jangan pakai `tunnel` (URL publik) untuk kantor ini.
+
 ### Berapa episode per minggu muat di Claude Pro?
 
 Batas Pro tidak diumumkan dalam token, jadi plugin **mengukur**, bukan menebak:

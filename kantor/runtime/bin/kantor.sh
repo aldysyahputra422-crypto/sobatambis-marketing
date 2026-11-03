@@ -8,11 +8,14 @@
 #   bash kantor.sh url                                                               cetak URL saja
 #   bash kantor.sh tunnel                                                            URL publik sementara (cloudflared)
 #   bash kantor.sh tunnel-stop
+#   bash kantor.sh tailscale                                                         buka ke perangkat di tailnet-mu saja (tailscale serve, bukan funnel)
+#   bash kantor.sh tailscale-stop
 #   bash kantor.sh autostart                                                         untuk hook SessionStart (senyap, opt-in)
 #   bash kantor.sh detect                                                            cek Node/PHP/cloudflared & transkrip
 #
 # Tidak menulis apa pun ke folder project. Cache, PID, dan log disimpan di
 #   ${KANTOR_STATE_DIR:-${XDG_CACHE_HOME:-~/.cache}/kantor-agent}/<slug-project>/
+# Akses jauh yang disarankan: tailscale (hanya tailnet). tunnel (cloudflared) membuat URL publik dan sebaiknya tidak dipakai.
 # Variabel opsional: KANTOR_PORT, KANTOR_RUNTIME (node|php), KANTOR_BIND, KANTOR_STATE_DIR, KANTOR_AUTOSTART=1,
 #   KANTOR_ALLOWED_HOSTS, CLAUDE_CONFIG_DIR. Penimpaan per project (opsional): <project>/.claude/kantor-agent.json
 set -u
@@ -153,11 +156,19 @@ print_running() {
   [ -d "$TRANSCRIPTS" ] || say "  Catatan  : belum ada transkrip Claude Code untuk folder ini — kantor terisi setelah Claude Code dipakai di sini."
 }
 
+allowed_hosts() { # nama host tambahan: *.ts.net bila Tailscale diminta (perintah tailscale atau "tailscale": true di config)
+  local a="${KANTOR_ALLOWED_HOSTS:-}"
+  if [ "${TAILSCALE:-0}" = 1 ] || [ "$(cfg_value tailscale)" = true ]; then a="${a:+$a,}.ts.net"; fi
+  printf '%s' "$a"
+}
+
 start_server() {
   mkdir -p "$STATE/cache" || die "tidak bisa membuat $STATE"
   trim_log
+  local allowed
+  allowed="$(allowed_hosts)"
   if running; then
-    if [ "$(envget RUNTIME_DIR)" = "$RUNTIME" ] && { [ -z "$WANT_RT" ] || [ "$WANT_RT" = "$(envget RUNTIME)" ]; } \
+    if [ "$(envget RUNTIME_DIR)" = "$RUNTIME" ] && [ "$(envget ALLOWED)" = "$allowed" ] && { [ -z "$WANT_RT" ] || [ "$WANT_RT" = "$(envget RUNTIME)" ]; } \
       && { [ -z "$WANT_PORT" ] || [ "$WANT_PORT" = "$(envget PORT)" ]; }; then
       print_running
       return 0
@@ -177,7 +188,7 @@ start_server() {
   while [ "$port" -le "$last" ]; do
     if port_busy "$port"; then port=$((port + 1)); continue; fi
     printf '\n[%s] start %s port %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$rt" "$port" >>"$LOG"
-    KANTOR_PROJECT="$PROJECT" KANTOR_STORAGE="$STATE" KANTOR_PORT="$port" KANTOR_BIND="$BIND" \
+    KANTOR_PROJECT="$PROJECT" KANTOR_STORAGE="$STATE" KANTOR_PORT="$port" KANTOR_BIND="$BIND" KANTOR_ALLOWED_HOSTS="$allowed" \
       nohup node "$RUNTIME/bin/serve-node.mjs" </dev/null >>"$LOG" 2>&1 &
     pid=$!
     ok=0; i=0
@@ -189,7 +200,7 @@ start_server() {
     if [ $ok = 1 ]; then
       {
         echo "PID=$pid"; echo "PORT=$port"; echo "RUNTIME=$rt"; echo "BIND=$BIND"
-        echo "RUNTIME_DIR=$RUNTIME"; echo "PROJECT=$PROJECT"; echo "STARTED=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        echo "RUNTIME_DIR=$RUNTIME"; echo "ALLOWED=$allowed"; echo "PROJECT=$PROJECT"; echo "STARTED=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
       } >"$ENVF"
       [ "$port" != "$base" ] && say "Port $base sudah dipakai — memakai $port."
       print_running
@@ -245,6 +256,22 @@ case "$CMD" in
     say "PERINGATAN: siapa pun yang tahu link ini bisa melihat aktivitas agent project ini (read-only, diredaksi)."
     say "Bagikan hanya ke orang yang kamu percaya. Matikan: bash \"$RUNTIME/bin/kantor.sh\" tunnel-stop" ;;
   tunnel-stop) stop_tunnel; say "Tunnel dimatikan." ;;
+  tailscale)
+    command -v tailscale >/dev/null 2>&1 || die "Tailscale belum terpasang di komputer ini (https://tailscale.com/download) atau belum login (tailscale up)."
+    TAILSCALE=1
+    QUIET=1 start_server
+    running || die "server tidak berjalan."
+    port="$(envget PORT)"
+    tailscale serve --bg --https=443 "localhost:$port" \
+      || die "tailscale serve gagal. Cek: tailscale status. Bila diminta, aktifkan HTTPS di konsol admin Tailscale (menu DNS)."
+    url="$(tailscale serve status 2>/dev/null | grep -o 'https://[^ ]*' | head -1)"
+    say "Kantor terbuka untuk perangkat di tailnet-mu saja (bukan internet): ${url%/}/kerja"
+    say "Komputer ini harus menyala dan Tailscale aktif. Putuskan: bash \"$RUNTIME/bin/kantor.sh\" tailscale-stop" ;;
+  tailscale-stop)
+    command -v tailscale >/dev/null 2>&1 || die "Tailscale tidak ditemukan."
+    port="$(envget PORT)"
+    [ -n "$port" ] || die "server tidak berjalan untuk project ini; untuk mematikan semua: tailscale serve reset"
+    tailscale serve --https=443 "localhost:$port" off && say "Tailscale serve dimatikan." ;;
   autostart)
     # Hook SessionStart: senyap, cepat, tidak pernah gagal. Aktif hanya bila KANTOR_AUTOSTART=1
     # atau "autostart": true di <project>/.claude/kantor-agent.json.
@@ -260,5 +287,5 @@ case "$CMD" in
     echo "  project     $PROJECT"
     [ -d "$TRANSCRIPTS" ] && echo "  transkrip   ada ($TRANSCRIPTS)" || echo "  transkrip   belum ada ($TRANSCRIPTS)"
     echo "  data server $STATE" ;;
-  *) echo "Perintah tidak dikenal: $CMD (start|stop|restart|status|url|tunnel|tunnel-stop|autostart|detect)" >&2; exit 2 ;;
+  *) echo "Perintah tidak dikenal: $CMD (start|stop|restart|status|url|tunnel|tunnel-stop|tailscale|tailscale-stop|autostart|detect)" >&2; exit 2 ;;
 esac
