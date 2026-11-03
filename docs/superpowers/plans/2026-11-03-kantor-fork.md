@@ -15,3 +15,6 @@ Tampilan 3D baru di `kantor/runtime/public/assets/sa/` (tata.js denah murni, kar
 
 ## Di luar cakupan
 Tailscale (`tailscale serve`) dikerjakan setelah Fase 1, di mesin pemilik.
+
+## Revisi Fase 2 (acuan visual)
+Denah ditata ulang mengikuti poster Estel (kamera isometrik depan-kanan, lantai beton, ruang kaca belakang, lounge depan) dan karakter dirender dari lembar karakter (`watak.js`, 18 gaya rambut). Perabot memakai bahan standar tanpa outline; outline hanya untuk karakter.

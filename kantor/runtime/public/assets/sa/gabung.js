@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 import { GARIS } from './bahan.js';
 
-const bisaGabung = (m) => m.isMesh && !Array.isArray(m.material) && m.geometry?.index && (m.material === GARIS || m.material.isMeshToonMaterial) && !m.userData.dinamis;
+const bisaGabung = (m) => m.isMesh && !Array.isArray(m.material) && m.geometry?.index && (m.material === GARIS || m.material.isMeshToonMaterial || m.material.userData.gabung) && !m.userData.dinamis;
 
 function kumpul(simpul, sendi, hasil) {
   for (const c of simpul.children) {

@@ -45,3 +45,4 @@ def test_tampilan_demo_render_dan_karakter_berjalan(tmp_path):
     assert h["info"]["panggilan"] < 1200, "terlalu banyak draw call (penggabungan geometri rusak?)"
     assert h["gerak"]["segera"]["mode"] == "jalan" and h["gerak"]["segera"]["titik"] > 0
     assert h["gerak"]["jauh"] >= 1.0, "karakter tidak berpindah"
+    assert h["galeri"] == [] and h["jumlahLabelGaleri"] == 18, (h["galeri"], h["jumlahLabelGaleri"])

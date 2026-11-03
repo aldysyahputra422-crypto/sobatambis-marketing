@@ -33,6 +33,14 @@ const { chromium } = require('playwright');
     }
     return { segera, jauh: +jauh.toFixed(2) };
   });
+  // galeri karakter (?galeri): 18 desain terbentuk tanpa galat
+  const g = await b.newPage({ viewport: { width: 1280, height: 800 } });
+  hasil.galeri = [];
+  g.on('console', (m) => { if (m.type() === 'error') hasil.galeri.push(m.text()); });
+  g.on('pageerror', (e) => hasil.galeri.push(e.message));
+  await g.goto(`${dasar}/kerja?galeri`, { waitUntil: 'load' });
+  await g.waitForFunction(() => window.__siap === true, null, { timeout: 40000 });
+  hasil.jumlahLabelGaleri = await g.evaluate(() => document.querySelectorAll('.zona-label').length);
   console.log(JSON.stringify(hasil));
   await b.close();
 })().catch((e) => { console.error(e); process.exit(1); });

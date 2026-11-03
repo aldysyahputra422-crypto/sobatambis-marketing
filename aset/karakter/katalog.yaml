@@ -5,4 +5,5 @@ acuan_chibi:
   sumber: sketsa karakter chibi buatan teman pemilik
   lisensi: izin-pembuat-lewat-chat
   syarat: gratis, boleh dipakai untuk aset Sobat Ambis (izin pembuat lewat chat WhatsApp, 2026-11-03; tangkapan layar disimpan pemilik)
-  catatan: jangan mengunggah gambar aslinya ke repo publik tanpa izin tambahan dari pembuat; karakter kantor dirender ulang dari acuan ini
+  dipakai_untuk: 16 desain karakter kantor live (rambut, baju, ekspresi per agent), dirender ulang secara prosedural di kantor/runtime/public/assets/sa/watak.js dan karakter.js
+  catatan: jangan mengunggah gambar aslinya ke repo publik tanpa izin tambahan dari pembuat; dua desain tambahan (Pemilik, Pencari Skill) dibuat baru dengan gaya yang sama

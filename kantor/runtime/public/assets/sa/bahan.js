@@ -25,7 +25,27 @@ export function toon(warna, extra = {}) {
   return cache.get(kunci);
 }
 
-export const GARIS = new THREE.MeshBasicMaterial({ color: '#1b1b24', side: THREE.BackSide });
+const stdCache = new Map();
+// Bahan standar halus untuk perabot dan bangunan (tampilan render bersih seperti poster acuan); userData.gabung = boleh dilebur.
+export function std(warna, { rough = 0.82, metal = 0, extra = {} } = {}) {
+  const kunci = warna + rough + metal + JSON.stringify(extra);
+  if (!stdCache.has(kunci)) {
+    const m = new THREE.MeshStandardMaterial({ color: warna, roughness: rough, metalness: metal, ...extra });
+    m.userData.gabung = true;
+    stdCache.set(kunci, m);
+  }
+  return stdCache.get(kunci);
+}
+
+// Mesh perabot: bahan standar, tanpa outline tebal (outline hanya untuk karakter).
+export function perabotBadan(geo, warna, opsi = {}) {
+  const m = new THREE.Mesh(geo, std(warna, opsi));
+  m.castShadow = opsi.cast !== false;
+  m.receiveShadow = true;
+  return m;
+}
+
+export const GARIS = new THREE.MeshBasicMaterial({ color: '#2a2020', side: THREE.BackSide });
 
 // Outline: salinan geometri berhadapan-belakang, diperbesar sama tebal di semua sumbu (t meter).
 export function garis(mesh, t = 0.028) {
