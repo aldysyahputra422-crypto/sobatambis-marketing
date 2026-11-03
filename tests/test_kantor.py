@@ -31,3 +31,18 @@ def test_plugin_terdaftar_di_settings_proyek():
 def test_readme_menjelaskan_cara_membuka_kantor():
     t = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "kantor-agent" in t and "127.0.0.1:8788/kerja" in t and "Hapis" in t
+
+
+def test_izin_karakter_tercatat_tanpa_gambar_di_repo_publik():
+    import yaml
+    k = yaml.safe_load((ROOT / "aset/karakter/katalog.yaml").read_text(encoding="utf-8"))["acuan_chibi"]
+    assert k["lisensi"] == "izin-pembuat-lewat-chat" and "gratis" in k["syarat"]
+    assert "tidak di repo publik" in k["file"]
+    assert not list((ROOT / "aset/karakter").glob("*.webp")) and not list((ROOT / "aset/karakter").glob("*.png"))
+
+
+def test_brief_desain_kantor_ada_di_repo():
+    t = (ROOT / "docs/desain/kantor-marketing-brief.md").read_text(encoding="utf-8")
+    for kunci in ("Direktur Marketing", "Pemilik (Aldy)", "#294D82", "#FFC400", "Opsi A", "Chibi", "aset/karakter/katalog.yaml"):
+        assert kunci in t, kunci
+    assert "—" not in t
