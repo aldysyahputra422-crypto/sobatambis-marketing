@@ -52,12 +52,16 @@ karpathy-skills (plugin, aktif bawaan), ECC / genjutsu / hyperframes / lemo-opus
 - `/sa-pasang-skill "<kebutuhan>"` — cari dan pasang skill dari katalog.
 
 ### Kantor live: lihat agent bekerja
-Departemen marketing divisualisasikan sebagai satu kantor 3D (repo `humaedihume/kantor-agent`, plugin sudah terdaftar di `config/claude-settings.json`):
-- **Hapis** = sesi utama (direktur), bekerja di mejanya.
-- **Dimas, Nadia, Rizky, Ayu** = 4 anggota tim; duduk bekerja saat ada subagent.
-- **Freelancer** (Tono, Wati, dst.) masuk lewat pintu saat tim penuh. Nama diambil dari daftar, bukan peran agent.
+Fork dari [humaedihume/kantor-agent](https://github.com/humaedihume/kantor-agent) (MIT) ada di `kantor/` (asal-usul di `kantor/NOTICE.md`). Desain dan keputusan: `docs/desain/kantor-marketing-brief.md`.
+- **Direktur Marketing** = sesi utama, di Ruang Direktur.
+- **16 agent** punya kursi tetap berlabel peran (Penulis Naskah, Animator, dst.) di zonanya; label dari `agentType` subagent. Daftarnya di `kantor/runtime/roster.json` dan dijaga test agar sama dengan `agents/`.
+- **Pemilik (Aldy)**: kursi menyala saat produksi berhenti menunggu persetujuanmu, lengkap dengan tindakan yang diminta.
+- **Papan tahap**: 12 tahap pipeline dan tahap yang sedang berjalan.
+- Subagent di luar daftar (misalnya `general-purpose`) tetap tampil sebagai freelancer.
 
-Konfigurasi di `.claude/kantor-agent.json`. Kantor menyala otomatis saat sesi dimulai (`autostart`) di `http://127.0.0.1:8788/kerja`. Kantor membaca transkrip Claude Code di komputer ini, jadi harus dijalankan di mesin yang juga menjalankan Claude Code. Tampilan diperbarui tiap 3 detik.
+Kantor menyala otomatis saat sesi dimulai (`autostart` di `.claude/kantor-agent.json`) di `http://127.0.0.1:8788/kerja`; `/sa-kantor start|status|stop` untuk mengaturnya sendiri. Data tambahan untuk tampilan ada di `/kerja/api/state` (`roster`, `pemilik`, `pipeline`). Kantor membaca transkrip Claude Code di komputer ini, jadi harus dijalankan di mesin yang juga menjalankan Claude Code. Tampilan diperbarui tiap 3 detik.
+
+Status: data dan label (Fase 1) selesai. Tampilan 3D baru mengikuti desain render (Fase 2); sampai itu jadi, tampilan 3D masih bawaan upstream dengan nama bawaan untuk kursi lamanya.
 
 ### Berapa episode per minggu muat di Claude Pro?
 

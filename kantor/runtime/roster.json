@@ -1,0 +1,150 @@
+{
+  "_catatan": "Roster kantor live Sobat Ambis. Setiap agent repo (agents/*.md) punya satu kursi tetap. Lihat docs/desain/kantor-marketing-brief.md.",
+  "ketua": {
+    "agent": "direktur-marketing",
+    "label": "Direktur Marketing",
+    "zona": "Ruang Direktur",
+    "fungsi": "direktur",
+    "warna": "#294D82",
+    "aksen": "#FFC400",
+    "benda": "papan tulis kecil"
+  },
+  "pemilik": {
+    "label": "Pemilik (Aldy)",
+    "zona": "Kursi Persetujuan",
+    "fungsi": "pemilik",
+    "warna": "#FFFFFF",
+    "aksen": "#FFC400",
+    "benda": "cangkir kopi"
+  },
+  "agents": [
+    {
+      "agent": "desainer-cover",
+      "label": "Desainer Cover",
+      "zona": "Ruang Kreatif",
+      "fungsi": "kreatif",
+      "warna": "#F4A261",
+      "benda": "palet cat"
+    },
+    {
+      "agent": "penulis-caption",
+      "label": "Penulis Caption",
+      "zona": "Ruang Kreatif",
+      "fungsi": "kreatif",
+      "warna": "#F4A261",
+      "benda": "kamera"
+    },
+    {
+      "agent": "animator",
+      "label": "Animator",
+      "zona": "Lantai Produksi",
+      "fungsi": "produksi",
+      "warna": "#294D82",
+      "benda": "tablet gambar"
+    },
+    {
+      "agent": "storyboarder",
+      "label": "Storyboarder",
+      "zona": "Lantai Produksi",
+      "fungsi": "produksi",
+      "warna": "#294D82",
+      "benda": "pensil"
+    },
+    {
+      "agent": "inspektur-frame",
+      "label": "Inspektur Frame",
+      "zona": "Lantai Produksi",
+      "fungsi": "produksi",
+      "warna": "#294D82",
+      "benda": "layar kecil"
+    },
+    {
+      "agent": "penulis-naskah",
+      "label": "Penulis Naskah",
+      "zona": "Ruang Naskah",
+      "fungsi": "naskah",
+      "warna": "#B39DDB",
+      "benda": "pulpen"
+    },
+    {
+      "agent": "pembasmi-slop",
+      "label": "Pembasmi Slop",
+      "zona": "Ruang Naskah",
+      "fungsi": "naskah",
+      "warna": "#B39DDB",
+      "benda": "buku catatan"
+    },
+    {
+      "agent": "pemeriksa-fakta",
+      "label": "Pemeriksa Fakta",
+      "zona": "Ruang Naskah",
+      "fungsi": "naskah",
+      "warna": "#B39DDB",
+      "benda": "kaca pembesar"
+    },
+    {
+      "agent": "sutradara-suara",
+      "label": "Sutradara Suara",
+      "zona": "Studio Suara",
+      "fungsi": "suara",
+      "warna": "#2A9D8F",
+      "benda": "headphone"
+    },
+    {
+      "agent": "qa-suara",
+      "label": "QA Suara",
+      "zona": "Studio Suara",
+      "fungsi": "suara",
+      "warna": "#2A9D8F",
+      "benda": "mikrofon kecil"
+    },
+    {
+      "agent": "periset-tren",
+      "label": "Periset Tren",
+      "zona": "Ruang Riset",
+      "fungsi": "riset",
+      "warna": "#8FD19E",
+      "benda": "teropong"
+    },
+    {
+      "agent": "perencana-konten",
+      "label": "Perencana Konten",
+      "zona": "Ruang Riset",
+      "fungsi": "riset",
+      "warna": "#8FD19E",
+      "benda": "kalender"
+    },
+    {
+      "agent": "penjaga-gerbang-qa",
+      "label": "Penjaga Gerbang QA",
+      "zona": "Ruang Gerbang",
+      "fungsi": "gerbang",
+      "warna": "#FFC400",
+      "benda": "papan centang"
+    },
+    {
+      "agent": "akuntan-token",
+      "label": "Akuntan Token",
+      "zona": "Ruang Gerbang",
+      "fungsi": "gerbang",
+      "warna": "#FFC400",
+      "benda": "kalkulator"
+    },
+    {
+      "agent": "penjadwal-notion",
+      "label": "Penjadwal Notion",
+      "zona": "Ruang Gerbang",
+      "fungsi": "gerbang",
+      "warna": "#FFC400",
+      "benda": "buku jadwal"
+    },
+    {
+      "agent": "pencari-skill",
+      "label": "Pencari Skill",
+      "zona": "Gudang Katalog",
+      "fungsi": "katalog",
+      "warna": "#C8A27C",
+      "benda": "rak kartu skill"
+    }
+  ]
+}

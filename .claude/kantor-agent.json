@@ -2,9 +2,7 @@
   "title": "Departemen Marketing · Sobat Ambis",
   "port": 8788,
   "names": {
-    "ketua": "Hapis",
-    "team": ["Dimas", "Nadia", "Rizky", "Ayu"],
-    "freelancers": ["Tono", "Wati", "Yoga", "Maya", "Eko", "Nina", "Rudi", "Lestari", "Bagas", "Citra", "Hendra", "Putri", "Galih", "Dinda", "Yudi", "Wulan", "Imam", "Kirana"]
+    "ketua": "Direktur Marketing"
   },
   "autostart": true
 }

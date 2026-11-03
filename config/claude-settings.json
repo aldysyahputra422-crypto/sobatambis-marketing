@@ -42,19 +42,12 @@
         "source": "github",
         "repo": "lemomo-ai/lemo-opuscar"
       }
-    },
-    "kantor-agent": {
-      "source": {
-        "source": "github",
-        "repo": "humaedihume/kantor-agent"
-      }
     }
   },
   "enabledPlugins": {
     "caveman@caveman": true,
     "ponytail@ponytail": true,
-    "andrej-karpathy-skills@karpathy-skills": true,
-    "kantor-agent@kantor-agent": true
+    "andrej-karpathy-skills@karpathy-skills": true
   },
   "env": {
     "DO_NOT_TRACK": "1"
@@ -81,7 +74,8 @@
       "Edit(template/src/**)",
       "Write(template/src/**)",
       "Bash(npm install --prefix template *)",
-      "Bash(npm install --prefix */template *)"
+      "Bash(npm install --prefix */template *)",
+      "Bash(bash kantor/runtime/bin/kantor.sh *)"
     ]
   },
   "hooks": {

@@ -24,6 +24,17 @@ def siapkan() -> str:
     return "dipasang" if r.returncode == 0 else f"gagal: {(r.stdout + r.stderr).strip().splitlines()[-1:]}"
 
 
+def kantor() -> None:
+    """Nyalakan kantor live (fork di kantor/) secara senyap bila "autostart": true di .claude/kantor-agent.json. Tidak pernah menggagalkan sesi."""
+    if os.environ.get("SA_LEWATI_SETUP"):
+        return
+    try:
+        subprocess.run(["bash", str(REPO / "kantor/runtime/bin/kantor.sh"), "autostart"],
+                       env={**os.environ, "CLAUDE_PROJECT_DIR": str(PROYEK)}, capture_output=True, timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        pass
+
+
 def pasang() -> str:
     if os.environ.get("SA_LEWATI_PASANG"):
         return "dilewati"
@@ -47,6 +58,7 @@ def produksi_aktif() -> list[str]:
 
 if __name__ == "__main__":
     baca_masukan()
+    kantor()
     bagian = [HEMAT_TOKEN, f"Dependensi: {siapkan()}. Skill otomatis: {pasang()}."]
     aktif = produksi_aktif()
     if aktif:
