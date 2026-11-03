@@ -6,7 +6,7 @@
   pakai_saat: render video animasi template remotion komposisi caption audio
   cara_pasang: skill resmi remotion-dev/skills dipasang otomatis (folder skills/*); dependensi npm ada di template/package.json
   otomatis: true
-  pasang: {jenis: git_subskill, url: "https://github.com/remotion-dev/skills", paths: ["skills/*"], skills: [remotion-best-practices]}
+  pasang: {jenis: git_subskill, url: "https://github.com/remotion-dev/skills", paths: ["skills/*"], skills: [remotion-best-practices], pin: "c7cb2fdcacd134fb2ccb9b7a44f9ffa44e467271"}
   agent: [animator, storyboarder, inspektur-frame]
   lisensi: Remotion License
   catatan_lisensi: gratis untuk individu dan tim kecil; cek remotion.dev/license bila tim membesar
@@ -67,7 +67,7 @@
   pakai_saat: naskah caption tulisan slop AI sunting gaya bahasa
   cara_pasang: git clone --depth 1 https://github.com/hardikpandya/stop-slop ~/.claude/skills/stop-slop
   otomatis: true
-  pasang: {jenis: git_skill, url: "https://github.com/hardikpandya/stop-slop"}
+  pasang: {jenis: git_skill, url: "https://github.com/hardikpandya/stop-slop", pin: "8da1f030185bdfe8471220585162991eaeb970e9"}
   agent: [pembasmi-slop, penulis-naskah, penulis-caption, penjaga-gerbang-qa]
   lisensi: MIT
   catatan_lisensi: bebas dipakai
@@ -94,7 +94,7 @@
   pakai_saat: naskah caption anti slop ai tulisan manusiawi sunting dialog
   cara_pasang: otomatis (git clone ke ~/.claude/skills/humanizer)
   otomatis: true
-  pasang: {jenis: git_skill, url: "https://github.com/blader/humanizer"}
+  pasang: {jenis: git_skill, url: "https://github.com/blader/humanizer", pin: "0ef9fe5bc3572734fd3ae6c448fe00a30cd5dcf0"}
   agent: [pembasmi-slop, penulis-naskah, penulis-caption, penjaga-gerbang-qa]
   lisensi: MIT
   catatan_lisensi: bebas dipakai
@@ -108,7 +108,7 @@
   pakai_saat: caption copywriting strategi konten kalender ide konten media sosial psikologi pemasaran hook video
   cara_pasang: otomatis (sparse clone, hanya folder skill terpilih)
   otomatis: true
-  pasang: {jenis: git_subskill, url: "https://github.com/coreyhaines31/marketingskills", paths: [skills/copywriting, skills/copy-editing, skills/content-strategy, skills/social, skills/marketing-psychology, skills/marketing-ideas, skills/video], skills: [copywriting, copy-editing, content-strategy, social, marketing-psychology, marketing-ideas, video]}
+  pasang: {jenis: git_subskill, url: "https://github.com/coreyhaines31/marketingskills", paths: [skills/copywriting, skills/copy-editing, skills/content-strategy, skills/social, skills/marketing-psychology, skills/marketing-ideas, skills/video], skills: [copywriting, copy-editing, content-strategy, social, marketing-psychology, marketing-ideas, video], pin: "88c79f6528a9347420e57ceb1fff9a60de651768"}
   agent: [perencana-konten, penulis-caption, desainer-cover, direktur-marketing, penulis-naskah, storyboarder, periset-tren]
   lisensi: MIT
   catatan_lisensi: bebas dipakai; jangan pasang seluruh paket (50+ skill) supaya konteks tetap ringan
@@ -122,7 +122,7 @@
   pakai_saat: naskah struktur cerita beat karakter arc diagnosis naskah film
   cara_pasang: otomatis (sparse clone skill screenwriting, screenwriting-beats, screenwriting-character, screenwriting-lint)
   otomatis: true
-  pasang: {jenis: git_subskill, url: "https://github.com/e06084/claude-screenwriting", paths: [skills/screenwriting, skills/screenwriting-beats, skills/screenwriting-character, skills/screenwriting-lint], skills: [screenwriting, screenwriting-beats, screenwriting-character, screenwriting-lint]}
+  pasang: {jenis: git_subskill, url: "https://github.com/e06084/claude-screenwriting", paths: [skills/screenwriting, skills/screenwriting-beats, skills/screenwriting-character, skills/screenwriting-lint], skills: [screenwriting, screenwriting-beats, screenwriting-character, screenwriting-lint], pin: "17e63120cd85dcf029d4ae8607b06c980fa668b5"}
   agent: [penulis-naskah, perencana-konten]
   lisensi: MIT
   catatan_lisensi: bebas dipakai; teks skill berbahasa Mandarin dan alurnya mengandaikan vault Obsidian. Pakai teori dan lint-nya; tetap menulis ke naskah.json, bukan vault
@@ -136,7 +136,7 @@
   pakai_saat: cover thumbnail desain visual poster komposisi tipografi
   cara_pasang: otomatis (sparse clone folder skills/canvas-design)
   otomatis: true
-  pasang: {jenis: git_subskill, url: "https://github.com/anthropics/skills", paths: [skills/canvas-design], skills: [canvas-design]}
+  pasang: {jenis: git_subskill, url: "https://github.com/anthropics/skills", paths: [skills/canvas-design], skills: [canvas-design], pin: "ca45fc496a3436251f191354091d557da31c15b5"}
   agent: [desainer-cover]
   lisensi: Apache-2.0
   catatan_lisensi: bebas dipakai
@@ -150,7 +150,7 @@
   pakai_saat: buat skill baru kemampuan belum ada
   cara_pasang: otomatis (sparse clone folder skills/skill-creator)
   otomatis: true
-  pasang: {jenis: git_subskill, url: "https://github.com/anthropics/skills", paths: [skills/skill-creator], skills: [skill-creator]}
+  pasang: {jenis: git_subskill, url: "https://github.com/anthropics/skills", paths: [skills/skill-creator], skills: [skill-creator], pin: "ca45fc496a3436251f191354091d557da31c15b5"}
   agent: [pencari-skill]
   lisensi: Apache-2.0
   catatan_lisensi: bebas dipakai
@@ -176,9 +176,9 @@
   sumber: https://github.com/LottieFiles/motion-design-skill
   fungsi: prinsip motion design timing easing koreografi gerak
   pakai_saat: animasi gerak easing timing transisi koreografi
-  cara_pasang: npx skills add LottieFiles/motion-design-skill
+  cara_pasang: otomatis (sparse clone terkunci ke commit, folder skills/motion-design); bukan npx supaya bisa dikunci
   otomatis: true
-  pasang: {jenis: npx_skill, repo: LottieFiles/motion-design-skill}
+  pasang: {jenis: git_subskill, url: "https://github.com/LottieFiles/motion-design-skill", paths: [skills/motion-design], skills: [motion-design], pin: "f9a8a041b85185ee4881b3471d3415e939aac772"}
   agent: [animator, storyboarder, inspektur-frame]
   lisensi: MIT
   catatan_lisensi: bebas dipakai
@@ -192,7 +192,7 @@
   pakai_saat: animasi gerak easing timeline web
   cara_pasang: npm install gsap di template bila dibutuhkan
   wajib: true
-  pasang: {jenis: npm, paket: [gsap]}
+  pasang: {jenis: npm, paket: ["gsap@3.15.0"]}
   lisensi: GSAP Standard License
   catatan_lisensi: gratis termasuk plugin bonus sejak 2025; cek gsap.com/standard-license
   butuh_key: null
@@ -205,7 +205,7 @@
   pakai_saat: 3d tiga dimensi kamera objek ruang
   cara_pasang: npm install three @remotion/three di template bila dibutuhkan
   wajib: true
-  pasang: {jenis: npm, paket: [three, "@remotion/three"]}
+  pasang: {jenis: npm, paket: ["three@0.178.0", "@remotion/three@4.0.539"]}
   lisensi: MIT
   catatan_lisensi: bebas dipakai
   butuh_key: null
@@ -219,7 +219,7 @@
   cara_pasang: npx skills add zanwei/design-dna
   wajib: true
   otomatis: true
-  pasang: {jenis: git_skill, url: "https://github.com/zanwei/design-dna"}
+  pasang: {jenis: git_skill, url: "https://github.com/zanwei/design-dna", pin: "593e39bc9e3652734653bd75544a333d7d43615e"}
   agent: [desainer-cover, animator]
   lisensi: MIT
   catatan_lisensi: bebas dipakai
@@ -233,7 +233,7 @@
   pakai_saat: animasi web antarmuka creative coding canvas
   cara_pasang: ikuti README repo (plugin Claude Code)
   wajib: true
-  pasang: {jenis: rujukan, url: "https://github.com/AThevon/genjutsu", plugin: genjutsu@genjutsu}
+  pasang: {jenis: rujukan, url: "https://github.com/AThevon/genjutsu", plugin: genjutsu@genjutsu, pin: "ac9ca74156946be8e449f0d6acc8043a105a38f3"}
   lisensi: MIT
   catatan_lisensi: bebas dipakai
   butuh_key: null
@@ -246,7 +246,7 @@
   pakai_saat: animasi karakter storyboard gaya tangan rujukan
   cara_pasang: git clone --depth 1 ke folder rujukan; baca ANIMATION_GUIDE.md
   wajib: true
-  pasang: {jenis: rujukan, url: "https://github.com/JohnHeibel/ClaudeAnimationBase"}
+  pasang: {jenis: rujukan, url: "https://github.com/JohnHeibel/ClaudeAnimationBase", pin: "0ac8bf2b31942376cb6b8c4074715595d512acd2"}
   lisensi: MIT
   catatan_lisensi: bebas dipakai
   butuh_key: null
@@ -259,7 +259,7 @@
   pakai_saat: gaya film rujukan visual gaya baru episode spesial
   cara_pasang: git clone --depth 1 ke folder rujukan; jangan dimuat utuh ke konteks
   wajib: true
-  pasang: {jenis: rujukan, url: "https://github.com/lemomo-ai/lemo-opuscar", plugin: lemo-opuscar@lemolab}
+  pasang: {jenis: rujukan, url: "https://github.com/lemomo-ai/lemo-opuscar", plugin: lemo-opuscar@lemolab, pin: "bebbbe1aa92a3cb4bb6f83500e61b23a17d1aa00"}
   lisensi: MIT
   catatan_lisensi: bebas dipakai
   butuh_key: null
@@ -272,7 +272,7 @@
   pakai_saat: b-roll kolase kertas video pendek
   cara_pasang: ikuti README repo; butuh Gemini API
   wajib: true
-  pasang: {jenis: git_skill, url: "https://github.com/pyang5166/gbro-collage-broll"}
+  pasang: {jenis: git_skill, url: "https://github.com/pyang5166/gbro-collage-broll", pin: "a1a4ee2e2abf7d44e460026b706d0c72c2cf8a91"}
   lisensi: MIT
   catatan_lisensi: bebas dipakai, generasi videonya berbayar
   butuh_key: GEMINI_API_KEY
@@ -285,7 +285,7 @@
   pakai_saat: teaser peluncuran motion film satu tarikan
   cara_pasang: ikuti README repo
   wajib: true
-  pasang: {jenis: git_skill, url: "https://github.com/feitangyuan/onetake"}
+  pasang: {jenis: git_skill, url: "https://github.com/feitangyuan/onetake", pin: "013a61ac8d98883c73733f59c06e49e9ba444f14"}
   lisensi: PolyForm-Noncommercial-1.0.0
   catatan_lisensi: hanya nonkomersial; boleh selama Sobat Ambis diperlakukan sebagai project mata kuliah, cek ulang bila mulai menerima bayaran
   butuh_key: null
@@ -298,7 +298,7 @@
   pakai_saat: render video html alternatif
   cara_pasang: npx hyperframes skills update
   wajib: true
-  pasang: {jenis: rujukan, url: "https://github.com/heygen-com/hyperframes", plugin: hyperframes@hyperframes}
+  pasang: {jenis: rujukan, url: "https://github.com/heygen-com/hyperframes", plugin: hyperframes@hyperframes, pin: "3baf81f9a92615507f76fe8de33e489034ee77ec"}
   lisensi: Apache-2.0
   catatan_lisensi: bebas dipakai; tidak dipasang bawaan karena Remotion sudah dipilih
   butuh_key: null
@@ -331,8 +331,8 @@
   sumber: https://github.com/Panniantong/Agent-Reach
   fungsi: CLI baca halaman web, info dan subtitle YouTube, repo GitHub untuk riset topik; keluaran JSON ringkas
   pakai_saat: riset tren topik terbaru baca web artikel transkrip subtitle youtube sumber
-  cara_pasang: "otomatis saat periset-tren mulai (python -m scripts.pasang_otomatis --agent periset-tren): uv tool install dari zip rilis GitHub lalu agent-reach setup. JANGAN pip install agent-reach (nama PyPI itu proyek lain)"
-  pasang: {jenis: uv_tool, url: "https://github.com/Panniantong/Agent-Reach/releases/latest/download/agent-reach.zip", perintah: agent-reach, setelah: [[setup]]}
+  cara_pasang: "otomatis saat periset-tren mulai (python -m scripts.pasang_otomatis --agent periset-tren): unduh zip rilis v1.6.1, cocokkan sha256, uv tool install dari berkas lokal, lalu agent-reach setup. JANGAN pip install agent-reach (nama PyPI itu proyek lain)"
+  pasang: {jenis: uv_tool, url: "https://github.com/Panniantong/Agent-Reach/releases/download/v1.6.1/agent-reach.zip", sha256: "51443d733bcb26064262442083a8f8abf6ba5e3e7df54beebafe98c88be04a60", perintah: agent-reach, setelah: [[setup]]}
   agent: [periset-tren]
   lisensi: MIT
   catatan_lisensi: hanya kanal tanpa login (web, youtube, github). Jangan pakai fitur cookie login media sosial (instagram, x, tiktok, reddit, xiaohongshu) karena berisiko akun diblokir; scripts/riset.py menolak URL itu
@@ -346,7 +346,7 @@
   pakai_saat: skill tambahan pengembangan agent umum
   cara_pasang: salin hanya skill yang dibutuhkan ke ~/.claude/skills; jangan pasang plugin utuh
   wajib: true
-  pasang: {jenis: rujukan, url: "https://github.com/affaan-m/ECC", plugin: ecc@ecc}
+  pasang: {jenis: rujukan, url: "https://github.com/affaan-m/ECC", plugin: ecc@ecc, pin: "b38be6a7f6350964d59328b52f0624e1d1d552d1"}
   lisensi: MIT
   catatan_lisensi: jangan pasang utuh (1.068 skill, 385 agent) karena membebani konteks setiap sesi
   butuh_key: null

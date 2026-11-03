@@ -32,6 +32,10 @@ Sumber kebenaran peta ini: field `agent` di `katalog/skill.yaml`.
    Mode `config/kebijakan.yaml`: `eksplorasi` (sekarang) mengabaikan lisensi; yang berbayar/ber-API-key tetap di-skip (gbro-collage-broll, higgsfield, open-generative-ai, elevenlabs).
 4. **Gagal pasang**: ulangi sekali. Gagal lagi → catat ke Notion, berhenti. Jangan mencoba cara pasang lain.
 
+## Aturan penguncian versi (wajib)
+- Semua pemasangan hanya untuk repo yang **terkunci** ke commit (`pin`), paket npm versi tepat, dan berkas rilis ber-sha256. Itu sudah dijaga `scripts.pasang_otomatis`.
+- Jangan pernah memakai `--izinkan-tak-terkunci` dan jangan menjalankan `scripts.kunci_versi`: keduanya keputusan pemilik. Bila hasilnya `butuh_pemilik` karena "belum dikunci", catat ke Notion lewat penjadwal-notion dan lanjutkan tanpa skill itu.
+
 ## Aturan hemat token (wajib)
 - Jangan membuka atau membaca `katalog/skill.yaml`, README repo luar, atau isi skill yang dipasang. Cukup keluaran script.
 - Jangan web search untuk mencari repo baru. Repo baru masuk katalog lewat pemilik.

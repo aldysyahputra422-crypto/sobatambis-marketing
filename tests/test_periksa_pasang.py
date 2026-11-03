@@ -109,3 +109,19 @@ def test_repo_asli_bisa_diperiksa_tanpa_mengubah_apa_pun():
     h = periksa_pasang.periksa(ROOT, jalankan=_jalan(), ada=_ada("ffmpeg"), env={}, skills_dir=ROOT / "tidak-ada")
     assert {x["status"] for x in h} <= {"ok", "gagal", "saran"}
     assert set(os.listdir(ROOT / ".claude")) == sebelum
+
+
+def test_repo_yang_belum_dikunci_dinyatakan_gagal(tmp_path):
+    r = _repo(tmp_path)
+    teks = (r / "katalog/skill.yaml").read_text()
+    import re
+    (r / "katalog/skill.yaml").write_text(re.sub(r', pin: "[0-9a-f]{40}"', "", teks, count=1))
+    h = periksa_pasang.periksa(r, jalankan=_jalan(), ada=_ada("ffmpeg"), env={}, skills_dir=tmp_path / "s")
+    v = next(x for x in h if x["nama"] == "versi terkunci")
+    assert v["status"] == "gagal" and "kunci_versi" in v["perbaiki"]
+    assert periksa_pasang.kode_keluar(h) == 1
+
+
+def test_katalog_asli_terkunci_menurut_pemeriksaan():
+    h = periksa_pasang.periksa(ROOT, jalankan=_jalan(), ada=_ada("ffmpeg"), env={}, skills_dir=ROOT / "tidak-ada")
+    assert next(x for x in h if x["nama"] == "versi terkunci")["status"] == "ok"

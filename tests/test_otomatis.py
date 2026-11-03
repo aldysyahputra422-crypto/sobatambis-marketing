@@ -23,6 +23,20 @@ def _jangan_sentuh_folder_asli(tmp_path, monkeypatch):
 
 # ---------- pemasang otomatis ----------
 
+_SHA: dict = {}
+
+
+def _balas_git(cmd):
+    """Jawaban git palsu untuk jalur kunci commit: fetch mengingat sha, rev-parse mengembalikannya."""
+    if cmd[0] == "git" and "-C" in cmd:
+        d = cmd[cmd.index("-C") + 1]
+        if "fetch" in cmd:
+            _SHA[d] = cmd[-1]
+        if "rev-parse" in cmd:
+            return subprocess.CompletedProcess(cmd, 0, _SHA.get(d, ""), "")
+    return None
+
+
 def test_boleh_otomatis_hanya_gratis_tanpa_key_lisensi_bebas():
     assert pasang_otomatis.boleh_otomatis(BY_ID["stop-slop"])
     assert pasang_otomatis.boleh_otomatis(BY_ID["motion-design-skill"])
@@ -36,8 +50,9 @@ def test_boleh_otomatis_hanya_gratis_tanpa_key_lisensi_bebas():
 def test_perintah_pasang_per_jenis(tmp_path):
     p = pasang_otomatis.perintah(BY_ID["stop-slop"], skills_dir=tmp_path)
     assert p[:3] == ["git", "clone", "--depth"] and p[-1] == str(tmp_path / "stop-slop")
-    q = pasang_otomatis.perintah(BY_ID["motion-design-skill"], skills_dir=tmp_path)
-    assert q[:4] == ["npx", "--yes", "skills", "add"] and "LottieFiles/motion-design-skill" in q
+    npx = type(BY_ID["stop-slop"])(**{**BY_ID["stop-slop"].__dict__, "id": "x", "pasang": {"jenis": "npx_skill", "repo": "a/b"}})
+    q = pasang_otomatis.perintah(npx, skills_dir=tmp_path)
+    assert q[:4] == ["npx", "--yes", "skills", "add"] and "a/b" in q
 
 
 def test_pasang_otomatis_memasang_yang_belum_dan_mencatat(tmp_path):
@@ -45,21 +60,25 @@ def test_pasang_otomatis_memasang_yang_belum_dan_mencatat(tmp_path):
 
     def runner(cmd, **kw):
         jalan.append(cmd)
-        if cmd[0] == "git":
-            Path(cmd[-1]).mkdir(parents=True)
-            (Path(cmd[-1]) / "SKILL.md").write_text("x")
-        else:
-            (tmp_path / "motion-design-skill").mkdir()
-            (tmp_path / "motion-design-skill" / "SKILL.md").write_text("x")
+        if (b := _balas_git(cmd)) is not None:
+            return b
+        if cmd[:2] == ["git", "clone"]:
+            dst = Path(cmd[-1])
+            if "stop-slop" in str(dst):
+                dst.mkdir(parents=True)
+                (dst / "SKILL.md").write_text("x")
+            else:
+                (dst / "skills/motion-design").mkdir(parents=True)
+                (dst / "skills/motion-design/SKILL.md").write_text("x")
         return subprocess.CompletedProcess(cmd, 0, "", "")
 
     log = tmp_path / "terpasang.md"
     dua = [BY_ID["stop-slop"], BY_ID["motion-design-skill"]]
-    hasil = pasang_otomatis.pasang_semua(dua, skills_dir=tmp_path, runner=runner, log=log)
+    hasil = pasang_otomatis.pasang_semua(dua, skills_dir=tmp_path, runner=runner, log=log, cache=tmp_path / "c")
     assert hasil["terpasang"] == ["stop-slop", "motion-design-skill"] and hasil["gagal"] == []
     assert "stop-slop" in log.read_text()
     jalan.clear()
-    hasil2 = pasang_otomatis.pasang_semua(dua, skills_dir=tmp_path, runner=runner, log=log)
+    hasil2 = pasang_otomatis.pasang_semua(dua, skills_dir=tmp_path, runner=runner, log=log, cache=tmp_path / "c")
     assert jalan == [] and hasil2["sudah_ada"] == ["stop-slop", "motion-design-skill"]
 
 
@@ -196,6 +215,8 @@ def test_subskill_hanya_folder_terpilih(tmp_path):
     cache = tmp_path / "cache"
 
     def runner(cmd, **kw):
+        if (b := _balas_git(cmd)) is not None:
+            return b
         if cmd[:2] == ["git", "clone"]:
             dst = Path(cmd[-1])
             for s in ("copywriting", "social", "cold-email"):
@@ -213,6 +234,8 @@ def test_subskill_hanya_folder_terpilih(tmp_path):
 
 def test_subskill_bintang_menyalin_semua_folder_skill(tmp_path):
     def runner(cmd, **kw):
+        if (b := _balas_git(cmd)) is not None:
+            return b
         if cmd[:2] == ["git", "clone"]:
             dst = Path(cmd[-1])
             for s in ("remotion-best-practices", "remotion-license"):
@@ -288,9 +311,11 @@ def test_cara_ambil_npm_unduh_rujukan(tmp_path, monkeypatch):
 
     def runner(cmd, **kw):
         jalan.append(cmd)
+        if (b := _balas_git(cmd)) is not None:
+            return b
         if cmd[0] == "npm":
-            for p in cmd[4:]:
-                (tmp_path / "template/node_modules" / p).mkdir(parents=True, exist_ok=True)
+            for p in cmd[5:]:
+                (tmp_path / "template/node_modules" / pasang_otomatis._nama_paket(p)).mkdir(parents=True, exist_ok=True)
         elif cmd[0] == "curl":
             Path(cmd[cmd.index("-o") + 1]).parent.mkdir(parents=True, exist_ok=True)
             Path(cmd[cmd.index("-o") + 1]).write_text("<html>")
@@ -301,7 +326,7 @@ def test_cara_ambil_npm_unduh_rujukan(tmp_path, monkeypatch):
     for i in ("threejs", "gsap", "youmind-opus-prompts", "claude-animation-base", "ecc"):
         h = pasang_otomatis.pasang_satu(BY_ID[i], skills_dir=tmp_path / "s", runner=runner, log=tmp_path / "t.md", cache=tmp_path / "c")
         assert h["status"] == "terpasang", (i, h)
-    assert ["npm", "install", "--prefix", str(tmp_path / "template"), "three", "@remotion/three"] in jalan
+    assert ["npm", "install", "--prefix", str(tmp_path / "template"), "--save-exact", "three@0.178.0", "@remotion/three@4.0.539"] in jalan
     assert (tmp_path / "rujukan/ecc/README.md").exists()
 
 
@@ -314,24 +339,28 @@ def test_settings_mendaftarkan_marketplace_repo_wajib():
 
 
 def test_agent_reach_dipasang_lewat_uv_untuk_periset(tmp_path, monkeypatch):
+    import hashlib
     monkeypatch.setattr(pasang_otomatis, "UV_BIN", tmp_path / "bin")
     monkeypatch.setattr(pasang_otomatis.shutil, "which", lambda n: None)
     e = BY_ID["agent-reach"]
-    assert e.pasang["jenis"] == "uv_tool" and "releases/latest/download/agent-reach.zip" in e.pasang["url"]
+    assert e.pasang["jenis"] == "uv_tool" and "releases/download/v" in e.pasang["url"] and "latest" not in e.pasang["url"]
     assert "periset-tren" in e.agent and not e.otomatis
+    isi = b"isi-zip-uji"
+    kat = [type(e)(**{**e.__dict__, "pasang": {**e.pasang, "sha256": hashlib.sha256(isi).hexdigest()}})]
     jalan = []
 
     def runner(cmd, **kw):
         jalan.append(cmd)
+        if cmd[0] == "curl":
+            Path(cmd[cmd.index("-o") + 1]).write_bytes(isi)
         if cmd[:3] == ["uv", "tool", "install"]:
             (tmp_path / "bin").mkdir(exist_ok=True)
             (tmp_path / "bin/agent-reach").write_text("#!/bin/sh")
         return subprocess.CompletedProcess(cmd, 0, "", "")
-    assert not pasang_otomatis.sudah_terpasang(e)
-    h = pasang_otomatis.pasang_untuk_agent(KATALOG, "periset-tren", skills_dir=tmp_path / "s", runner=runner,
-                                           log=tmp_path / "t.md", cache=tmp_path / "c")
+    assert not pasang_otomatis.sudah_terpasang(kat[0])
+    h = pasang_otomatis.pasang_untuk_agent(kat, "periset-tren", skills_dir=tmp_path / "s", runner=runner, log=tmp_path / "t.md", cache=tmp_path / "c")
     assert "agent-reach" in h["terpasang"], h
-    assert ["uv", "tool", "install", e.pasang["url"]] in jalan
+    assert ["uv", "tool", "install", str(tmp_path / "c/agent-reach.zip")] in jalan
     assert [str(tmp_path / "bin/agent-reach"), "setup"] in jalan
     assert not any("pypi" in " ".join(c) or c[:2] == ["pip", "install"] for c in jalan)
 

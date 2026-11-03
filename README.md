@@ -85,6 +85,12 @@ Batas Pro tidak diumumkan dalam token, jadi plugin **mengukur**, bukan menebak:
 
 Data yang sudah ada (pilot v1, pipeline lama): 17.866 token output, 6,0 juta token cache read dalam satu episode. Pipeline v2 belum diukur.
 
+### Keamanan pemasangan
+Pemasangan otomatis menjalankan `git clone` dan `npm` di komputermu, jadi semuanya **dikunci ke versi tertentu** di `katalog/skill.yaml`: repo git ke commit (`pin`), paket npm ke versi tepat, dan rilis Agent-Reach ke `sha256` (diverifikasi sebelum dipasang). Repo asal yang berubah atau dibajak tidak ikut terpasang. Hash HEAD diperiksa setelah pengambilan, dan yang tidak cocok ditolak. `npx` tidak pernah otomatis karena tidak bisa dikunci.
+- Perbarui kunci hanya setelah kamu membaca perubahan di repo asalnya: `python -m scripts.kunci_versi --id <id>` atau `--perbarui`.
+- Kunci menjamin versi yang sama, bukan hasil audit. Pindaian cepat saya terhadap 9 skill otomatis tidak menemukan perintah berbahaya (tanpa `rm -rf`, `sudo`, `postinstall`, akses `.ssh`), tetapi itu bukan audit penuh.
+- `/sa-periksa` memeriksa bahwa semuanya masih terkunci.
+
 ### Hemat token: yang sudah diatur
 Ukuran pilot: ~82% biaya ada di konteks yang dibaca ulang setiap langkah (cache read), hanya ~12% di output. Jadi yang dipangkas adalah jumlah langkah, bukan cuma panjang tulisan:
 - Tahap mekanis (suara, adegan, mix, render, QA) jalan dalam **satu** perintah `python -m scripts.tahap jalan`; agent spesialis hanya dipanggil saat tahap itu gagal.

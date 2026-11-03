@@ -86,6 +86,13 @@ def periksa(root: Path = ROOT, *, jalankan=subprocess.run, ada=shutil.which, env
         belum = [e.id for e in kat if not pasang_otomatis.sudah_terpasang(e, sd)]
     except (OSError, KeyError, TypeError):
         kat, belum = [], []
+    try:
+        belum_kunci = [e.id for e in muat(root / "katalog/skill.yaml") if (e.pasang or {}).get("jenis") not in ("plugin", "setup", "unduh", None)
+                       and not e.butuh_key and (e.biaya or "").lower() == "gratis" and pasang_otomatis.alasan_belum_terkunci(e)]
+    except (OSError, KeyError, TypeError):
+        belum_kunci = []
+    hasil.append(_h("versi terkunci", "gagal", f"{len(belum_kunci)} entri belum dikunci: {', '.join(belum_kunci[:4])}", "Pemasangan otomatis menolaknya. Pemilik: python -m scripts.kunci_versi --semua (baca perubahannya), lalu commit.") if belum_kunci
+                 else _h("versi terkunci", "ok", "semua repo dan paket dikunci ke versi tertentu (commit, versi tepat, sha256)"))
     hasil.append(_h("skill katalog", "ok", f"{len(kat)} skill otomatis terpasang") if kat and not belum
                  else _h("skill katalog", "saran", f"{len(belum)} dari {len(kat)} belum terpasang", "Terpasang otomatis saat sesi dimulai (butuh internet); manual: python -m scripts.pasang_otomatis"))
     hasil.append(_h("kunci ElevenLabs", "ok", "ada (nilainya tidak ditampilkan)") if env.get("ELEVENLABS_API_KEY")

@@ -21,6 +21,10 @@ Plugin Claude Code yang memproduksi serial animasi Reels "Arta & Mbis" untuk Sob
 - Mode eksplorasi (`config/kebijakan.yaml`): 13 repo wajib pemilik bisa diambil kapan saja (`python -m scripts.pasang_otomatis --wajib`), lisensi tidak membatasi; yang berbayar di-skip. Ganti ke `komersial` saat mulai menghasilkan uang.
 - Kemampuan yang kurang dipasang pencari-skill lewat `scripts/pasang_otomatis.py` tanpa bertanya, hanya bila lolos aturan ketatnya; selain itu catat ke Notion.
 
+## Keamanan pemasangan
+- Pemasangan otomatis hanya untuk yang terkunci: repo git ke commit (`pin`), npm ke versi tepat, rilis ke `sha256`. `npx` tidak pernah otomatis. Kunci diubah hanya pemilik: `python -m scripts.kunci_versi` (baca perubahan di repo asal dulu). Agent tidak boleh memakai `--izinkan-tak-terkunci`.
+- Pin berarti versi yang sama setiap kali, bukan hasil audit kode.
+
 ## Perencanaan mingguan
 - `/sa-minggu <YYYY-Www>`: `scripts.kapasitas` (diukur dari `/usage`, tidak ditebak) → `scripts.jadwal_minggu` → periset-tren (`bank-topik.json`, lulus `scripts.riset periksa`) → perencana-konten → Notion.
 - Riset: fakta hanya dari sumber tingkat A/B (`config/sumber.yaml`). Agent-Reach hanya kanal tanpa login; situs wajib login tidak dibuka.
