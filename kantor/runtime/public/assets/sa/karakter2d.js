@@ -284,20 +284,23 @@ function baju2d(ctx, w) {
 
 // ------------------------------------------------------------------ karakter utuh
 // `wajahCanvas` = canvas 512x512 hasil gambarWajah (dibuat pemanggil supaya bisa dipakai ulang saat kedip).
-export function gambarKarakter2d(ctx, w, wajahCanvas) {
+export function gambarKarakter2d(ctx, w, wajahCanvas, { bayangan = true } = {}) {
   const s = w.rambut;
   const gaya = RAMBUT2D[s.gaya] ?? RAMBUT2D['panjang-pita'];
   ctx.clearRect(0, 0, LEBAR, TINGGI);
   ctx.lineJoin = 'round';
 
-  // bayangan lembut di lantai
-  ctx.save();
-  ctx.globalAlpha = 0.22;
-  ctx.fillStyle = '#2B2238';
-  ctx.beginPath();
-  ctx.ellipse(TUBUH.cx, TUBUH.bayang.cy, TUBUH.bayang.rx, TUBUH.bayang.ry, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
+  // Bayangan ikut digambar hanya untuk lembar datar. Di ruangan 3D bayangannya dibuat di lantai,
+  // kalau ikut tergambar di sini hasilnya jadi noda tegak di papan karakter.
+  if (bayangan) {
+    ctx.save();
+    ctx.globalAlpha = 0.22;
+    ctx.fillStyle = '#2B2238';
+    ctx.beginPath();
+    ctx.ellipse(TUBUH.cx, TUBUH.bayang.cy, TUBUH.bayang.rx, TUBUH.bayang.ry, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
 
   gaya.belakang?.(ctx, s);
   kaki2d(ctx, w);
@@ -314,5 +317,12 @@ export function gambarKarakter2d(ctx, w, wajahCanvas) {
 export function gambarLengkap(ctx, w, buatCanvas, opsi = {}) {
   const c = buatCanvas(512, 512);
   gambarWajah(c.getContext('2d'), w, opsi);
-  gambarKarakter2d(ctx, w, c);
+  gambarKarakter2d(ctx, w, c, opsi);
 }
+
+// Tinggi tokoh di dalam gambar (dari ujung rambut sampai alas sepatu), dipakai untuk menskalakan
+// papan karakter di ruangan 3D supaya tingginya sama dengan karakter 3D sebelumnya.
+export const BAGIAN_TOKOH = {
+  atas: TUBUH.kepala.cy - TUBUH.kepala.ry - 60, // sisakan ruang untuk rambut tinggi
+  alas: TUBUH.kaki.atas + TUBUH.kaki.panjang + TUBUH.sepatu.tinggi - 10,
+};
