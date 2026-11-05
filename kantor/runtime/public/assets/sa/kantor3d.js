@@ -12,7 +12,8 @@ import { buatKarakter, perbarui } from './karakter.js';
 import * as P from './perabot.js';
 import { isiDinding, statusHolo, urutanFokus } from './ringkas.js';
 import {
-  ALUR, HOLO, jalur, jalurKeluar, jalurMasuk, LAYAR, LOUNGE, MEJA, MEJA_CADANGAN, MEJA_KETUA, PEMILIK_KURSI, PINTU, PINTU_MASUK, TAHAP_ZONA, ZONA,
+  ALUR, FASAD_Z, HOLO, jalur, jalurKeluar, jalurMasuk, KACA_DEPAN_Z, LAYAR, LORONG_Z, LOUNGE, MEJA, MEJA_CADANGAN, MEJA_KETUA,
+  PEMILIK_KURSI, PINTU, PINTU_MASUK, RUANG_DEPAN, TAHAP_ZONA, TINGGI_RUANG, ZONA,
 } from './tata.js';
 import { aturMalam, bangunUi, malamAwal } from './ui.js';
 import { WATAK, WATAK_FREELANCER } from './watak.js';
@@ -120,20 +121,32 @@ matahari.shadow.radius = 3;
 scene.add(hemi, matahari);
 // lampu tambahan hanya menyala di tema malam (intensitas 0 di siang supaya jumlah lampu tetap dan shader tidak dikompilasi ulang)
 const lampuHolo = new THREE.PointLight('#4FD1C5', 0, 11, 2);
+lampuHolo.name = 'lampuHolo';
 lampuHolo.position.set(HOLO.x, 1.6, HOLO.z);
 const lampuLayar = new THREE.PointLight('#8FB4FF', 0, 12, 2);
+lampuLayar.name = 'lampuLayar';
 lampuLayar.position.set(LAYAR.x, 2.4, LAYAR.z + 2.2);
 scene.add(lampuHolo, lampuLayar);
+// lampu langit-langit: cahaya hangat yang membuat ruangan terasa mewah, dari atas maupun dari dalam
+const lampuAtap = [[-12, -6], [-12, 5], [-2, -6], [-2, 5], [8, -6], [8, 5], [15, 0]].map(([x, z]) => {
+  const l = new THREE.PointLight('#FFE0B4', 0, 17, 2.1);
+  l.name = 'lampuAtap';
+  l.position.set(x, TINGGI_RUANG - 0.35, z);
+  scene.add(l);
+  return l;
+});
 let neon = null; // kelompok lampu neon, dibuat setelah bangunan
 let holo = null;
 const tema = () => {
   const m = malam();
   const g = modeGelap();
-  hemi.intensity = m ? 0.5 : g ? 0.65 : 1.05;
-  hemi.color.set(m ? '#8FA8FF' : '#ffffff');
-  hemi.groundColor.set(m ? '#141C38' : '#aeb8c6');
-  matahari.intensity = m ? 0.45 : g ? 0.85 : 1.35;
-  matahari.color.set(m ? '#9DB4FF' : '#fff4e4');
+  // siang pun dibuat hangat (lampu kantor menyala), bukan putih datar
+  hemi.intensity = m ? 0.42 : g ? 0.58 : 0.82;
+  hemi.color.set(m ? '#8FA8FF' : '#FFF3E2');
+  hemi.groundColor.set(m ? '#141C38' : '#B9A894');
+  matahari.intensity = m ? 0.4 : g ? 0.7 : 1.1;
+  matahari.color.set(m ? '#9DB4FF' : '#FFE0B8');
+  for (const l of lampuAtap) l.intensity = m ? 13 : g ? 9 : 6;
   lampuHolo.intensity = m ? 9 : 0;
   lampuLayar.intensity = m ? 7 : 0;
   if (neon) neon.visible = m;
@@ -180,6 +193,8 @@ add(kotak(36.8, 0.5, 19.8, '#EEF0F3'), 0, -0.25, 0);
 }
 
 // dinding belakang: padat di atas ruang kaca, jendela besar di atas lantai produksi dan di sisi kanan
+const KARPET_GELAP = '#3C3744';
+const KARPET_HANGAT = '#6B5545';
 const TEMBOK = '#C3C9D1';
 const TUTUP = '#ECEEF1';
 function tembok(x0, x1, z, tinggi = 3.6, y0 = 0) {
@@ -202,6 +217,21 @@ temboksamping(-9.75, 5.9, -18.25);
 temboksamping(8.5, 9.75, -18.25);
 add(kotak(0.5, 1.1, 2.6, TEMBOK), -18.25, 3.05, 7.2);
 add(P.pintuKantor(), -18.0, 0, PINTU_MASUK.z, Math.PI / 2);
+// fasad kaca gedung di sisi depan: kantor terbaca sebagai satu lantai di gedung perkantoran
+add(P.kaca(36.5, TINGGI_RUANG), 0, 0, FASAD_Z);
+add(kotak(36.5, 0.1, 0.6, TUTUP), 0, TINGGI_RUANG + 0.05, FASAD_Z);
+// menara tetangga di luar jendela (tanpa bayangan, hanya latar)
+{
+  const kota = new THREE.Group();
+  // Semua di sisi belakang (z negatif): terlihat lewat jendela dinding belakang dari mode Dalam,
+  // dan tidak pernah berada di antara kamera dan kantor (kamera selalu di sisi +z).
+  const T = [[-18, -34, 9, 24, 11, '#8A93A6'], [-3, -46, 10, 32, 10, '#7C8698'], [13, -38, 11, 20, 12, '#949DAE'],
+    [27, -52, 9, 28, 10, '#838DA0'], [-33, -44, 12, 18, 14, '#8F98AA'], [38, -36, 10, 24, 11, '#7C8698'],
+    [3, -66, 14, 38, 14, '#919AAC'], [-44, -30, 10, 15, 11, '#99A2B4'], [24, -28, 8, 13, 9, '#9BA4B6']];
+  for (const [x, z, w0, h0, d0, warna] of T) kota.add(P.menara(w0, h0, d0, warna).translateX(x).translateZ(z));
+  kota.traverse((o) => { o.castShadow = false; o.receiveShadow = false; });
+  scene.add(kota);
+}
 
 // ruang kaca (depan dengan celah pintu, sekat antarruang)
 const sekat = (zona) => {
@@ -210,6 +240,14 @@ const sekat = (zona) => {
   for (const [s, e] of [[x0, px - 0.75], [px + 0.75, x1]]) if (e - s > 0.2) add(P.kaca(e - s), (s + e) / 2, 0, -3.5);
 };
 ['riset', 'naskah', 'suara', 'direktur', 'gerbang'].forEach(sekat);
+// sekat kaca ruang depan: dinding menghadap lorong (berpintu) dan dinding samping setinggi ruangan
+const sekatDepan = (zona) => {
+  const [x0, , x1] = ZONA[zona].rect;
+  const px = PINTU[zona][0];
+  for (const [s0, e0] of [[x0, px - 0.75], [px + 0.75, x1]]) if (e0 - s0 > 0.2) add(P.kaca(e0 - s0, 3.0), (s0 + e0) / 2, 0, KACA_DEPAN_Z);
+};
+RUANG_DEPAN.forEach(sekatDepan);
+for (const x of [1, 8.5]) add(P.kaca(6, 3.0, 'z'), x, 0, 6.5);
 for (const x of [-13, -8, 1, 5.6, 10.2, 14.8]) add(P.kaca(6, 2.5, 'z'), x, 0, -6.5);
 
 // ---------------------------------------------------------------- meja kerja per agent
@@ -272,36 +310,47 @@ add(P.sofaL(2.0, 0.1, '#8F98A3'), -16.6, 0, 8.9, 0.2);
 add(P.tanaman(1.2), -17.4, 0, 4.2);
 const papan = P.papanStatus();
 add(papan.group, -9.9, 0, 8.3, 0.7);
-// lounge percakapan: kursi tamu teal bersandaran tinggi, kursi dan pouf oranye di atas karpet bundar gelap
-add(P.karpet(4.6, 4.6, '#454B54', true), -1.2, 0.012, 6.2);
+// lounge terbuka: kursi tamu teal dan kursi oranye di atas karpet bundar
+add(P.karpet(4.6, 4.6, KARPET_GELAP, true), -2.4, 0.012, 6.6);
 add(P.kursiTamu(W.teal, true), -5.4, 0, 6.4, 0.5);
 add(P.kursiTamu(W.teal, true), -1.1, 0, 7.5, -0.5);
 add(P.kursiOranye(), -1.9, 0, 5.0, 0.2);
 add(P.kursiOranye(), -0.3, 0, 5.9, -0.3);
-add(P.pouf(W.oranye), -2.6, 0, 6.6);
+add(P.pouf(W.oranye), -3.4, 0, 6.6);
 add(P.mejaBundar(0.4, W.putih, 0.7), -4.2, 0, 8.3);
 add(P.tanaman(1.3), -6.6, 0, 4.7);
-// dapur dan pulau
-add(P.dapur(3.5), 2.75, 0, -0.9);
-add(P.pulau(2.8), 3.0, 0, 3.4);
-add(P.tanaman(1.1), 0.5, 0, -0.6);
-// rak buku teal dan meja kolaborasi (kursi hijau)
-add(P.rakBuku(3.4, 2.3), 7.4, 0, 2.8, Math.PI / 2);
-add(P.mejaPanjang(4.0, 1.0, W.kayu, 3), 7.5, 0, 8.3);
-// area santai: karpet gelap, sofa L teal, meja bundar putih, pouf hijau, foosball
-add(P.karpet(7.4, 4.4, '#454B54'), 13.4, 0.012, 4.0);
-add(P.sofaL(4.4, 2.4, W.teal), 12.2, 0, 1.9);
-add(P.mejaBundar(0.55, W.putih, 0.75), 10.6, 0, 5.8);
-add(P.bangku(W.hijau), 9.8, 0, 5.8);
-add(P.bangku(W.hijau), 11.4, 0, 5.8);
-add(P.mejaBundar(0.55, W.putih, 0.75), 15.7, 0, 5.9);
-add(P.bangku(W.hijau), 15.7, 0, 6.8);
-[[15.9, 3.9], [16.8, 4.7], [9.7, 3.6]].forEach(([x, z]) => add(P.pouf(W.hijau), x, 0, z));
-add(P.foosball(), 15.2, 0, 8.4);
-add(P.tanaman(1.2), 17.2, 0, 9.0);
-add(P.tanaman(1.0), 0.8, 0, 8.7);
-// meja baobab
+add(P.tanaman(1.0), 0.3, 0, 8.9);
+
+// ---- Ruang Rapat: meja panjang berkarpet, rak, dan layar di dinding kaca
+add(P.karpet(6.4, 4.4, KARPET_HANGAT), 4.75, 0.012, 6.8);
+add(P.mejaPanjang(3.8, 1.3, W.kayu, 0), 4.75, 0, 6.8);
+for (const x of [3.3, 4.75, 6.2]) {
+  add(P.kursi(W.teal), x, 0, 5.95);
+  add(P.kursi(W.teal), x, 0, 7.65, Math.PI);
+}
+add(P.rakBuku(1.2, 2.0), 8.0, 0, 8.6, Math.PI / 2);
+add(P.tanaman(1.2), 1.8, 0, 8.9);
+{ // layar rapat menempel di sekat kaca kiri
+  const l = P.layarDinding(2.2, 1.3);
+  add(l, 1.12, 1.95, 6.3, Math.PI / 2);
+}
+
+// ---- Ruang Istirahat: pantry, pulau, sofa, foosball, karpet
+add(P.karpet(6.6, 3.6, KARPET_GELAP), 14.6, 0.012, 7.8);
+add(P.dapur(3.2), 17.55, 0, 6.5, -Math.PI / 2);
+add(P.pulau(2.6), 13.5, 0, 5.6);
+for (const x of [12.6, 13.5, 14.4]) add(P.bangku(W.kayu), x, 0, 4.75);
+add(P.sofaL(3.2, 1.0, W.teal), 15.1, 0, 8.5, Math.PI);
+add(P.mejaBundar(0.5, W.putih, 0.5), 15.1, 0, 7.0);
+add(P.foosball(), 11.5, 0, 8.6);
+add(P.pouf(W.hijau), 10.2, 0, 5.6);
+add(P.tanaman(1.3), 9.2, 0, 9.0);
+add(P.tanaman(1.0), 16.9, 0, 4.2);
+
+// ---- koridor tengah: karpet pelari dan meja baobab
+add(P.karpet(22, 1.8, KARPET_HANGAT), 3.0, 0.011, LORONG_Z);
 add(P.baobab(), 14.8, 0, -0.3);
+add(P.tanaman(1.1), 0.5, 0, 1.2);
 
 // alur produksi di lantai (panah kuning) dan bingkai zona aktif
 const panah = [];
@@ -348,7 +397,8 @@ for (const [id, z] of Object.entries(ZONA)) {
 // label zona bergaya callout poster: kotak bergaris tipis dengan garis penunjuk ke lantai
 const JANGKAR = {
   riset: [-15.6, -3.6], naskah: [-10.5, -3.6], produksi: [-3.5, -3.6], suara: [3.3, -3.6], direktur: [7.9, -3.6], gerbang: [12.5, -3.6],
-  kreatif: [16.4, -1.8], katalog: [-8.0, 3.0], lobi: [-14.8, 4.2], lounge: [6.0, 5.2],
+  kreatif: [16.4, -1.8], katalog: [-8.0, 3.0], lobi: [-14.8, 4.2], lounge: [-4.0, 4.2],
+  rapat: [4.75, 3.7], istirahat: [13.0, 3.7],
 };
 for (const [id, z] of Object.entries(ZONA)) {
   const d = document.createElement('div');
@@ -364,6 +414,26 @@ for (const [id, z] of Object.entries(ZONA)) {
 
 // perabot statis digabung per bahan (ribuan mesh menjadi puluhan draw call); yang berlayar/animasi tidak ikut
 gabungKelompok(dunia);
+
+// ---- langit-langit: pelat dengan panel lampu tanam. Disembunyikan saat kamera melihat dari atas.
+const atap = new THREE.Group();
+{
+  const pelat = kotak(36.6, 0.18, 19.6, '#E7E9ED');
+  pelat.castShadow = false;
+  pelat.position.set(0, TINGGI_RUANG + 0.09, 0);
+  atap.add(pelat);
+  for (let x = -15.5; x <= 15.5; x += 4.4) {
+    for (const z of [-7.4, -5.0, -1.2, 1.4, 5.4, 8.0]) {
+      const pl = P.panelLampu(2.6, 0.42);
+      pl.position.set(x, TINGGI_RUANG - 0.01, z);
+      atap.add(pl);
+    }
+  }
+}
+dunia.add(atap);
+gabungKelompok(atap); // dilebur tersendiri: ikut peleburan dunia akan membuatnya tidak bisa disembunyikan
+
+
 
 // layar besar di dinding belakang Lantai Produksi: tahap pipeline, agent yang bekerja, dan permintaan untuk Aldy
 const layarDinding = (() => {
@@ -757,7 +827,7 @@ function fokus(zonaId, durasi = 0.9) {
     return;
   }
   const [x0, z0, x1, z1] = ZONA[zonaId].rect;
-  setKamera(new THREE.Vector3((x0 + x1) / 2, 0.6, (z0 + z1) / 2), Math.max(26, Math.max(x1 - x0, z1 - z0) * 2.6), durasi);
+  setKamera(new THREE.Vector3((x0 + x1) / 2, 0.8, (z0 + z1) / 2), Math.max(31, Math.max(x1 - x0, z1 - z0) * 2.8), durasi);
 }
 function dekat(id, jarak = 12, durasi = 0.9) {
   const a = aktor.get(id);
@@ -768,6 +838,10 @@ function dekat(id, jarak = 12, durasi = 0.9) {
 const kam = { mode: 'semua', terpilih: null, t: 0 };
 const JARAK_MEJA = 22;
 const JARAK_FOKUS = 26;
+const FOV_LUAR = 20; // sudut sempit: mendekati isometrik
+const FOV_DALAM = 48; // di dalam ruangan perlu sudut lebar supaya langit-langit ikut terlihat
+// Berdiri di lounge terbuka, memandang menyeberangi lorong ke ruang kaca, sedikit mendongak ke langit-langit.
+const DALAM = { dari: [-2.6, 1.68, 7.4], ke: [1.4, 2.0, -3.0] };
 const FOKUS_DETIK = 7;
 function aturBatas(bebas) {
   if (bebas) {
@@ -781,12 +855,25 @@ function aturBatas(bebas) {
     controls.minDistance = 5;
   }
 }
+function aturFov(dalam) {
+  const f = dalam ? FOV_DALAM : FOV_LUAR;
+  if (camera.fov === f) return;
+  camera.fov = f;
+  camera.updateProjectionMatrix();
+}
 function setMode(m, id) {
   const dulu = kam.mode;
   kam.mode = m;
   kam.t = 0;
-  if (dulu === 'jelajah' && m !== 'jelajah') aturBatas(false);
-  if (m === 'jelajah') {
+  if ((dulu === 'jelajah' || dulu === 'dalam') && m !== 'jelajah' && m !== 'dalam') aturBatas(false);
+  aturFov(m === 'dalam');
+  if (m === 'dalam') {
+    aturBatas(true);
+    anim = null;
+    kam.terpilih = null;
+    camera.position.set(...DALAM.dari);
+    controls.target.set(...DALAM.ke);
+  } else if (m === 'jelajah') {
     aturBatas(true);
     anim = null;
     kam.terpilih = null;
@@ -931,6 +1018,8 @@ function frame() {
     camera.position.lerpVectors(anim.dari.p, anim.ke.p, e);
     if (k >= 1) anim = null;
   }
+  // langit-langit hanya tampak dari sudut rendah; dari atas disembunyikan supaya kantor tetap terbaca
+  atap.visible = kam.mode === 'dalam' || controls.getPolarAngle() > 1.08;
   holo.langkah(t, dt);
   bergilirFokus(dt);
   ikuti(dt);

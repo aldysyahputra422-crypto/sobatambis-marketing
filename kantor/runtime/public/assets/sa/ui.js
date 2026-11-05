@@ -3,6 +3,7 @@ import { ZONA, zonaDariNama } from './tata.js';
 import { namaTahap } from './ringkas.js';
 
 const URUT_ZONA = ['direktur', 'riset', 'naskah', 'suara', 'produksi', 'kreatif', 'gerbang', 'katalog'];
+const ZONA_NAV = ['lobi', 'lounge', 'rapat', 'istirahat'];
 const $ = (id) => document.getElementById(id);
 const h = (tag, cls, teks) => {
   const e = document.createElement(tag);
@@ -16,7 +17,8 @@ const potong = (s, n) => (s && s.length > n ? `${s.slice(0, n - 1)}…` : s ?? '
 const LABEL_STATE = { bekerja: 'Bekerja', selesai: 'Beres', santai: 'Santai' };
 
 const MODE = [
-  ['semua', 'Semua', 'gambaran'], ['meja', 'Meja', 'per agent'], ['jelajah', 'Jelajah', 'bebas'], ['fokus', 'Fokus', 'otomatis'], ['tim', 'Tim', 'per ruang'],
+  ['semua', 'Semua', 'gambaran'], ['dalam', 'Dalam', 'setinggi mata'], ['meja', 'Meja', 'per agent'],
+  ['jelajah', 'Jelajah', 'bebas'], ['fokus', 'Fokus', 'otomatis'], ['tim', 'Tim', 'per ruang'],
 ];
 
 // Tema malam: gelap dengan aksen neon. Menandai <html data-malam>; kantor3d.js membaca atribut itu untuk adegan 3D.
@@ -52,7 +54,7 @@ export function bangunUi({ roster, fokus, demo, skenario, kendali }) {
     b.addEventListener('click', aksi);
     nav.appendChild(b);
   };
-  for (const id of ['lobi', ...URUT_ZONA.filter((z) => z !== 'katalog'), 'lounge']) tombol(ZONA[id].nama, () => fokus(id));
+  for (const id of [...URUT_ZONA.filter((z) => z !== 'katalog'), ...ZONA_NAV]) tombol(ZONA[id].nama, () => fokus(id));
   tombol('Layar produksi', () => kendali.lihatLayar());
 
   const navMode = $('modeNav');

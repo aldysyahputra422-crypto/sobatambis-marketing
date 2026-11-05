@@ -15,7 +15,9 @@ export const ZONA = {
   kreatif: { nama: 'Ruang Kreatif', rect: [14.8, -9.5, 18, -1] },
   katalog: { nama: 'Gudang Katalog', rect: [-10.5, -1.5, -5.5, 3.5] },
   lobi: { nama: 'Lobi', rect: [-18, 3.5, -9, 9.5] },
-  lounge: { nama: 'Lounge', rect: [-9, 3.5, 18, 9.5] },
+  lounge: { nama: 'Lounge', rect: [-9, 3.5, 1, 9.5] },
+  rapat: { nama: 'Ruang Rapat', rect: [1, 3.5, 8.5, 9.5] },
+  istirahat: { nama: 'Ruang Istirahat', rect: [8.5, 3.5, 18, 9.5] },
 };
 
 // nama zona di roster.json → id zona di sini ("Kursi Persetujuan" = lobi)
@@ -56,39 +58,52 @@ export const MEJA_CADANGAN = [
 // Pintu kaca ruang belakang: [x pintu, z garis kaca]. Zona tanpa pintu (produksi, kreatif) terbuka ke lorong.
 export const PINTU = {
   riset: [-15.65, -3.5], naskah: [-10.5, -3.5], suara: [3.3, -3.5], direktur: [6.6, -3.5], gerbang: [12.4, -3.5],
+  rapat: [2.2, 3.5], istirahat: [10.0, 3.5],
 };
+// Ruang depan berdinding kaca (Rapat dan Istirahat) berbagi garis kaca di z = 3.5.
+export const KACA_DEPAN_Z = 3.5;
+export const RUANG_DEPAN = ['rapat', 'istirahat'];
+// Fasad kaca gedung di sisi depan dan ketinggian langit-langit.
+export const FASAD_Z = 9.75;
+export const TINGGI_RUANG = 3.6;
 export const LORONG_Z = -2.4; // lorong utama tepat di depan ruang belakang
 export const DALAM_Z = -4.0; // jalur di dalam ruang kaca sebelum pintu
 export const PINTU_MASUK = { x: -18.6, z: 7.2 }; // pintu kantor di dinding kiri (freelancer masuk)
 export const KORIDOR_MASUK = -16.6;
 
 // Tempat santai (satu per agent). hadap = sudut y (rad), 0 = menghadap +z. via = kolom jalan dari lorong ke tempat itu.
+// Tempat berkumpul. `via` = kolom jalan ke pintu ruangnya; untuk ruang berdinding kaca harus x pintunya.
 export const LOUNGE = [
-  // area percakapan: kursi tamu teal dan kursi oranye
+  // lounge terbuka
   { x: -5.4, z: 6.4, modus: 'duduk', hadap: 0.5, via: -3.0 }, { x: -1.1, z: 7.5, modus: 'duduk', hadap: -0.5, via: -3.0 },
   { x: -1.9, z: 5.0, modus: 'duduk', hadap: 0.2, via: -3.0 }, { x: -0.3, z: 5.9, modus: 'duduk', hadap: -0.3, via: -3.0 },
-  // pulau dapur (berdiri di sisi utara pulau)
-  { x: 2.0, z: 2.2, modus: 'berdiri', hadap: 0.2, via: 5.8 }, { x: 3.1, z: 2.2, modus: 'berdiri', hadap: -0.1, via: 5.8 }, { x: 4.2, z: 2.2, modus: 'berdiri', hadap: 0.3, via: 5.8 },
-  // meja kolaborasi (kursi hijau sisi utara)
-  { x: 6.3, z: 7.2, modus: 'duduk', hadap: 0.1, via: 5.8 }, { x: 7.6, z: 7.2, modus: 'duduk', hadap: -0.1, via: 5.8 }, { x: 8.9, z: 7.2, modus: 'duduk', hadap: 0.2, via: 5.8 },
-  // sofa area santai
-  { x: 11.0, z: 1.9, modus: 'duduk', hadap: 0.1, via: 9.2 }, { x: 12.2, z: 1.9, modus: 'duduk', hadap: 0, via: 9.2 }, { x: 13.4, z: 1.9, modus: 'duduk', hadap: -0.1, via: 9.2 },
-  // meja foosball dan meja bundar
-  { x: 14.6, z: 7.1, modus: 'berdiri', hadap: 0.3, via: 9.2 }, { x: 15.8, z: 7.1, modus: 'berdiri', hadap: -0.3, via: 9.2 },
-  { x: 11.2, z: 6.3, modus: 'berdiri', hadap: 0.4, via: 9.2 },
+  // Ruang Rapat: enam kursi mengelilingi meja panjang
+  { x: 3.3, z: 5.95, modus: 'duduk', hadap: 0, via: 2.2 }, { x: 4.75, z: 5.95, modus: 'duduk', hadap: 0, via: 2.2 },
+  { x: 6.2, z: 5.95, modus: 'duduk', hadap: 0, via: 2.2 },
+  { x: 3.3, z: 7.65, modus: 'duduk', hadap: Math.PI, via: 2.2 }, { x: 4.75, z: 7.65, modus: 'duduk', hadap: Math.PI, via: 2.2 },
+  { x: 6.2, z: 7.65, modus: 'duduk', hadap: Math.PI, via: 2.2 },
+  // Ruang Istirahat: pulau pantry, sofa, meja foosball
+  { x: 12.6, z: 4.9, modus: 'berdiri', hadap: 0.2, via: 10.0 }, { x: 13.5, z: 4.9, modus: 'berdiri', hadap: -0.1, via: 10.0 },
+  { x: 14.4, z: 4.9, modus: 'berdiri', hadap: 0.3, via: 10.0 },
+  { x: 14.0, z: 7.6, modus: 'duduk', hadap: 0.1, via: 10.0 }, { x: 15.2, z: 7.6, modus: 'duduk', hadap: 0, via: 10.0 },
+  { x: 16.4, z: 7.6, modus: 'duduk', hadap: -0.1, via: 10.0 },
+  { x: 10.9, z: 7.7, modus: 'berdiri', hadap: 0.3, via: 10.0 }, { x: 12.1, z: 7.7, modus: 'berdiri', hadap: -0.3, via: 10.0 },
 ];
 
 // Benda besar yang tidak boleh ditembus jalur jalan (tests/tata.test.mjs).
 export const RINTANGAN = {
   loker: [-10.1, -1.2, -5.9, -0.5],
-  dapur: [1.0, -1.6, 4.5, 0.7],
-  pulau: [1.6, 2.85, 4.4, 3.95],
-  rak: [7.1, 1.0, 7.7, 4.6],
   baobab: [13.0, -2.1, 16.6, 1.5],
-  kolaborasi: [5.5, 7.8, 9.5, 8.8],
   resepsionis: [-12.8, 4.0, -9.2, 6.1],
-  foosball: [14.2, 7.8, 16.2, 9.0],
   hologram: [-1.95, 0.05, -0.05, 1.95],
+  // Ruang Rapat
+  mejaRapat: [2.85, 6.15, 6.65, 7.45],
+  rakRapat: [7.7, 8.0, 8.3, 9.2],
+  // Ruang Istirahat
+  pulau: [12.1, 5.05, 14.9, 6.15],
+  pantry: [17.1, 4.7, 18.0, 8.3],
+  sofaIstirahat: [13.4, 8.0, 16.8, 9.1],
+  foosball: [10.4, 8.1, 12.6, 9.1],
 };
 
 // Hologram di area terbuka tengah (menyala sesuai tahap pipeline) dan layar besar di dinding belakang Lantai Produksi.
@@ -108,6 +123,10 @@ export const ALUR = [[-14.0, 5.0], [-14.0, LORONG_Z], [14.6, LORONG_Z]];
 // Rute dari tempat t ke lorong (titik terakhir selalu di z = LORONG_Z).
 function rute(t) {
   if (t.via !== undefined) return [[t.via, t.z], [t.via, LORONG_Z]];
+  if (t.zona && PINTU[t.zona] && t.z > KACA_DEPAN_Z) {
+    const p = PINTU[t.zona];
+    return [[p[0], t.z], [p[0], LORONG_Z]];
+  }
   const p = PINTU[t.zona];
   const kolom = t.lane ?? t.x + 0.95;
   if (p) return [[kolom, t.z], [kolom, DALAM_Z], [p[0], DALAM_Z], [p[0], LORONG_Z]];

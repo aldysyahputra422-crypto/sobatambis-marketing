@@ -43,7 +43,7 @@ def test_tampilan_demo_render_dan_karakter_berjalan(tmp_path):
     assert h["info"]["aktor"] == 18 + 1, h["info"]  # 16 agent + direktur + pemilik + 1 freelancer demo
     assert h["info"]["kartu"] == 17 and h["info"]["spanduk"] is True
     assert h["info"]["panggilan"] < 1200, "terlalu banyak draw call (penggabungan geometri rusak?)"
-    assert h["dock"] == {"mode": 5, "chip": 18, "zonaTersembunyi": True, "holo": "Tahap: QA Gerak"}, h["dock"]
+    assert h["dock"] == {"mode": 6, "chip": 18, "zonaTersembunyi": True, "holo": "Tahap: QA Gerak"}, h["dock"]
     m = h["mode"]
     assert m["timZona"] is True and m["zonaMeja"] is True, m  # baris ruang hanya tampil di mode Tim
     assert m["meja"] == "meja:animator" and "Animator" in m["chipTerpilih"], m
@@ -51,8 +51,14 @@ def test_tampilan_demo_render_dan_karakter_berjalan(tmp_path):
     assert m["fokus"] == "ketua", m  # direktur bekerja di skenario 1, jadi dia disorot dulu
     assert m["bebas"] == [True, None] and m["batasKembali"] is True, m  # Jelajah membuka batas putar; keluar dari Jelajah memulihkannya
     ml = h["malam"]
-    assert ml["on"]["malam"] == "1" and ml["on"]["tema"] == "dark" and ml["on"]["tekan"] == "true" and all(ml["on"]["lampu"]), ml
-    assert ml["off"]["malam"] is None and ml["off"]["tekan"] == "false" and not any(ml["off"]["lampu"]), ml
+    assert ml["on"]["malam"] == "1" and ml["on"]["tema"] == "dark" and ml["on"]["tekan"] == "true", ml
+    assert ml["off"]["malam"] is None and ml["off"]["tekan"] == "false", ml
+    # lampu langit-langit selalu menyala (kantor berpenerangan), lebih terang saat malam
+    assert len(ml["off"]["atap"]) >= 5 and all(v > 0 for v in ml["off"]["atap"]), ml["off"]
+    assert all(a > b for a, b in zip(ml["on"]["atap"], ml["off"]["atap"])), "malam harus lebih terang di lampu atap"
+    # lampu hologram dan layar hanya menyala di tema malam
+    assert ml["off"]["holo"] == 0 and ml["off"]["layar"] == 0, ml["off"]
+    assert ml["on"]["holo"] > 0 and ml["on"]["layar"] > 0, ml["on"]
     assert h["gerak"]["segera"]["mode"] == "jalan" and h["gerak"]["segera"]["titik"] > 0
     assert h["gerak"]["jauh"] >= 1.0, "karakter tidak berpindah"
     assert h["galeri"] == [] and h["jumlahLabelGaleri"] == 18, (h["galeri"], h["jumlahLabelGaleri"])

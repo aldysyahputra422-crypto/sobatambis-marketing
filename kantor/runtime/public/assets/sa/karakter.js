@@ -1,72 +1,21 @@
-// Karakter chibi prosedural dari data `watak.js` (desain lembar karakter teman pemilik).
-// Pendekatan C: badan dan kepala tetap 3D supaya duduk benar di ruangan dan kena bayangan, tetapi
-// KEPALA berbentuk kotak membulat (squircle, bukan bola) dan WAJAHNYA digambar datar 2D di canvas
-// lalu ditempel ke permukaan depan kepala. Lihat wajah.js.
+// Karakter chibi prosedural dari data `watak.js` (desain lembar karakter teman pemilik): kepala besar, kaki dan lengan
+// tipis, outline gelap, warna pastel. Setiap agent punya rambut, baju, dan ekspresi sendiri.
 import * as THREE from 'three';
-import { badan, canvasTekstur, gelapkan, lembut, toon } from './bahan.js';
+import { badan, toon } from './bahan.js';
 import { gabungKarakter } from './gabung.js';
-import { gambarWajah, normaSquircle, PANGKAT, SISI } from './wajah.js';
 
 const S = (r, w = 18, h = 12) => new THREE.SphereGeometry(r, w, h);
 const B = (w, h, d) => new THREE.BoxGeometry(w, h, d);
 const C = (rt, rb, h, seg = 12) => new THREE.CylinderGeometry(rt, rb, h, seg);
 const lerp = (a, b, k) => a + (b - a) * k;
+const HITAM = '#1b1717';
+const dasar = () => new THREE.MeshBasicMaterial({ color: HITAM });
 
 const PINGGUL = 0.42;
 const KEPALA_Y = 1.26;
-// Kepala lembar: lebih LEBAR daripada tinggi, bagian atas agak rata, tanpa leher.
-const RX = 0.52;
-const RY = 0.47;
+const RX = 0.5; // jari-jari kepala (lebar)
+const RY = 0.44;
 const RZ = 0.44;
-
-// Kepala kotak-membulat: bola satuan didorong keluar memakai norma-p (p > 2 = makin berisi di sudut).
-function squircleGeo(rx, ry, rz, p = PANGKAT, seg = 34) {
-  const g = new THREE.SphereGeometry(1, seg, Math.round(seg * 0.6));
-  const pos = g.attributes.position;
-  for (let i = 0; i < pos.count; i++) {
-    const x = pos.getX(i);
-    const y = pos.getY(i);
-    const z = pos.getZ(i);
-    const n = normaSquircle(x, y, z, p);
-    pos.setXYZ(i, (x / n) * rx, (y / n) * ry, (z / n) * rz);
-  }
-  pos.needsUpdate = true;
-  g.computeVertexNormals();
-  return g;
-}
-
-// Bidang wajah: tutup depan kepala (bukan persegi, supaya sudutnya tidak menjorok keluar).
-// UV diproyeksikan datar dari kotak batasnya, jadi gambar wajah menempel lurus tanpa melar.
-function wajahBidang(rx, ry, rz, lebar = 1.17, tinggi = 0.5) {
-  const g = new THREE.SphereGeometry(1, 30, 22, Math.PI / 2 - lebar, lebar * 2, tinggi, Math.PI - tinggi * 2);
-  const pos = g.attributes.position;
-  for (let i = 0; i < pos.count; i++) {
-    const n = normaSquircle(pos.getX(i), pos.getY(i), pos.getZ(i));
-    pos.setXYZ(i, (pos.getX(i) / n) * rx * 1.006, (pos.getY(i) / n) * ry * 1.006, (pos.getZ(i) / n) * rz * 1.006);
-  }
-  pos.needsUpdate = true;
-  g.computeBoundingBox();
-  const b = g.boundingBox;
-  const uv = g.attributes.uv;
-  for (let i = 0; i < pos.count; i++) {
-    uv.setXY(i, (pos.getX(i) - b.min.x) / (b.max.x - b.min.x), (pos.getY(i) - b.min.y) / (b.max.y - b.min.y));
-  }
-  uv.needsUpdate = true;
-  g.computeVertexNormals();
-  return g;
-}
-
-// Telinga menonjol dengan lengkung di dalamnya (penanda khas lembar).
-function telinga(sx, w) {
-  const g = new THREE.Group();
-  g.position.set(sx * (RX - 0.015), -0.02, 0.0);
-  g.add(badan(squircleGeo(0.045, 0.1, 0.075, 3, 14), w.kulit, { t: 0.013 }));
-  const dalam = new THREE.Mesh(new THREE.TorusGeometry(0.04, 0.0085, 6, 14, Math.PI * 1.2), lembut(gelapkan(w.kulit, 0.82)));
-  dalam.rotation.set(0, sx * Math.PI / 2, sx * 0.5);
-  dalam.position.x = sx * 0.035;
-  g.add(dalam);
-  return g;
-}
 
 function pasang(g, o, x = 0, y = 0, z = 0, rot) {
   o.position.set(x, y, z);
@@ -93,12 +42,6 @@ function rambut(spec) {
       m(S(0.3), 0, 0.56, 0.12, [1.55, 1.25, 1.35], [-0.5, 0, 0]);
       m(S(0.15), 0, 0.62, 0.4, [1.5, 1, 0.9], [-0.6, 0, 0]);
       for (const s of [-1, 1]) pan(s * 0.46, -0.08, 0.1, 0.1, 0.24, 0.12);
-      break;
-    case 'klimis': // disisir rapi ke belakang: bahasa "serius" di lembar
-      topi(0.5, 0.01);
-      m(S(0.3), 0, 0.3, -0.16, [1.52, 0.8, 1.2], [0.2, 0, 0]);
-      m(S(0.22), 0, 0.42, 0.06, [1.45, 0.62, 1.1], [-0.25, 0, 0]);
-      for (const s of [-1, 1]) pan(s * 0.48, -0.04, 0.02, 0.11, 0.34, 0.26);
       break;
     case 'rapi':
       topi();
@@ -257,15 +200,105 @@ function rambut(spec) {
   return g;
 }
 
-// ------------------------------------------------------------------ wajah (canvas 2D ditempel ke kepala)
-function buatWajah(w) {
-  const { tekstur, ctx } = canvasTekstur(SISI, SISI, (c) => gambarWajah(c, w));
-  const mesh = new THREE.Mesh(wajahBidang(RX, RY, RZ), new THREE.MeshBasicMaterial({
-    map: tekstur, transparent: true, toneMapped: false, depthWrite: false,
-  }));
-  mesh.renderOrder = 2;
-  mesh.userData.dinamis = true; // jangan ikut dilebur: teksturnya milik satu karakter
-  return { mesh, tekstur, ctx, w, kedip: false, bisaKedip: ['titik', 'bulat', 'kosong', 'cincin'].includes(w.mata) };
+// ------------------------------------------------------------------ wajah
+function mataBuat(jenis, s) {
+  const g = new THREE.Group();
+  g.position.set(s * 0.18, 0.0, 0.405);
+  switch (jenis) {
+    case 'bulat':
+    case 'kosong': {
+      const putih = badan(S(0.11), '#FFFFFF', { t: 0.014 });
+      putih.scale.set(1, 1, 0.42);
+      g.add(putih);
+      if (jenis === 'bulat') {
+        const p = new THREE.Mesh(S(0.05, 10, 8), dasar());
+        p.position.set(-s * 0.015, 0, 0.05);
+        g.add(p);
+      }
+      break;
+    }
+    case 'senyum': {
+      const a = new THREE.Mesh(new THREE.TorusGeometry(0.075, 0.017, 6, 14, Math.PI), dasar());
+      a.position.y = -0.02;
+      g.add(a);
+      break;
+    }
+    case 'x':
+      for (const r of [Math.PI / 4, -Math.PI / 4]) {
+        const b = new THREE.Mesh(B(0.17, 0.03, 0.012), dasar());
+        b.rotation.z = r;
+        g.add(b);
+      }
+      break;
+    case 'sipit': {
+      const b = new THREE.Mesh(B(0.15, 0.032, 0.012), dasar());
+      b.rotation.z = s * 0.1;
+      g.add(b);
+      break;
+    }
+    default: {
+      const e = new THREE.Mesh(S(0.06, 10, 8), dasar());
+      e.scale.set(1, 1.4, 0.5);
+      g.add(e);
+    }
+  }
+  return g;
+}
+
+function mulutBuat(spec) {
+  const g = new THREE.Group();
+  g.position.set(0, -0.15, 0.41);
+  const hitam = dasar();
+  const kotak = (w, h, d, mat, x = 0, y = 0, z = 0) => {
+    const o = new THREE.Mesh(B(w, h, d), mat);
+    o.position.set(x, y, z);
+    g.add(o);
+    return o;
+  };
+  switch (spec.mulut) {
+    case 'senyum': {
+      const a = new THREE.Mesh(new THREE.TorusGeometry(0.07, 0.015, 6, 14, Math.PI), hitam);
+      a.rotation.z = Math.PI;
+      a.position.y = 0.03;
+      g.add(a);
+      break;
+    }
+    case 'gigi': // senyum lebar bergigi
+      kotak(0.34, 0.16, 0.012, hitam, 0, 0.0, 0);
+      kotak(0.29, 0.11, 0.014, toon('#FFFFFF'), 0, 0.0, 0.006);
+      kotak(0.012, 0.11, 0.015, hitam, 0, 0, 0.008);
+      break;
+    case 'ternganga': { // mulut terbuka lebar, lidah dan tetesan oranye
+      const lubang = new THREE.Mesh(S(0.11, 14, 10), hitam);
+      lubang.scale.set(1.15, 1.35, 0.4);
+      g.add(lubang);
+      const lidah = new THREE.Mesh(S(0.07, 10, 8), toon(spec.lidah ?? '#F5A623'));
+      lidah.scale.set(1.1, 0.75, 0.35);
+      lidah.position.set(0, -0.08, 0.02);
+      g.add(lidah);
+      const tetes = new THREE.Mesh(new THREE.CapsuleGeometry(0.035, 0.18, 4, 8), toon(spec.lidah ?? '#F5A623'));
+      tetes.position.set(0.04, -0.28, 0.0);
+      g.add(tetes);
+      break;
+    }
+    case 'o': {
+      const o = new THREE.Mesh(S(0.05, 10, 8), hitam);
+      o.scale.set(1, 1.2, 0.4);
+      g.add(o);
+      break;
+    }
+    case 'gigit': // gigi dirapatkan
+      kotak(0.28, 0.12, 0.012, hitam);
+      kotak(0.24, 0.085, 0.014, toon('#FFFFFF'), 0, 0, 0.006);
+      for (const x of [-0.06, 0, 0.06]) kotak(0.01, 0.085, 0.016, hitam, x, 0, 0.008);
+      break;
+    case 'kecil':
+      kotak(0.055, 0.03, 0.012, hitam);
+      break;
+    default:
+      kotak(0.11, 0.024, 0.012, hitam);
+  }
+  return g;
 }
 
 // ------------------------------------------------------------------ anggota badan
@@ -378,21 +411,53 @@ export function buatKarakter(w, { seed = 0, tandaFreelancer = false } = {}) {
   const kepala = new THREE.Group();
   kepala.position.y = KEPALA_Y;
   akar.add(kepala);
-  kepala.add(badan(squircleGeo(RX, RY, RZ), w.kulit));
-  for (const s of [-1, 1]) kepala.add(telinga(s, w));
-  const wajah = buatWajah(w);
-  kepala.add(wajah.mesh);
+  const tengkorak = badan(S(1, 30, 20), w.kulit);
+  tengkorak.scale.set(RX, RY, RZ);
+  kepala.add(tengkorak);
+  for (const s of [-1, 1]) {
+    pasang(kepala, badan(S(0.075, 10, 8), w.kulit, { t: 0.02 }), s * (RX - 0.01), -0.03, 0);
+    if (w.pipi) {
+      const p = new THREE.Mesh(S(0.075, 10, 8), toon(w.pipi));
+      p.scale.set(1.25, 0.8, 0.3);
+      pasang(kepala, p, s * 0.28, -0.1, 0.375);
+    }
+    if (w.bayangMata) {
+      const p = new THREE.Mesh(S(0.07, 10, 8), toon(w.bayangMata));
+      p.scale.set(1.3, 0.55, 0.25);
+      pasang(kepala, p, s * 0.19, -0.1, 0.385);
+    }
+    if (w.bintik) for (let i = 0; i < 3; i++) {
+      const d = new THREE.Mesh(S(0.012, 6, 5), toon('#B9784B'));
+      pasang(kepala, d, s * (0.24 + i * 0.045), -0.04 - (i % 2) * 0.03, 0.4);
+    }
+  }
+  const mata = [];
+  for (const s of [-1, 1]) {
+    const e = mataBuat(w.mata, s);
+    kepala.add(e);
+    mata.push(e);
+  }
+  if (w.hidung) {
+    const n = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.09, 4), toon(w.hidung));
+    n.rotation.x = Math.PI / 2;
+    pasang(kepala, n, 0, -0.06, 0.435);
+  }
+  kepala.add(mulutBuat(w));
   kepala.add(rambut(w.rambut));
+  if (w.kacamata) {
+    const bingkai = new THREE.MeshBasicMaterial({ color: w.kacamata });
+    for (const s of [-1, 1]) pasang(kepala, new THREE.Mesh(new THREE.TorusGeometry(0.115, 0.016, 8, 20), bingkai), s * 0.19, 0, 0.41);
+    pasang(kepala, new THREE.Mesh(B(0.09, 0.016, 0.016), bingkai), 0, 0.01, 0.41);
+  }
   if (tandaFreelancer) {
     pasang(akar, badan(B(0.15, 0.2, 0.015), '#FFFFFF', { t: 0.012 }), 0.05, 0.5, 0.2);
     pasang(akar, new THREE.Mesh(B(0.03, 0.22, 0.012), toon('#FFC400')), 0.05, 0.69, 0.18, [0, 0, 0.25]);
   }
 
-  if (w.skala) g.scale.setScalar(w.skala);
   const kar = {
-    group: g, akar, kepala, wajah,
+    group: g, akar, kepala, mata,
     sendi: { ul: [kakiK.pinggul, kakiR.pinggul], ll: [kakiK.lutut, kakiR.lutut], ua: [lenganK.bahu, lenganR.bahu], la: [lenganK.siku, lenganR.siku] },
-    seed, mode: 'berdiri',
+    seed, mode: 'berdiri', matiKedip: ['titik', 'bulat'].includes(w.mata),
     pose: { ul: [0, 0], ll: [0, 0], ua: [0, 0], la: [0, 0], y: 0, kx: 0, kz: 0 },
   };
   gabungKarakter(kar);
@@ -441,13 +506,8 @@ export function perbarui(kar, t, dt) {
   kar.akar.position.y = p.y;
   kar.kepala.rotation.x = p.kx;
   kar.kepala.rotation.z = p.kz;
-  const wj = kar.wajah;
-  if (wj.bisaKedip) {
+  if (kar.matiKedip) {
     const kedip = (t * 0.7 + kar.seed) % 4 > 3.88;
-    if (kedip !== wj.kedip) { // gambar ulang hanya saat berubah, bukan tiap frame
-      wj.kedip = kedip;
-      gambarWajah(wj.ctx, wj.w, { kedip });
-      wj.tekstur.needsUpdate = true;
-    }
+    for (const e of kar.mata) e.scale.y = kedip ? 0.12 : 1;
   }
 }

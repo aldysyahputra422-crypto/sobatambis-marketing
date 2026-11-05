@@ -4,7 +4,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import {
-  ALUR, HOLO, jalur, jalurKeluar, jalurMasuk, LANTAI, LAYAR, LOUNGE, MEJA, MEJA_CADANGAN, MEJA_KETUA, PEMILIK_KURSI, PINTU, RINTANGAN, TAHAP_ZONA, ZONA, zonaDariNama,
+  ALUR, HOLO, jalur, jalurKeluar, jalurMasuk, LANTAI, LAYAR, RUANG_DEPAN, LOUNGE, MEJA, MEJA_CADANGAN, MEJA_KETUA, PEMILIK_KURSI, PINTU, RINTANGAN, TAHAP_ZONA, ZONA, zonaDariNama,
 } from '../runtime/public/assets/sa/tata.js';
 import { keadaanDemo, SKENARIO } from '../runtime/public/assets/sa/demo.js';
 
@@ -103,10 +103,13 @@ function periksaRute(nama, mulai, titik) {
     assert.ok(a[0] === b[0] || a[1] === b[1], `${nama}: segmen ${i} miring ${a} → ${b}`);
     for (const k of semuaMeja()) assert.ok(!menabrak(a, b, k), `${nama}: segmen ${i} (${a} → ${b}) menembus meja ${k}`);
     for (const [r, k] of Object.entries(RINTANGAN)) assert.ok(!menabrak(a, b, k), `${nama}: segmen ${i} (${a} → ${b}) menembus ${r}`);
-    // dinding kaca ruang belakang (z = -3.5): hanya boleh dilewati di pintu
-    if (a[0] === b[0] && Math.min(a[1], b[1]) < -3.5 && Math.max(a[1], b[1]) > -3.5) {
-      const ruang = Object.entries(PINTU).find(([id]) => a[0] >= ZONA[id].rect[0] && a[0] <= ZONA[id].rect[2]);
-      if (ruang) assert.ok(Math.abs(a[0] - ruang[1][0]) <= 0.7, `${nama}: menembus kaca ${ruang[0]} di x=${a[0]} (pintu ${ruang[1][0]})`);
+    // dinding kaca: ruang belakang di z = -3.5, ruang depan di z = +3.5. Hanya boleh dilewati di pintunya.
+    for (const [id, p] of Object.entries(PINTU)) {
+      const gz = p[1];
+      if (!(a[0] === b[0] && Math.min(a[1], b[1]) < gz && Math.max(a[1], b[1]) > gz)) continue;
+      const [x0, , x1] = ZONA[id].rect;
+      if (a[0] < x0 || a[0] > x1) continue;
+      assert.ok(Math.abs(a[0] - p[0]) <= 0.7, `${nama}: menembus kaca ${id} di x=${a[0]} (pintu ${p[0]})`);
     }
   }
 }
@@ -131,6 +134,26 @@ test('pintu kaca berada di dalam ruangnya dan tidak menempel dinding', () => {
   for (const [zona, p] of Object.entries(PINTU)) {
     const [x0, , x1] = ZONA[zona].rect;
     assert.ok(p[0] > x0 + 0.8 && p[0] < x1 - 0.8, `${zona}: pintu terlalu dekat dinding`);
+  }
+});
+
+test('tempat berkumpul di ruang depan berdinding kaca keluar lewat pintu ruangnya', () => {
+  for (const id of RUANG_DEPAN) {
+    const [x0, z0, x1, z1] = ZONA[id].rect;
+    const di = LOUNGE.filter((s) => s.x >= x0 && s.x <= x1 && s.z >= z0 && s.z <= z1);
+    assert.ok(di.length >= 3, `${id}: terlalu sedikit tempat berkumpul (${di.length})`);
+    for (const s of di) assert.equal(s.via, PINTU[id][0], `tempat di ${id} (${s.x}, ${s.z}) tidak lewat pintu`);
+  }
+  // lounge terbuka tidak punya pintu, jadi jalurnya bebas
+  const terbuka = LOUNGE.filter((s) => s.x < ZONA.rapat.rect[0]);
+  assert.ok(terbuka.length >= 3, 'lounge terbuka kehilangan tempat duduk');
+});
+
+test('tempat berkumpul tidak berdiri di dalam perabot', () => {
+  for (const s of LOUNGE) {
+    for (const [nama, k] of Object.entries(RINTANGAN)) {
+      assert.ok(!dalam(k, [s.x, s.z]), `tempat (${s.x}, ${s.z}) berdiri di dalam ${nama}`);
+    }
   }
 });
 

@@ -42,7 +42,11 @@ const { chromium } = require('playwright');
     const b = document.getElementById('btnMalam');
     const r = document.documentElement;
     const tik = () => new Promise((x) => setTimeout(x, 80)); // MutationObserver berjalan asinkron
-    const baca = () => ({ malam: r.dataset.malam ?? null, tema: r.dataset.theme ?? null, tekan: b.getAttribute('aria-pressed'), lampu: window.__kantor.scene.children.filter((c) => c.isPointLight).map((c) => c.intensity > 0) });
+    const lampu = (nama) => window.__kantor.scene.children.filter((c) => c.isPointLight && c.name === nama).map((c) => c.intensity);
+    const baca = () => ({
+      malam: r.dataset.malam ?? null, tema: r.dataset.theme ?? null, tekan: b.getAttribute('aria-pressed'),
+      atap: lampu('lampuAtap'), holo: lampu('lampuHolo')[0], layar: lampu('lampuLayar')[0],
+    });
     b.click();
     await tik();
     const on = baca();
