@@ -5,7 +5,7 @@
 // Data murni (tanpa three.js) supaya bisa diuji di Node.
 
 export const GAYA_RAMBUT = [
-  'jambul', 'rapi', 'keriting-pigtail', 'jabrik', 'panjang-pita', 'acak-tunas', 'kepang-x', 'jambul-pirang', 'bob-poni',
+  'jambul', 'klimis', 'rapi', 'keriting-pigtail', 'jabrik', 'panjang-pita', 'acak-tunas', 'kepang-x', 'jambul-pirang', 'bob-poni',
   'afro-besar', 'bergelombang-bahu', 'keriting-topi', 'acak-antena', 'panjang-jamur', 'panjang-tengah', 'acak-jambul', 'poni-panjang', 'kupluk',
 ];
 export const MATA = ['titik', 'bulat', 'senyum', 'x', 'sipit', 'kosong'];
@@ -25,12 +25,15 @@ export const WATAK = {
     bawah: { jenis: 'celana', warna: HITAM }, sepatu: HITAM,
   },
   pemilik: {
+    // Aldy (pemilik). Kesan berwibawa dibangun dari mata menyipit, rambut klimis, setelan gelap, dan
+    // badan sedikit lebih besar. Dalam gaya lembar, mata menyipit yang membuat serius, bukan ukuran badan.
     sumber: 'desain baru (Aldy), gaya lembar',
-    kulit: '#EBBE98', hidung: '#E39B66', pipi: '#F29B8E',
-    rambut: { gaya: 'rapi', warna: '#1F1F29' },
-    mata: 'titik', mulut: 'senyum',
-    baju: { atas: '#F4F5F8', lengan: '#F4F5F8', rompi: '#294D82', dasi: '#FFC400' },
-    bawah: { jenis: 'celana', warna: '#1F2430' }, sepatu: '#1F2430',
+    kulit: '#E8B795', hidung: '#D98A52', pipi: null,
+    rambut: { gaya: 'klimis', warna: '#15151D' },
+    mata: 'sipit', mulut: 'datar',
+    baju: { atas: '#27314B', lengan: '#27314B', rompi: '#1B2235', dasi: '#FFC400', kerah: '#F4F5F8' },
+    bawah: { jenis: 'celana', warna: '#1B2235' }, sepatu: '#15151D',
+    skala: 1.07,
   },
   'sutradara-suara': {
     sumber: 'lembar baris 1 kolom 1',

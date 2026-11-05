@@ -1,4 +1,5 @@
-// Bahan bersama: toon dua-tiga tingkat bayangan dan outline hitam tebal (gaya chibi).
+// Bahan bersama: badan karakter memakai bahan lembut seperti mainan vinyl (bayangan halus, sedikit pantulan)
+// dengan garis tepi tipis berwarna cokelat gelap, mengikuti lembar karakter teman pemilik.
 import * as THREE from 'three';
 
 let gradien = null;
@@ -45,10 +46,31 @@ export function perabotBadan(geo, warna, opsi = {}) {
   return m;
 }
 
-export const GARIS = new THREE.MeshBasicMaterial({ color: '#2a2020', side: THREE.BackSide });
+// Garis tepi: cokelat gelap dan tipis seperti di lembar, bukan hitam tebal.
+export const GARIS = new THREE.MeshBasicMaterial({ color: '#4A3129', side: THREE.BackSide });
+export const TEBAL_GARIS = 0.022;
+
+// Gelapkan warna hex (dipakai untuk lekuk telinga dan lipatan).
+export function gelapkan(hex, k = 0.85) {
+  const n = parseInt(hex.slice(1), 16);
+  const c = (v) => Math.max(0, Math.min(255, Math.round(v * k)));
+  return `#${((c(n >> 16) << 16) | (c((n >> 8) & 255) << 8) | c(n & 255)).toString(16).padStart(6, '0')}`;
+}
+
+const lembutCache = new Map();
+// Badan karakter: halus, bayangan lembut, sedikit kilap (vinyl). userData.gabung = boleh dilebur per bahan.
+export function lembut(warna, extra = {}) {
+  const kunci = warna + JSON.stringify(extra);
+  if (!lembutCache.has(kunci)) {
+    const m = new THREE.MeshStandardMaterial({ color: warna, roughness: 0.62, metalness: 0.02, ...extra });
+    m.userData.gabung = true;
+    lembutCache.set(kunci, m);
+  }
+  return lembutCache.get(kunci);
+}
 
 // Outline: salinan geometri berhadapan-belakang, diperbesar sama tebal di semua sumbu (t meter).
-export function garis(mesh, t = 0.028) {
+export function garis(mesh, t = TEBAL_GARIS) {
   mesh.geometry.computeBoundingBox();
   const b = mesh.geometry.boundingBox;
   const sz = (a, c) => Math.max(c - a, 0.02);
@@ -63,8 +85,8 @@ export function garis(mesh, t = 0.028) {
   return mesh;
 }
 
-export function badan(geo, warna, { t = 0.028, tanpaGaris = false, cast = true, extra = {} } = {}) {
-  const m = new THREE.Mesh(geo, toon(warna, extra));
+export function badan(geo, warna, { t = TEBAL_GARIS, tanpaGaris = false, cast = true, extra = {} } = {}) {
+  const m = new THREE.Mesh(geo, lembut(warna, extra));
   m.castShadow = cast;
   m.receiveShadow = true;
   if (!tanpaGaris) garis(m, t);
