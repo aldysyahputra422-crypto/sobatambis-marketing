@@ -118,9 +118,13 @@ def main(argv: list[str]) -> int:
     if "beat" not in n:
         return -1
     pilihan = n.get("sumber_suara")
-    if pilihan == "manusia":
+    if pilihan in ("manusia", "manual"):
         from scripts.suara import lembar, manusia
-        lembar.tulis(folder)
+        if pilihan == "manual":  # jalur senggang: suara dibuat pemilik di ElevenLabs, dipotong lokal per baris
+            from scripts.senggang import lembar_tempel
+            lembar_tempel.tulis(folder)
+        else:
+            lembar.tulis(folder)
         k = manusia.jalankan(folder)
     elif pilihan == "elevenlabs":
         from scripts.suara import v2
