@@ -74,3 +74,30 @@ def test_ep_awal_melanjutkan_episode_yang_ada(tmp_path):
     (tmp_path / "2026-W46/ep01").mkdir(parents=True)
     assert jadwal_minggu.ep_berikutnya(tmp_path) == 2
     assert jadwal_minggu.ep_berikutnya(tmp_path / "kosong") == 1
+
+
+def test_saran_jalur_batas_menipis_senggang():
+    j = jadwal_minggu.susun("2026-W47", kapasitas_mingguan=3, ep_awal=2, target=7)
+    serial = [h for h in j["hari"] if h["jenis"] == "serial"]
+    assert serial and all(h["saran_jalur"] == "senggang" and "menipis" in h["alasan_jalur"] for h in serial)
+    assert all("saran_jalur" not in h for h in j["hari"] if h["jenis"] == "turunan")
+
+
+def test_saran_jalur_cukup_atau_belum_diukur_otomatis():
+    for kap in (8, None):
+        j = jadwal_minggu.susun("2026-W47", kapasitas_mingguan=kap, ep_awal=2, target=7)
+        assert all(h["saran_jalur"] == "otomatis" for h in j["hari"] if h["jenis"] == "serial")
+
+
+def test_saran_jalur_pemilik_sibuk_otomatis_walau_menipis():
+    j = jadwal_minggu.susun("2026-W47", kapasitas_mingguan=3, ep_awal=2, target=7, sibuk={"Senin"})
+    senin = j["hari"][0]
+    assert senin["jenis"] == "serial" and senin["saran_jalur"] == "otomatis" and "sibuk" in senin["alasan_jalur"]
+    lain = [h for h in j["hari"] if h["jenis"] == "serial" and h["hari"] != "Senin"]
+    assert all(h["saran_jalur"] == "senggang" for h in lain)
+
+
+def test_saran_jalur_hanya_saran_tidak_mengubah_jumlah_episode():
+    a = jadwal_minggu.susun("2026-W47", kapasitas_mingguan=3, ep_awal=2, target=7)
+    b = jadwal_minggu.susun("2026-W47", kapasitas_mingguan=3, ep_awal=2, target=7, sibuk={"Senin", "Selasa"})
+    assert [h["jenis"] for h in a["hari"]] == [h["jenis"] for h in b["hari"]]

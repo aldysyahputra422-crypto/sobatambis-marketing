@@ -1,10 +1,12 @@
 """Jadwal 7 hari tayang dari kapasitas terukur.
 
-python -m scripts.jadwal_minggu susun 2026-W47      → tulis videos/2026-W47/jadwal.json (+ cetak ringkasan)
+python -m scripts.jadwal_minggu susun 2026-W47 [--sibuk Senin,Rabu]  → tulis videos/2026-W47/jadwal.json (+ cetak ringkasan)
 python -m scripts.jadwal_minggu notion videos/2026-W47 → JSON baris database Notion "Produksi Sobat Ambis"
 
 Hari tanpa kapasitas untuk episode serial diisi "turunan": format hemat token dari episode yang sudah jadi
 (carousel momen mengena, potongan 15 detik), dikerjakan perencana-konten, bukan pipeline penuh.
+Tiap hari serial membawa SARAN jalur ("saran_jalur": otomatis|senggang, dengan "alasan_jalur"); pemilik tetap memilih.
+Batas mingguan menipis (kapasitas < target) → senggang; hari yang ditandai --sibuk → otomatis (senggang butuh pemilik menulis di ChatGPT dan menempel ke ElevenLabs).
 Judul episode diisi perencana-konten langsung di jadwal.json (field "judul").
 """
 import json
@@ -37,8 +39,17 @@ def _hari_serial(n: int) -> set[int]:
     return {round(i * 7 / n) for i in range(n)} if n else set()
 
 
+def saran_jalur(kapasitas_mingguan: int | None, target: int, hari_sibuk: bool = False) -> tuple[str, str]:
+    """Saran saja. Pemilik sibuk menang atas batas menipis: jalur senggang memakai waktu pemilik."""
+    if hari_sibuk:
+        return "otomatis", "pemilik sibuk: jalur senggang butuh pemilik menulis di ChatGPT dan menempel ke ElevenLabs"
+    if kapasitas_mingguan is not None and kapasitas_mingguan < target:
+        return "senggang", f"batas mingguan menipis: kapasitas {kapasitas_mingguan} < target {target}; senggang menghemat token naskah dan suara"
+    return "otomatis", "kapasitas cukup" if kapasitas_mingguan is not None else "kapasitas belum diukur"
+
+
 def susun(minggu: str, kapasitas_mingguan: int | None, ep_awal: int, target: int = 7, jam: str = "19:00",
-          jeda_produksi: int = 2, zona: str = "+07:00") -> dict:
+          jeda_produksi: int = 2, zona: str = "+07:00", sibuk: set[str] | None = None) -> dict:
     th, mg = re.fullmatch(r"(\d{4})-W(\d{2})", minggu).groups()
     senin = date.fromisocalendar(int(th), int(mg), 1)
     peringatan = []
@@ -57,7 +68,8 @@ def susun(minggu: str, kapasitas_mingguan: int | None, ep_awal: int, target: int
                 "produksi": (tgl - timedelta(days=jeda_produksi)).isoformat(), "judul": ""}
         if i in serial:
             nama = f"ep{ep:02d}"
-            slot.update(jenis="serial", episode=nama, folder=f"videos/{minggu}/{nama}")
+            jalur, alasan = saran_jalur(kapasitas_mingguan, target, NAMA_HARI[i] in (sibuk or set()))
+            slot.update(jenis="serial", episode=nama, folder=f"videos/{minggu}/{nama}", saran_jalur=jalur, alasan_jalur=alasan)
             terakhir, ep = nama, ep + 1
         else:
             slot.update(jenis="turunan", episode=None, sumber_episode=terakhir,
@@ -89,9 +101,10 @@ def main(argv: list[str]) -> int:
         print(json.dumps(baris_notion(json.loads((Path(argv[1]) / "jadwal.json").read_text(encoding="utf-8"))), ensure_ascii=False, indent=1))
         return 0
     k = konfig()
+    sibuk = set(argv[argv.index("--sibuk") + 1].split(",")) if "--sibuk" in argv else set()
     kap = kapasitas.hitung(cadangan=k.get("cadangan_persen", 15))
     j = susun(argv[1], kap["kapasitas_mingguan"], ep_berikutnya(), target=k.get("target_serial", 7),
-              jam=k.get("jam_tayang", "19:00"), jeda_produksi=k.get("jeda_produksi_hari", 2))
+              jam=k.get("jam_tayang", "19:00"), jeda_produksi=k.get("jeda_produksi_hari", 2), sibuk=sibuk)
     folder = VIDEOS / argv[1]
     folder.mkdir(parents=True, exist_ok=True)
     p = folder / "jadwal.json"
@@ -101,7 +114,7 @@ def main(argv: list[str]) -> int:
             h["judul"] = lama.get(h["folder"], "")
     p.write_text(json.dumps(j, ensure_ascii=False, indent=1), encoding="utf-8")
     for h in j["hari"]:
-        print(f"{h['hari']:<7} {h['tayang'][:10]} {h['jenis']:<8} {h['episode'] or '-'}")
+        print(f"{h['hari']:<7} {h['tayang'][:10]} {h['jenis']:<8} {h['episode'] or '-':<5} {h.get('saran_jalur', '')}")
     for x in j["peringatan"]:
         print(f"! {x}")
     return 0

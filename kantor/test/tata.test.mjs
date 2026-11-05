@@ -4,7 +4,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import {
-  ALUR, jalur, jalurKeluar, jalurMasuk, LANTAI, LOUNGE, MEJA, MEJA_CADANGAN, MEJA_KETUA, PEMILIK_KURSI, PINTU, RINTANGAN, TAHAP_ZONA, ZONA, zonaDariNama,
+  ALUR, HOLO, jalur, jalurKeluar, jalurMasuk, LANTAI, LAYAR, LOUNGE, MEJA, MEJA_CADANGAN, MEJA_KETUA, PEMILIK_KURSI, PINTU, RINTANGAN, TAHAP_ZONA, ZONA, zonaDariNama,
 } from '../runtime/public/assets/sa/tata.js';
 import { keadaanDemo, SKENARIO } from '../runtime/public/assets/sa/demo.js';
 
@@ -132,4 +132,22 @@ test('pintu kaca berada di dalam ruangnya dan tidak menempel dinding', () => {
     const [x0, , x1] = ZONA[zona].rect;
     assert.ok(p[0] > x0 + 0.8 && p[0] < x1 - 0.8, `${zona}: pintu terlalu dekat dinding`);
   }
+});
+
+test('hologram berdiri di area terbuka di dalam kotak rintangannya dan tidak menimpa meja atau zona kaca', () => {
+  const k = RINTANGAN.hologram;
+  assert.ok(k, 'hologram harus terdaftar sebagai rintangan supaya jalur jalan menghindarinya');
+  assert.ok(HOLO.x - HOLO.r >= k[0] && HOLO.x + HOLO.r <= k[2] && HOLO.z - HOLO.r >= k[1] && HOLO.z + HOLO.r <= k[3]);
+  assert.ok(dalam(LANTAI, [HOLO.x, HOLO.z]));
+  for (const [id, z] of Object.entries(ZONA)) assert.ok(!dalam(z.rect, [HOLO.x, HOLO.z]), `hologram berdiri di dalam zona ${id}; seharusnya di area terbuka`);
+  for (const m of semuaMeja()) assert.ok(!menabrak([k[0], k[1]], [k[2], k[3]], m), 'hologram menimpa meja');
+  for (const [nama, b] of Object.entries(RINTANGAN)) if (nama !== 'hologram') assert.ok(!menabrak([k[0], k[1]], [k[2], k[3]], b), `hologram menimpa ${nama}`);
+});
+
+test('layar dinding menempel di dinding belakang Lantai Produksi, di atas meja, dan tidak keluar zona', () => {
+  const [x0, , x1] = ZONA.produksi.rect;
+  assert.ok(LAYAR.x - LAYAR.w / 2 >= x0 && LAYAR.x + LAYAR.w / 2 <= x1, 'layar keluar dari lebar Lantai Produksi');
+  assert.ok(LAYAR.z < -9.3 && LAYAR.z > -9.6, 'layar harus menempel dinding belakang');
+  assert.ok(LAYAR.y - LAYAR.h / 2 >= 1.4, 'tepi bawah layar harus di atas kepala karakter yang duduk');
+  assert.ok(LAYAR.y + LAYAR.h / 2 <= 3.5, 'layar menembus tutup dinding');
 });

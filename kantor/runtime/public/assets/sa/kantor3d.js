@@ -5,15 +5,16 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { CSS2DObject, CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
-import { canvasTekstur, perabotBadan } from './bahan.js';
+import { bulatTeks, canvasTekstur, perabotBadan } from './bahan.js';
 import { keadaanDemo, SKENARIO } from './demo.js';
 import { gabungKelompok } from './gabung.js';
 import { buatKarakter, perbarui } from './karakter.js';
 import * as P from './perabot.js';
+import { isiDinding, statusHolo, urutanFokus } from './ringkas.js';
 import {
-  ALUR, jalur, jalurKeluar, jalurMasuk, LOUNGE, MEJA, MEJA_CADANGAN, MEJA_KETUA, PEMILIK_KURSI, PINTU, PINTU_MASUK, TAHAP_ZONA, ZONA,
+  ALUR, HOLO, jalur, jalurKeluar, jalurMasuk, LAYAR, LOUNGE, MEJA, MEJA_CADANGAN, MEJA_KETUA, PEMILIK_KURSI, PINTU, PINTU_MASUK, TAHAP_ZONA, ZONA,
 } from './tata.js';
-import { bangunUi } from './ui.js';
+import { aturMalam, bangunUi, malamAwal } from './ui.js';
 import { WATAK, WATAK_FREELANCER } from './watak.js';
 
 const API = '/kerja/api/state';
@@ -25,14 +26,14 @@ const el = document.getElementById('scene');
 const W = P.W;
 
 // ---------------------------------------------------------------- latar peta kota (seperti poster acuan)
-function latarPeta(gelapMode) {
+function latarPeta(gelapMode, malam = false) {
   const c = document.createElement('canvas');
   c.width = 1400;
   c.height = 1000;
   const g = c.getContext('2d');
-  g.fillStyle = gelapMode ? '#161F33' : '#E6EAEE';
+  g.fillStyle = malam ? '#080D1C' : gelapMode ? '#161F33' : '#E6EAEE';
   g.fillRect(0, 0, c.width, c.height);
-  g.strokeStyle = gelapMode ? 'rgba(255,255,255,.07)' : 'rgba(255,255,255,.85)';
+  g.strokeStyle = malam ? 'rgba(56,225,255,.13)' : gelapMode ? 'rgba(255,255,255,.07)' : 'rgba(255,255,255,.85)';
   g.lineCap = 'round';
   let seed = 7;
   const acak = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
@@ -58,11 +59,12 @@ function latarPeta(gelapMode) {
   }
 }
 const gelap = matchMedia('(prefers-color-scheme: dark)');
+const malam = () => document.documentElement.dataset.malam !== undefined;
 const modeGelap = () => { // pilihan tema eksplisit (data-theme) menang atas pengaturan sistem
   const t = document.documentElement.dataset.theme;
   return t === 'dark' || (t !== 'light' && gelap.matches);
 };
-latarPeta(modeGelap());
+latarPeta(modeGelap(), malam());
 
 // ---------------------------------------------------------------- renderer
 let renderer;
@@ -116,13 +118,30 @@ Object.assign(matahari.shadow.camera, { left: -32, right: 32, top: 26, bottom: -
 matahari.shadow.bias = -0.0005;
 matahari.shadow.radius = 3;
 scene.add(hemi, matahari);
+// lampu tambahan hanya menyala di tema malam (intensitas 0 di siang supaya jumlah lampu tetap dan shader tidak dikompilasi ulang)
+const lampuHolo = new THREE.PointLight('#4FD1C5', 0, 11, 2);
+lampuHolo.position.set(HOLO.x, 1.6, HOLO.z);
+const lampuLayar = new THREE.PointLight('#8FB4FF', 0, 12, 2);
+lampuLayar.position.set(LAYAR.x, 2.4, LAYAR.z + 2.2);
+scene.add(lampuHolo, lampuLayar);
+let neon = null; // kelompok lampu neon, dibuat setelah bangunan
+let holo = null;
 const tema = () => {
-  hemi.intensity = modeGelap() ? 0.65 : 1.05;
-  matahari.intensity = modeGelap() ? 0.85 : 1.35;
-  latarPeta(modeGelap());
+  const m = malam();
+  const g = modeGelap();
+  hemi.intensity = m ? 0.5 : g ? 0.65 : 1.05;
+  hemi.color.set(m ? '#8FA8FF' : '#ffffff');
+  hemi.groundColor.set(m ? '#141C38' : '#aeb8c6');
+  matahari.intensity = m ? 0.45 : g ? 0.85 : 1.35;
+  matahari.color.set(m ? '#9DB4FF' : '#fff4e4');
+  lampuHolo.intensity = m ? 9 : 0;
+  lampuLayar.intensity = m ? 7 : 0;
+  if (neon) neon.visible = m;
+  holo?.aturMalam(m);
+  latarPeta(g, m);
 };
 gelap.addEventListener?.('change', tema);
-new MutationObserver(tema).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+new MutationObserver(tema).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-malam'] });
 
 // ---------------------------------------------------------------- bangunan
 const dunia = new THREE.Group();
@@ -346,6 +365,182 @@ for (const [id, z] of Object.entries(ZONA)) {
 // perabot statis digabung per bahan (ribuan mesh menjadi puluhan draw call); yang berlayar/animasi tidak ikut
 gabungKelompok(dunia);
 
+// layar besar di dinding belakang Lantai Produksi: tahap pipeline, agent yang bekerja, dan permintaan untuk Aldy
+const layarDinding = (() => {
+  const { tekstur, ctx } = canvasTekstur(1280, 392, () => {});
+  add(kotak(LAYAR.w + 0.18, LAYAR.h + 0.18, 0.09, '#23272E'), LAYAR.x, LAYAR.y, LAYAR.z);
+  const bidang = new THREE.Mesh(new THREE.PlaneGeometry(LAYAR.w, LAYAR.h), new THREE.MeshBasicMaterial({ map: tekstur, toneMapped: false }));
+  bidang.position.set(LAYAR.x, LAYAR.y, LAYAR.z + 0.05);
+  dunia.add(bidang);
+  const bungkus = (teks, maks) => {
+    const baris = [];
+    let cur = '';
+    for (const kata of teks.split(' ')) {
+      if (ctx.measureText(`${cur} ${kata}`.trim()).width > maks && cur) { baris.push(cur); cur = kata; } else cur = `${cur} ${kata}`.trim();
+    }
+    if (cur) baris.push(cur);
+    return baris;
+  };
+  const gambar = (d) => {
+    const w = isiDinding(d);
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#0C1730';
+    ctx.fillRect(0, 0, 1280, 392);
+    ctx.fillStyle = '#FFC400';
+    ctx.font = '700 30px system-ui, sans-serif';
+    ctx.fillText('PRODUKSI', 28, 50);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '600 26px system-ui, sans-serif';
+    ctx.fillText(w.judul, 200, 50);
+    if (w.sekarang) {
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#7FE9FF';
+      ctx.font = '700 30px system-ui, sans-serif';
+      ctx.fillText(`Tahap: ${w.sekarang}`, 1252, 50);
+      ctx.textAlign = 'left';
+    }
+    w.tahap.forEach((t, i) => {
+      const x = 28 + (i % 6) * 205;
+      const y = 72 + Math.floor(i / 6) * 46;
+      ctx.fillStyle = t.status === 'sekarang' ? '#FFC400' : t.status === 'lulus' ? '#2A9D8F' : '#26324f';
+      bulatTeks(ctx, x, y, 195, 36, 9);
+      ctx.fill();
+      ctx.fillStyle = t.status === 'sekarang' ? '#10182b' : '#ffffff';
+      ctx.font = '600 19px system-ui, sans-serif';
+      ctx.fillText(`${t.status === 'lulus' ? '✓ ' : ''}${t.nama}`, x + 12, y + 25);
+    });
+    ctx.fillStyle = '#9FB0CF';
+    ctx.font = '700 16px system-ui, sans-serif';
+    ctx.fillText('SEDANG BEKERJA', 28, 190);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '600 22px system-ui, sans-serif';
+    if (!w.aktif.length) {
+      ctx.fillStyle = '#9FB0CF';
+      ctx.fillText(w.tahap.length ? 'Tidak ada agent yang bekerja saat ini.' : 'Menunggu produksi dimulai.', 28, 232);
+    }
+    w.aktif.forEach((a, i) => {
+      ctx.fillStyle = '#2A9D8F';
+      ctx.beginPath();
+      ctx.arc(38, 226 + i * 34 - 7, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '700 22px system-ui, sans-serif';
+      ctx.fillText(a.label, 54, 226 + i * 34);
+      ctx.fillStyle = '#9FB0CF';
+      ctx.font = '500 20px system-ui, sans-serif';
+      ctx.fillText(a.tugas, 330, 226 + i * 34);
+    });
+    if (w.sisa) {
+      ctx.fillStyle = '#9FB0CF';
+      ctx.font = '600 18px system-ui, sans-serif';
+      ctx.fillText(`+${w.sisa} agent lainnya`, 54, 226 + w.aktif.length * 34);
+    }
+    // kanan bawah: permintaan untuk Aldy
+    ctx.fillStyle = w.butuh ? '#D94662' : '#16233f';
+    bulatTeks(ctx, 880, 168, 372, 196, 14);
+    ctx.fill();
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '700 20px system-ui, sans-serif';
+    ctx.fillText(w.butuh ? 'MENUNGGU ALDY' : 'Aldy', 900, 202);
+    ctx.font = '500 20px system-ui, sans-serif';
+    ctx.fillStyle = w.butuh ? '#FFFFFF' : '#9FB0CF';
+    bungkus(w.butuh || 'Tidak ada yang menunggu persetujuan.', 330).slice(0, 5).forEach((b, i) => ctx.fillText(b, 900, 236 + i * 28));
+    tekstur.needsUpdate = true;
+  };
+  gambar(null);
+  return { gambar };
+})();
+
+// hologram di area terbuka tengah: warna dan kecepatan putar mengikuti keadaan produksi
+holo = (() => {
+  const grup = new THREE.Group();
+  grup.position.set(HOLO.x, 0, HOLO.z);
+  const alas = new THREE.Mesh(new THREE.CylinderGeometry(HOLO.r, HOLO.r + 0.08, 0.14, 40), new THREE.MeshStandardMaterial({ color: '#1C2434', roughness: 0.55, metalness: 0.25 }));
+  alas.position.y = 0.07;
+  alas.castShadow = !RINGAN;
+  alas.receiveShadow = true;
+  grup.add(alas);
+  const basic = (opsi) => new THREE.MeshBasicMaterial({ toneMapped: false, ...opsi });
+  const bahan = {
+    alas: basic({}), kawat: basic({ wireframe: true, transparent: true, opacity: 0.9 }), inti: basic({ transparent: true, opacity: 0.2, depthWrite: false }),
+    r1: basic({}), r2: basic({}), kerucut: basic({ transparent: true, opacity: 0.1, side: THREE.DoubleSide, depthWrite: false }),
+  };
+  const cincinAlas = new THREE.Mesh(new THREE.TorusGeometry(HOLO.r - 0.07, 0.03, 8, 56), bahan.alas);
+  cincinAlas.rotation.x = Math.PI / 2;
+  cincinAlas.position.y = 0.15;
+  const bola = new THREE.Mesh(new THREE.IcosahedronGeometry(0.55, 2), bahan.kawat);
+  const inti = new THREE.Mesh(new THREE.SphereGeometry(0.4, 24, 16), bahan.inti);
+  const r1 = new THREE.Mesh(new THREE.TorusGeometry(0.8, 0.016, 6, 64), bahan.r1);
+  const r2 = new THREE.Mesh(new THREE.TorusGeometry(0.68, 0.016, 6, 64), bahan.r2);
+  r1.rotation.x = 1.15;
+  r2.rotation.set(0.5, 0, 1.0);
+  const melayang = new THREE.Group();
+  melayang.position.y = 1.3;
+  melayang.add(bola, inti, r1, r2);
+  const kerucut = new THREE.Mesh(new THREE.CylinderGeometry(0.5, HOLO.r - 0.15, 1.15, 32, 1, true), bahan.kerucut);
+  kerucut.position.y = 0.72;
+  grup.add(cincinAlas, melayang, kerucut);
+  const labelDiv = document.createElement('div');
+  labelDiv.className = 'holo-label';
+  const lab = new CSS2DObject(labelDiv);
+  lab.position.set(0, 2.25, 0);
+  grup.add(lab);
+  dunia.add(grup);
+  const warna = new THREE.Color('#4FD1C5');
+  const sasaran = new THREE.Color('#4FD1C5');
+  let st = statusHolo(null);
+  let sebelumnya = '';
+  return {
+    atur(d) {
+      st = statusHolo(d);
+      sasaran.set(st.warna);
+      if (st.teks !== sebelumnya) { labelDiv.textContent = st.teks; sebelumnya = st.teks; }
+      labelDiv.dataset.mode = st.mode;
+      labelDiv.style.setProperty('--w', st.warna);
+    },
+    aturMalam(m) {
+      for (const b of Object.values(bahan)) {
+        b.blending = m ? THREE.AdditiveBlending : THREE.NormalBlending;
+        b.needsUpdate = true;
+      }
+    },
+    langkah(t, dt) {
+      warna.lerp(sasaran, Math.min(1, dt * 4));
+      for (const b of Object.values(bahan)) b.color.copy(warna);
+      lampuHolo.color.copy(warna);
+      const k = REDUCED ? 0 : st.kecepatan;
+      bola.rotation.y += dt * k;
+      bola.rotation.x += dt * k * 0.35;
+      r1.rotation.z += dt * k * 1.3;
+      r2.rotation.y -= dt * k * 1.7;
+      const denyut = st.mode === 'menunggu' ? Math.sin(t * 6) * 0.07 : st.mode === 'bekerja' ? Math.sin(t * 3) * 0.035 : 0;
+      melayang.scale.setScalar(1 + denyut);
+      melayang.position.y = 1.3 + (REDUCED ? 0 : Math.sin(t * 1.4) * 0.05);
+    },
+  };
+})();
+
+// lampu neon (hanya tampil di tema malam): garis di atas dinding belakang, dasar kaca, dan tepi lantai
+neon = (() => {
+  const g = new THREE.Group();
+  const warnaNeon = ['#38E1FF', '#FF4DDB', '#FFC400'];
+  const garis = (w, h, d, x, y, z, i) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshBasicMaterial({ color: warnaNeon[i % warnaNeon.length], toneMapped: false }));
+    m.position.set(x, y, z);
+    g.add(m);
+  };
+  Object.values(ZONA).filter((z) => z.rect[1] === -9.5).forEach((z, i) => garis(z.rect[2] - z.rect[0] - 0.3, 0.05, 0.05, (z.rect[0] + z.rect[2]) / 2, 3.5, -9.46, i));
+  ['riset', 'naskah', 'suara', 'direktur', 'gerbang'].forEach((id, i) => {
+    const [x0, , x1] = ZONA[id].rect;
+    garis(x1 - x0 - 0.2, 0.03, 0.05, (x0 + x1) / 2, 0.03, -3.42, i);
+  });
+  garis(36.6, 0.04, 0.05, 0, 0.02, 9.93, 0);
+  garis(0.05, 0.04, 19.6, 18.43, 0.02, 0, 1);
+  g.visible = false;
+  dunia.add(g);
+  return g;
+})();
+
 // ---------------------------------------------------------------- aktor
 const aktor = new Map();
 const SKALA_KARAKTER = 1.3; // chibi dibesarkan agar terbaca; tinggi duduk disesuaikan di karakter.js
@@ -367,7 +562,7 @@ function buatAktor(id, watak, info, opsi = {}) {
   const lab = new CSS2DObject(labelEl(info.label, info.warna));
   lab.position.set(0, 1.95, 0);
   kar.group.add(lab);
-  lab.element.addEventListener('click', () => fokus(opsi.zona));
+  lab.element.addEventListener('click', () => pilihAgen(id));
   const gel = document.createElement('div');
   gel.className = 'gelembung';
   gel.hidden = true;
@@ -528,10 +723,13 @@ function terapkan(d) {
   }
   sinkronFreelancer(d.freelancers ?? []);
   papan.gambar(d.pipeline, d.pemilik);
+  layarDinding.gambar(d);
+  holo.atur(d);
   const aktif = menunggu ? 'lobi' : d.pipeline && d.pipeline.status !== 'siap posting' ? TAHAP_ZONA[d.pipeline.sekarang] : null;
   for (const [id, g] of Object.entries(bingkaiZona)) g.visible = id === aktif;
   pertama = false;
-  ui.perbarui(d, fokus);
+  if (kam.mode === 'fokus' && !urutanFokus(d).includes(kam.terpilih)) kam.t = 99; // yang disorot sudah selesai: pindah di frame berikutnya
+  ui.perbarui(d, lompatZona);
 }
 
 // ---------------------------------------------------------------- kamera
@@ -542,9 +740,9 @@ function rumah() {
   const jarak = Math.min(300, Math.max(42, lebarPerlu / (2 * Math.tan(THREE.MathUtils.degToRad(10)) * a)));
   return { target: PUSAT.clone(), jarak };
 }
-function setKamera(target, jarak, durasi = 0.9) {
+function setKamera(target, jarak, durasi = 0.9, arah = ARAH) {
   const dari = { t: controls.target.clone(), p: camera.position.clone() };
-  const ke = { t: target.clone(), p: target.clone().add(ARAH.clone().multiplyScalar(jarak)) };
+  const ke = { t: target.clone(), p: target.clone().add(arah.clone().multiplyScalar(jarak)) };
   if (REDUCED || durasi === 0) {
     controls.target.copy(ke.t);
     camera.position.copy(ke.p);
@@ -566,7 +764,97 @@ function dekat(id, jarak = 12, durasi = 0.9) {
   if (a) setKamera(new THREE.Vector3(a.pos[0], 1.1, a.pos[1]), jarak, durasi);
 }
 
-const ui = bangunUi({ roster, fokus, demo: DEMO, skenario: SKENARIO });
+// mode kamera: Semua (gambaran), Meja (menempel pada satu agent), Jelajah (bebas), Fokus (otomatis bergilir), Tim (lompat per ruang)
+const kam = { mode: 'semua', terpilih: null, t: 0 };
+const JARAK_MEJA = 22;
+const JARAK_FOKUS = 26;
+const FOKUS_DETIK = 7;
+function aturBatas(bebas) {
+  if (bebas) {
+    controls.minAzimuthAngle = -Infinity;
+    controls.maxAzimuthAngle = Infinity;
+    controls.maxPolarAngle = 1.45;
+    controls.minDistance = 3;
+  } else {
+    aturArah();
+    controls.maxPolarAngle = 1.25;
+    controls.minDistance = 5;
+  }
+}
+function setMode(m, id) {
+  const dulu = kam.mode;
+  kam.mode = m;
+  kam.t = 0;
+  if (dulu === 'jelajah' && m !== 'jelajah') aturBatas(false);
+  if (m === 'jelajah') {
+    aturBatas(true);
+    anim = null;
+    kam.terpilih = null;
+  } else if (m === 'semua') {
+    kam.terpilih = null;
+    fokus(null);
+  } else if (m === 'meja') {
+    kam.terpilih = id ?? kam.terpilih ?? urutanFokus(terakhir)[0] ?? 'ketua';
+    dekat(kam.terpilih, JARAK_MEJA);
+  } else if (m === 'fokus') {
+    kam.terpilih = urutanFokus(terakhir)[0] ?? null;
+    if (kam.terpilih) dekat(kam.terpilih, JARAK_FOKUS);
+    else fokus(null);
+  } else {
+    kam.terpilih = null; // tim
+  }
+  ui.tandai(kam);
+}
+function pilihAgen(id) {
+  if (kam.mode === 'meja' && kam.terpilih === id) setMode('semua');
+  else setMode('meja', id);
+}
+function lompatZona(id) {
+  if (kam.mode !== 'tim') setMode('tim');
+  fokus(id);
+}
+function lihatLayar() {
+  if (kam.mode !== 'tim') setMode('tim');
+  // dari depan dan agak tinggi supaya layar terbaca; azimut dipilih di dalam batas OrbitControls (landscape 0.1, potret 0.45)
+  const az = potret() ? 0.45 : 0.1;
+  const el = 1.13; // sudut polar (rad)
+  const arah = new THREE.Vector3(Math.sin(el) * Math.sin(az), Math.cos(el), Math.sin(el) * Math.cos(az));
+  setKamera(new THREE.Vector3(LAYAR.x, 2.3, LAYAR.z), potret() ? 44 : 21, 0.9, arah); // jarak cukup agar lebar layar (6,2 m) muat di area tanpa panel
+}
+// menempel pada agent yang berjalan: kamera dan targetnya ikut bergeser halus
+function ikuti(dt) {
+  if (anim || !kam.terpilih || (kam.mode !== 'meja' && kam.mode !== 'fokus')) return;
+  const a = aktor.get(kam.terpilih);
+  if (!a) return;
+  const k = Math.min(1, dt * 3);
+  const dx = (a.pos[0] - controls.target.x) * k;
+  const dz = (a.pos[1] - controls.target.z) * k;
+  camera.position.x += dx;
+  camera.position.z += dz;
+  controls.target.x += dx;
+  controls.target.z += dz;
+}
+function bergilirFokus(dt) {
+  if (kam.mode !== 'fokus') return;
+  kam.t += dt;
+  if (kam.t < FOKUS_DETIK) return;
+  kam.t = 0;
+  const u = urutanFokus(terakhir);
+  if (!u.length) {
+    kam.terpilih = null;
+    fokus(null);
+  } else {
+    kam.terpilih = u[(u.indexOf(kam.terpilih) + 1) % u.length];
+    dekat(kam.terpilih, JARAK_FOKUS);
+  }
+  ui.tandai(kam);
+}
+controls.addEventListener('start', () => { // pengguna menyentuh kamera: hentikan animasi dan, di Fokus, serahkan kendali
+  anim = null;
+  if (kam.mode === 'fokus') setMode('jelajah');
+});
+
+const ui = bangunUi({ roster, fokus: lompatZona, demo: DEMO, skenario: SKENARIO, kendali: { setMode, pilihAgen, lihatLayar } });
 
 function ukuran() {
   const w = el.clientWidth;
@@ -594,9 +882,14 @@ aturArah();
   const h = rumah();
   setKamera(h.target, h.jarak, 0);
 }
+const KUNCI_MODE = { 1: 'semua', 2: 'meja', 3: 'jelajah', 4: 'fokus', 5: 'tim' };
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Home' || e.key === '0') fokus(null);
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === 'Home' || e.key === '0') setMode('semua');
+  else if (KUNCI_MODE[e.key]) setMode(KUNCI_MODE[e.key]);
 });
+aturMalam(malamAwal(params), false);
+ui.tandai(kam);
 tema();
 
 // ---------------------------------------------------------------- loop
@@ -638,6 +931,9 @@ function frame() {
     camera.position.lerpVectors(anim.dari.p, anim.ke.p, e);
     if (k >= 1) anim = null;
   }
+  holo.langkah(t, dt);
+  bergilirFokus(dt);
+  ikuti(dt);
   controls.update();
   labelsEl.classList.toggle('jauh', camera.position.distanceTo(controls.target) > 52);
   renderer.render(scene, camera);
@@ -666,6 +962,6 @@ if (DEMO && !params.has('skenario')) {
 setInterval(() => { if (!document.hidden && !DEMO) ambil(); }, POLL_MS);
 await ambil();
 document.getElementById('loading')?.remove();
-window.__kantor = { terapkan, aktor, scene, camera, controls, renderer, fokus, dekat, ambil };
+window.__kantor = { terapkan, aktor, scene, camera, controls, renderer, fokus, dekat, ambil, setMode, pilihAgen, lihatLayar, kam, holo, aturMalam };
 window.__siap = true;
 frame();

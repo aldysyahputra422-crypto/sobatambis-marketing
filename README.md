@@ -64,6 +64,8 @@ Kantor menyala otomatis saat sesi dimulai (`autostart` di `.claude/kantor-agent.
 
 Tampilan 3D (Fase 2) sudah jadi: denah isometrik yang mengikuti poster "Italian Smart Office" (ruang kaca di belakang, lantai beton dengan karpet gelap, lounge teal dan oranye), 16 karakter dengan desain dari lembar karakter chibi (rambut, baju, dan ekspresi per agent; semua desain bisa dilihat di `/kerja?galeri`), dan alur produksi sebagai panah kuning di lantai. Zona yang sedang bekerja diberi bingkai kuning. Saat produksi menunggu persetujuan, kursi Aldy menyala merah dengan gelembung tindakannya. Agent yang bekerja berjalan ke mejanya, yang santai ke lounge. Di HP kantor diputar tegak dan panel dilipat.
 
+Navigasi di bawah (terinspirasi tampilan "Daylight Lab", hanya cara melihat, bukan cara memerintah): **mode kamera** Semua (gambaran), Meja (menempel pada satu agent), Jelajah (putar bebas), Fokus (bergilir otomatis ke agent yang bekerja, tiap 7 detik; menyentuh kamera mengambil alih) dan Tim (lompat per ruang atau ke layar produksi); tombol keyboard 1 sampai 5. **Chip agent** di baris bawah (Aldy, direktur, 16 agent) bertitik status; mengetuk satu chip membawa kamera ke mejanya. **Layar produksi** di dinding Lantai Produksi menampilkan 12 tahap, agent yang bekerja, dan permintaan untuk Aldy. **Hologram** di tengah kantor berwarna merah saat Aldy ditunggu, kuning saat ada yang bekerja, teal redup saat sepi. Tombol **Malam** (atau `?malam=1`) mengganti ke tema gelap bergaya neon dan diingat per peramban. Semua isinya berasal dari data yang sama dengan panel; tidak ada angka karangan.
+
 Lihat tampilan tanpa menunggu produksi: buka `http://127.0.0.1:8788/kerja?demo` (tiga skenario bergantian tiap 14 detik, atau `?demo&skenario=0|1|2`). Mode demo selalu memasang spanduk "data contoh, bukan aktivitas nyata". Tanpa `?demo`, semua yang tampil berasal dari transkrip dan `status.json` nyata.
 
 ### Buka kantor dari HP lewat Tailscale
@@ -105,6 +107,19 @@ Ukuran pilot: ~82% biaya ada di konteks yang dibaca ulang setiap langkah (cache 
 
 - **Rekaman manusia** (`"sumber_suara": "manusia"`): plugin menulis `lembar-rekaman.md`. Rekam satu file per tokoh ke `rekaman/arta.m4a`, `rekaman/ratna.m4a`, `rekaman/mbis.m4a` (urutan bebas; salah ucap cukup diulang). Plugin membersihkan audio, memotong per baris, dan meminta rekam ulang hanya untuk baris yang hilang (`rekaman/ulang-t04.1.m4a`).
 - **ElevenLabs** (`"sumber_suara": "elevenlabs"`): dialog dibuat per beat dengan suara yang dipilih saat audisi.
+
+### Dua jalur per episode: otomatis dan senggang
+
+Pemilik memilih jalur saat memulai episode. `scripts.jadwal_minggu` hanya memberi saran (batas mingguan menipis → senggang; pemilik sibuk → otomatis).
+
+- **otomatis** (bawaan): penulis-naskah, pembasmi-slop, pemeriksa-fakta menulis naskah; suara lewat ElevenLabs atau rekaman manusia.
+- **senggang** (`/sa-senggang <folder>`, hemat token): naskah ditulis pemilik di ChatGPT (Thinking), suara dibuat pemilik di ElevenLabs. Claude hanya menjalankan script deterministik, tanpa LLM dan tanpa API ElevenLabs:
+  1. `python -m scripts.senggang.prompt <folder>` membuat `prompt-chatgpt.md` (dunia cerita, aturan Mbis, kosakata tag dari `config/tag_ekspresi.yaml`, format dua lapis: dialog bertag + arahan visual). Tempel ke ChatGPT, simpan jawabannya sebagai `tempelan.txt`.
+  2. `scripts.senggang.impor` mengubah tempelan menjadi `naskah.json` (`jalur: "senggang"`, `sumber_suara: "manual"`), menjalankan skema + `periksa_beat` + kata terlarang Mbis. Galat dikembalikan **per baris** dan ditulis ke `koreksi-chatgpt.md` untuk ditempel balik ke ChatGPT. Tag yang tidak ada di YAML ditolak.
+  3. Approval 1 tetap milik pemilik (`disetujui: true`). Lalu `lembar-elevenlabs.md`: blok salin per tokoh (hanya ucapan + tag audio; aksi dan SFX tidak ikut). Tempel ke ElevenLabs, unduh satu file per tokoh ke `rekaman/<tokoh>.mp3`.
+  4. Audio dipotong per baris secara lokal (transkrip lokal, jalur rekaman manusia), lalu tahap adegan sampai kemasan sama dengan jalur otomatis.
+  
+  Tag audio bertanda `terverifikasi: belum` di YAML belum terbukti berfungsi (dokumentasi ElevenLabs tidak memuatnya; dukungan bahasa Indonesia belum diuji). Pemilik menguji setelah berlangganan dan mengganti dengan `cadangan` bila perlu.
 
 ## Lisensi aset
 
