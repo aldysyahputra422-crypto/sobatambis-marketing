@@ -1,0 +1,65 @@
+Tentu! Ini naskah episode kedua. Semoga cocok.
+
+##EPISODE ep02 | Struk dari Neraka Kasir
+##JUDUL_BERIKUT Namaku di Mana-Mana
+
+##BEAT t01 hook
+LATAR: kamar
+MUSIK: ceria_konyol
+KAMERA: dekat arta dorong
+PROPERTI: struk
+PUNCHLINE: Kok kasirnya hidup?
+DIALOG:
+ARTA: [curious] Kok kasirnya hidup?
+
+##BEAT t02 lucu
+LATAR: kamar
+MUSIK: ceria_konyol
+SFX: tabrak_kartun | pada_kata: sendirinya
+PUNCHLINE: mesin kasir mencetak struk dengan sendirinya
+DIALOG:
+ARTA: [tense, slowly] Tiba-tiba, mesin kasir mencetak struk dengan [aksi: lompat] sendirinya.
+
+##BEAT t03 lucu
+LATAR: ruang_tamu
+MUSIK: tegang_naik
+PUNCHLINE: Namaku? Kenapa namaku?
+DIALOG:
+MBIS: [ominous, slowly] Struknya bertuliskan namamu.
+ARTA: [confused] Namaku? Kenapa namaku?
+[narasi: Arta menatap struk lama sekali]
+
+##BEAT t04 naik
+LATAR: dinding_sticky
+MUSIK: tegang_naik
+AKSI: arta banting | pada_kata: NAMAKU | ekspresi: marah
+PUNCHLINE: TOLONG HAPUS NAMAKU!
+DIALOG:
+ARTA: [shouting] TOLONG HAPUS NAMAKU!
+
+##BEAT t05 lucu
+LATAR: meja_malam
+MUSIK: ceria_konyol
+AKSI: arta lemas
+PUNCHLINE: Total belanjaku nol.
+DIALOG:
+ARTA: [sighs] Ternyata total belanjaku nol.
+
+##BEAT t06 mengena durasi=4
+LATAR: meja_malam
+AKSI: arta terduduk | pada: awal
+KAMERA: dekat arta diam
+PUNCHLINE: Utangku seratus hari.
+DIALOG:
+ARTA: [quietly] Nol belanja, tapi utangku seratus hari.
+
+##BEAT t07 penutup
+LATAR: meja_malam
+MUSIK: tema_mbis
+AKSI: mbis muncul
+PUNCHLINE: KUCINGNYA NGOMONG?!
+DIALOG:
+MBIS: [warm] Kasirnya cuma mengingatkan.
+ARTA: [gasps] KUCINGNYA NGOMONG?!
+##AKHIR
+Kalau mau, saya bisa buat versi lain!

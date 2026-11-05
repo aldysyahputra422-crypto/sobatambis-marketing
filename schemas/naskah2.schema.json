@@ -5,7 +5,8 @@
   "required": ["episode", "judul", "disetujui", "judul_berikut", "beat"],
   "properties": {
     "episode": {"type": "string"}, "judul": {"type": "string"}, "disetujui": {"type": "boolean"},
-    "sumber_suara": {"enum": [null, "manusia", "elevenlabs"]},
+    "sumber_suara": {"enum": [null, "manusia", "elevenlabs", "manual"]},
+    "jalur": {"enum": ["otomatis", "senggang"]},
     "judul_berikut": {"type": "string"},
     "beat": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/beat"}}
   },
@@ -26,7 +27,8 @@
             "mulai_kata": {"type": "string"}, "gerak": {"enum": ["diam", "dorong", "hentak", "sapu", "getar"]}}}},
         "dialog": {"type": "array", "items": {"type": "object", "required": ["penutur", "teks", "arah"],
           "properties": {"penutur": {"enum": ["arta", "ratna", "mbis", "bima"]}, "teks": {"type": "string", "minLength": 1},
-            "arah": {"type": "string"}, "puncak": {"type": "string"}}}},
+            "arah": {"type": "string"}, "puncak": {"type": "string"},
+            "tag": {"type": "string"}, "ekspresi": {"type": "string"}}}},
         "aksi": {"type": "array", "items": {"type": "object", "required": ["tokoh", "aksi"],
           "properties": {"tokoh": {"enum": ["arta", "ratna", "mbis"]}, "aksi": {"type": "string"},
             "pada_kata": {"type": "string"}, "pada": {"enum": ["awal", "akhir"]}, "benda": {"type": "string"},
