@@ -374,54 +374,6 @@ export function kiosOranye() { // "coffice": kios oranye dengan layar dan bangku
 }
 
 // ------------------------------------------------------------------ dekorasi
-// Layar datar di dinding (ruang rapat). Menghadap +z.
-export function layarDinding(panjang = 2.2, tinggi = 1.3) {
-  const g = new THREE.Group();
-  tambah(g, lembut(panjang, tinggi, 0.07, '#23272E', 0.03), 0, 0, 0);
-  const l = new THREE.Mesh(new THREE.PlaneGeometry(panjang - 0.12, tinggi - 0.12), new THREE.MeshBasicMaterial({ color: '#16305C', toneMapped: false }));
-  l.position.z = 0.04;
-  g.add(l);
-  return g;
-}
-
-// Panel lampu tanam di langit-langit: bidang menyala sebagai bingkai cahaya hangat.
-export function panelLampu(panjang = 2.4, lebar = 0.5, warna = '#FFF2DC') {
-  const g = new THREE.Group();
-  tambah(g, kotak(panjang + 0.12, 0.08, lebar + 0.12, '#D8DCE2', { cast: false }), 0, 0.04, 0);
-  const l = new THREE.Mesh(new THREE.PlaneGeometry(panjang, lebar), new THREE.MeshBasicMaterial({ color: warna, toneMapped: false }));
-  l.rotation.x = Math.PI / 2;
-  l.position.y = -0.005;
-  g.add(l);
-  return g;
-}
-
-// Menara di kejauhan: dilihat dari dalam lewat fasad kaca, membuat kantor terasa di lantai atas gedung.
-export function menara(lebar, tinggi, dalam, warna) {
-  const g = new THREE.Group();
-  const b = kotak(lebar, tinggi, dalam, warna, { cast: false });
-  b.receiveShadow = false;
-  tambah(g, b, 0, tinggi / 2, 0);
-  const { tekstur } = canvasTekstur(64, 256, (c, w, h) => {
-    c.fillStyle = 'rgba(0,0,0,0)';
-    c.fillRect(0, 0, w, h);
-    let seed = 5;
-    const acak = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
-    for (let y = 8; y < h - 8; y += 16) {
-      for (let x = 6; x < w - 6; x += 14) {
-        c.fillStyle = acak() > 0.45 ? 'rgba(255,230,180,0.85)' : 'rgba(120,140,170,0.45)';
-        c.fillRect(x, y, 8, 9);
-      }
-    }
-  });
-  for (const [sx, sz, ry] of [[0, dalam / 2 + 0.01, 0], [0, -dalam / 2 - 0.01, Math.PI]]) {
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(lebar * 0.86, tinggi * 0.92), new THREE.MeshBasicMaterial({ map: tekstur, transparent: true, toneMapped: false }));
-    m.position.set(sx, tinggi / 2, sz);
-    m.rotation.y = ry;
-    g.add(m);
-  }
-  return g;
-}
-
 export function tanaman(skala = 1) {
   const g = new THREE.Group();
   tambah(g, badan(new THREE.CylinderGeometry(0.22, 0.17, 0.34, 14), '#F2F2F2'), 0, 0.17, 0);
