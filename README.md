@@ -108,6 +108,19 @@ Ukuran pilot: ~82% biaya ada di konteks yang dibaca ulang setiap langkah (cache 
 - **Rekaman manusia** (`"sumber_suara": "manusia"`): plugin menulis `lembar-rekaman.md`. Rekam satu file per tokoh ke `rekaman/arta.m4a`, `rekaman/ratna.m4a`, `rekaman/mbis.m4a` (urutan bebas; salah ucap cukup diulang). Plugin membersihkan audio, memotong per baris, dan meminta rekam ulang hanya untuk baris yang hilang (`rekaman/ulang-t04.1.m4a`).
 - **ElevenLabs** (`"sumber_suara": "elevenlabs"`): dialog dibuat per beat dengan suara yang dipilih saat audisi.
 
+### Dua jalur per episode: otomatis dan senggang
+
+Pemilik memilih jalur saat memulai episode. `scripts.jadwal_minggu` hanya memberi saran (batas mingguan menipis → senggang; pemilik sibuk → otomatis).
+
+- **otomatis** (bawaan): penulis-naskah, pembasmi-slop, pemeriksa-fakta menulis naskah; suara lewat ElevenLabs atau rekaman manusia.
+- **senggang** (`/sa-senggang <folder>`, hemat token): naskah ditulis pemilik di ChatGPT (Thinking), suara dibuat pemilik di ElevenLabs. Claude hanya menjalankan script deterministik, tanpa LLM dan tanpa API ElevenLabs:
+  1. `python -m scripts.senggang.prompt <folder>` membuat `prompt-chatgpt.md` (dunia cerita, aturan Mbis, kosakata tag dari `config/tag_ekspresi.yaml`, format dua lapis: dialog bertag + arahan visual). Tempel ke ChatGPT, simpan jawabannya sebagai `tempelan.txt`.
+  2. `scripts.senggang.impor` mengubah tempelan menjadi `naskah.json` (`jalur: "senggang"`, `sumber_suara: "manual"`), menjalankan skema + `periksa_beat` + kata terlarang Mbis. Galat dikembalikan **per baris** dan ditulis ke `koreksi-chatgpt.md` untuk ditempel balik ke ChatGPT. Tag yang tidak ada di YAML ditolak.
+  3. Approval 1 tetap milik pemilik (`disetujui: true`). Lalu `lembar-elevenlabs.md`: blok salin per tokoh (hanya ucapan + tag audio; aksi dan SFX tidak ikut). Tempel ke ElevenLabs, unduh satu file per tokoh ke `rekaman/<tokoh>.mp3`.
+  4. Audio dipotong per baris secara lokal (transkrip lokal, jalur rekaman manusia), lalu tahap adegan sampai kemasan sama dengan jalur otomatis.
+  
+  Tag audio bertanda `terverifikasi: belum` di YAML belum terbukti berfungsi (dokumentasi ElevenLabs tidak memuatnya; dukungan bahasa Indonesia belum diuji). Pemilik menguji setelah berlangganan dan mengganti dengan `cadangan` bila perlu.
+
 ## Lisensi aset
 
 `aset/sfx` dan `aset/musik` mencatat sumber dan lisensi setiap file. Musik saat ini buatan sendiri (sementara); SFX dibuat di akun gratis (nonkomersial) dan **wajib** dibangun ulang sesudah upgrade sebelum ada video yang diposting. Tahap `gerbang` menolak aset nonkomersial.
