@@ -4,7 +4,9 @@ python -m scripts.tahap mulai|berikutnya <folder>
 python -m scripts.tahap ulang <folder> <tahap>
 python -m scripts.tahap jalan <folder>   → jalankan SEMUA tahap mekanis berurutan dalam satu panggilan (hemat token),
     berhenti di tahap kreatif/persetujuan, saat gagal, atau saat butuh izin. Keluaran satu baris JSON.
-    Kode: 0 berhenti normal, 1 gagal (lihat "perbaiki"), 3 butuh izin/kredit, 4 butuh Approval 1, 5 rekam ulang.
+    Kode: 0 berhenti normal, 1 gagal (lihat "perbaiki"), 3 butuh izin/kredit, 4 butuh Approval 1, 5 rekam ulang/audio,
+    6 (jalur senggang) tempelan ChatGPT belum ada atau salah (galat per baris di "alasan").
+python -m scripts.tahap mulai <folder> [senggang]  → pilihan jalur disimpan di status.json (bawaan: otomatis).
 """
 import json
 import sys
@@ -51,6 +53,46 @@ class Berhenti(Exception):
 
 def _json(p: Path) -> dict:
     return json.loads(Path(p).read_text(encoding="utf-8"))
+
+
+def jalur_folder(folder: Path) -> str:
+    """'senggang' (naskah dari ChatGPT, suara manual) atau 'otomatis'. naskah.json menentukan; selain itu status.json."""
+    try:
+        j = _json(Path(folder) / "naskah.json").get("jalur")
+        if j:
+            return j
+    except (OSError, ValueError):
+        pass
+    return status.baca(folder).get("jalur", "otomatis")
+
+
+def set_jalur(folder: Path, jalur: str) -> None:
+    if jalur not in ("otomatis", "senggang"):
+        raise ValueError(f"jalur tidak dikenal: {jalur}")
+    data = status.baca(folder)
+    data["jalur"] = jalur
+    status.tulis(folder, data)
+
+
+def _naskah_senggang(folder: Path):
+    """Jalur senggang: tanpa penulis-naskah, pembasmi-slop, pemeriksa-fakta. Impor mekanis, lint Python, lalu Approval 1."""
+    from scripts import naskah as naskah_mod
+    from scripts.senggang import impor, lembar_tempel
+    tempel, hasil = folder / "tempelan.txt", folder / "naskah.json"
+    if tempel.exists() and (not hasil.exists() or tempel.stat().st_mtime > hasil.stat().st_mtime):
+        kode, keluar, _ = impor.proses(folder)
+        if kode != 0:
+            raise Berhenti(6, "; ".join(x for x in keluar if x.startswith(("baris", "umum", "naskah.json sudah"))) or "impor gagal")
+    if not hasil.exists():
+        raise Berhenti(6, f"tempelan.txt belum ada di {folder}: tempel prompt-chatgpt.md ke ChatGPT (python -m scripts.senggang.prompt), simpan jawabannya sebagai tempelan.txt")
+    n = naskah_mod.muat(hasil)
+    masalah = naskah_mod.periksa_beat(n)
+    if masalah:
+        raise Berhenti(6, "; ".join(masalah[:5]))
+    lembar_tempel.tulis(folder)
+    if not n.get("disetujui"):
+        raise Berhenti(4, "Approval 1: naskah.json dari ChatGPT lulus lint, menunggu pemilik (disetujui: true). Lembar suara: lembar-elevenlabs.md")
+    return None
 
 
 def _suara(folder: Path):
@@ -119,6 +161,9 @@ LANGKAH = {"suara": _suara, "adegan": _adegan, "mix": _mix, "render_draf": _rend
            "qa_gerak": _qa_gerak, "render": _render(False), "qa_final": _qa_final}
 
 
+LANGKAH_SENGGANG = {**LANGKAH, "naskah": _naskah_senggang}
+
+
 def berikutnya(folder: Path) -> str | None:
     data = status.baca(folder)
     if "mulai" not in data:
@@ -144,7 +189,8 @@ def ulang(folder: Path, nama: str) -> None:
 
 
 def jalan(folder: Path, langkah: dict | None = None) -> dict:
-    folder, langkah = Path(folder), langkah or LANGKAH
+    folder = Path(folder)
+    langkah = langkah or (LANGKAH_SENGGANG if jalur_folder(folder) == "senggang" else LANGKAH)
     lulus: list[str] = []
     while True:
         t = berikutnya(folder)
@@ -183,6 +229,8 @@ if __name__ == "__main__":
     if perintah == "berikutnya":
         print(berikutnya(folder) or "selesai")
     elif perintah == "mulai":
+        if len(sys.argv) > 3:
+            set_jalur(folder, sys.argv[3])
         # tandai produksi aktif agar hook Stop melanjutkan otomatis sampai titik persetujuan
         penanda = Path(".sa/aktif.json")
         penanda.parent.mkdir(exist_ok=True)

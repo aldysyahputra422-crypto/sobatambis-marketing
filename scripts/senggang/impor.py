@@ -403,41 +403,43 @@ def pesan_koreksi(galat: list[Galat]) -> str:
     return "\n".join(baris) + "\n"
 
 
-def main(argv: list[str]) -> int:
-    pos = [a for a in argv if not a.startswith("--")]
-    timpa = "--timpa" in argv
-    if not pos:
-        print("pakai: python -m scripts.senggang.impor <folder> [tempelan.txt] [--timpa]")
-        return 2
-    folder = Path(pos[0])
-    sumber = Path(pos[1]) if len(pos) > 1 else folder / "tempelan.txt"
+def proses(folder: Path, sumber: Path | None = None, timpa: bool = False) -> tuple[int, list[str], Hasil | None]:
+    """Satu kali impor untuk sebuah folder. Kembalikan (kode, baris keluaran, hasil)."""
+    folder = Path(folder)
+    sumber = sumber or folder / "tempelan.txt"
     try:
         teks = sumber.read_text(encoding="utf-8")
     except OSError as e:
-        print(f"tempelan tidak terbaca: {e}")
-        return 1
+        return 1, [f"tempelan tidak terbaca: {e}"], None
     tujuan = folder / "naskah.json"
     if tujuan.exists() and not timpa:
         try:
             if json.loads(tujuan.read_text(encoding="utf-8")).get("disetujui"):
-                print("naskah.json sudah disetujui pemilik; tidak ditimpa (pakai --timpa bila disengaja)")
-                return 7
+                return 7, ["naskah.json sudah disetujui pemilik; tidak ditimpa (pakai --timpa bila disengaja)"], None
         except json.JSONDecodeError:
             pass
     h = impor_teks(teks)
-    for p in h.peringatan:
-        print(f"catatan {p}")
+    keluar = [f"catatan {p}" for p in h.peringatan]
     koreksi = folder / "koreksi-chatgpt.md"
     if h.galat:
-        for g in h.galat:
-            print(g)
+        keluar += [str(g) for g in h.galat]
         koreksi.write_text(pesan_koreksi(h.galat), encoding="utf-8")
-        print(f"{len(h.galat)} galat. Tempel isi {koreksi} ke ChatGPT, lalu simpan jawabannya sebagai tempelan.txt dan jalankan lagi.")
-        return 1
+        keluar.append(f"{len(h.galat)} galat. Tempel isi {koreksi} ke ChatGPT, lalu simpan jawabannya sebagai tempelan.txt dan jalankan lagi.")
+        return 1, keluar, h
     koreksi.unlink(missing_ok=True)
     tujuan.write_text(json.dumps(h.naskah, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"naskah.json dibuat ({len(h.naskah['beat'])} beat). Menunggu Approval 1 pemilik (disetujui: true).")
-    return 0
+    keluar.append(f"naskah.json dibuat ({len(h.naskah['beat'])} beat). Menunggu Approval 1 pemilik (disetujui: true).")
+    return 0, keluar, h
+
+
+def main(argv: list[str]) -> int:
+    pos = [a for a in argv if not a.startswith("--")]
+    if not pos:
+        print("pakai: python -m scripts.senggang.impor <folder> [tempelan.txt] [--timpa]")
+        return 2
+    kode, keluar, _ = proses(Path(pos[0]), Path(pos[1]) if len(pos) > 1 else None, "--timpa" in argv)
+    print("\n".join(keluar))
+    return kode
 
 
 if __name__ == "__main__":

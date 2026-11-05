@@ -8,7 +8,7 @@ Pertama jalankan `python -m scripts.tahap mulai $ARGUMENTS` (menandai produksi a
 
 | Tahap | Agent | Perintah | Lulus jika |
 |---|---|---|---|
-| `naskah` | penulis-naskah → pembasmi-slop → pemeriksa-fakta | `python -m scripts.naskah periksa $ARGUMENTS` | kode 0. **kode 4 = Approval 1**: kirim naskah ke pemilik dan tanyakan sumber suara (`manusia` atau `elevenlabs`). Berhenti sampai pemilik setuju, lalu set `disetujui: true` dan `sumber_suara`. |
+| `naskah` | penulis-naskah → pembasmi-slop → pemeriksa-fakta (**jalur senggang: tidak ada agent**, lihat bawah tabel) | `python -m scripts.naskah periksa $ARGUMENTS` | kode 0. **kode 4 = Approval 1**: kirim naskah ke pemilik dan tanyakan sumber suara (`manusia` atau `elevenlabs`). Berhenti sampai pemilik setuju, lalu set `disetujui: true` dan `sumber_suara`. |
 | `suara` | *mekanis*; gagal → sutradara-suara | `python -m scripts.suara.produksi $ARGUMENTS` | kode 0. **kode 3**: izin/kredit ElevenLabs kurang, berhenti dan minta persetujuan pemilik (`tahap jalan` juga berhenti dengan kode 3 bila `.sa/izin-elevenlabs` belum ada). **kode 5**: kirim `lembar-rekaman.md` dan daftar baris yang perlu direkam ulang, berhenti. |
 | `dialog_ok` | qa-suara | kirim `dialog.wav` ke pemilik (**Approval 2**) | pemilik menyetujui trek dialog |
 | `adegan` | *mekanis*; gagal → animator (aset) / storyboarder | `python -m scripts.adegan2 $ARGUMENTS` | kode 0 |
@@ -20,6 +20,8 @@ Pertama jalankan `python -m scripts.tahap mulai $ARGUMENTS` (menandai produksi a
 | `kemasan` | desainer-cover, penulis-caption → pembasmi-slop | `npx remotion still Cover ...`, menulis `caption.txt` | `cover.png` ada; caption memuat "INFO" dan tanpa "—" |
 | `video_ok` | direktur-marketing | kirim `video.mp4`, `cover.png`, `caption.txt` ke pemilik (**Approval 3**) | pemilik menyetujui |
 | `gerbang` | akuntan-token, penjaga-gerbang-qa | `python -m scripts.token_meter $ARGUMENTS`, menulis `qa.md` | semua butir checklist lulus, termasuk lisensi aset |
+
+**Jalur senggang** (`naskah.json` berisi `jalur: "senggang"`, atau `python -m scripts.tahap mulai <folder> senggang`): tahap `naskah` TIDAK memanggil penulis-naskah, pembasmi-slop, atau pemeriksa-fakta. `tahap jalan` sendiri mengimpor `tempelan.txt` dari ChatGPT, lint Python, lalu berhenti di Approval 1 (kode 4); tempelan salah berhenti dengan kode 6 (galat per baris). Suara `manual`: pemilik menempel `lembar-elevenlabs.md` ke ElevenLabs dan mengirim `rekaman/<tokoh>.mp3`; kode 5 bila audio belum lengkap. Perintah lengkap: `/sa-senggang <folder>`. Jalur otomatis tidak berubah.
 
 `tahap jalan` menandai sendiri tahap mekanis yang lulus beserta angkanya (`lufs`, `skor_median`). Tahap kreatif ditandai direktur setelah verifikasi:
 
